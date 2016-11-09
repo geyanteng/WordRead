@@ -153,7 +153,10 @@ namespace DataStructure
                 childs[i] = null;
             }
         }
+        public MLNode()
+        {
 
+        }
         public T Data
         {
             get { return data; }
@@ -412,7 +415,7 @@ namespace DataStructure
             else LevelOrder(head);
         }
     }
-    class Tree
+    /*class Tree
     {
 
         static void Main(string[] args)
@@ -462,5 +465,5 @@ namespace DataStructure
 
             } while (ch != '5');
         }
-    }
+    }*/
 }

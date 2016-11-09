@@ -40,6 +40,10 @@ namespace WordRead
         {
             get { return nodes; }
         }
+        public int NodeNumber
+        {
+            get { return nodes.Count; }
+        }
         /// <summary>
         /// 添加结点
         /// </summary>

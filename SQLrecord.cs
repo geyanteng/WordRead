@@ -19,7 +19,7 @@ namespace WordRead
         private SqlDataAdapter myDataAdapter;
         private DataSet myDataSet;
         private DataTable myTable;
-        private ConventionRow conventionRow=new ConventionRow();
+      
         public SQLrecord(string connectString = ConStr, string tableName = tblName)
         {
             try

@@ -12,22 +12,60 @@ namespace WordRead
 {
     class ConventionRow
     {
+        private void ConventionRow_Init()
+        {
+            this._Purposes = 0;
+            this._Display = (int)DISPLAY.IS_DISPLAY;
+            this._ConventionTypeKey = 3;
+        }
+        public ConventionRow(string titleCn, CATEGORY category)
+        {
+            this._TitleCn = this._TitleEn = this._ShortTitleCn = this._ShortTitleEn = titleCn;
+            this._Category = (int)category;
+            this._Guid = Guid.NewGuid();
+            ConventionRow_Init();
+        }
+        public ConventionRow(CATEGORY category)
+        {
+            this._Category = (int)category;
+            this._Guid = Guid.NewGuid();
+            ConventionRow_Init();
+        }
+        public ConventionRow(Guid guid,int depth,CATEGORY category)
+        {
+            this._Category = (int)category;
+            this._Guid = guid;
+            this._Depth = depth;
+            ConventionRow_Init();
+        }
+        public ConventionRow(Guid parentNodeGuid,int depth, string titleCn, 
+            int sequenceNumber, CATEGORY category)
+        {
+            this._TitleCn = this._TitleEn = this._ShortTitleCn = this._ShortTitleEn = titleCn;
+            this._Category = (int)category;
+            this._Guid = Guid.NewGuid();
+            ConventionRow_Init();
+            this._ParentNodeGuid = parentNodeGuid;
+            this._SequenceNumber = sequenceNumber;
+            this._Depth = depth;
+        }
         private Guid _Guid;
         public Guid Guid
         {
-            get{ return _Guid; }
-            set{
+            get { return _Guid; }
+            /*set{
                 if (value.GetType().ToString() != "Guid")
                     throw new ArgumentException("value", "输入值不是Guid数据类型");
                 _Guid = value;
-            }
+            }*/
         }
         private int _Depth;
         public int Depth
         {
             get { return _Depth; }
-            set {
-                if(value.GetType().ToString()!="int"||value<0)
+            set
+            {
+                if (value.GetType().ToString() != "int" || value < 0)
                     throw new ArgumentException("value", "输入值不是int数据类型或小于0");
                 _Depth = value;
             }
@@ -36,9 +74,10 @@ namespace WordRead
         public Guid ParentNodeGuid
         {
             get { return _ParentNodeGuid; }
-            set{
-                if(value.GetType().ToString()!="Guid")
-                    throw new ArgumentException("value", "输入值不是Guid数据类型");
+            set
+            {
+                //if (value.GetType().ToString() != "Guid")
+                //    throw new ArgumentException("value", "输入值不是Guid数据类型");
                 _ParentNodeGuid = value;
             }
         }
@@ -46,7 +85,8 @@ namespace WordRead
         public int Category
         {
             get { return _Category; }
-            set{
+            set
+            {
                 if (value != 1 || value != 2)
                     throw new ArgumentException("value", "Category只能为1或2");
                 _Category = value;
@@ -56,7 +96,7 @@ namespace WordRead
         public string TitleCn
         {
             get { return _TitleCn; }
-            set {_TitleCn = value; }
+            set { _TitleCn = value; }
         }
         private string _TitleEn;
         public string TitleEn
@@ -70,36 +110,43 @@ namespace WordRead
             get { return _TagCn; }
             set { _TagCn = value; }
         }
-            //private string _TagEn;
-            //public string TagEn
-            //{
-            //    get { return _TagEn; }
-            //    set { _TagEn = value; }
-            //}
-            //private Guid _QueryGuid;
-            //public Guid QueryGuid
-            //{
-            //    get { return _QueryGuid; }
-            //    set { 
-            //        if(value!=null||value.GetType().ToString()!="Guid")
-            //            throw new ArgumentException("value", "输入值非空或不是Guid数据类型");
-            //        _QueryGuid = value; }
-            //}
-            //private string _Note;
-            //public string Note
-            //{
-            //    get { return _Note; }
-            //    set { _Note = value; }
-            //}
+        //private string _TagEn;
+        //public string TagEn
+        //{
+        //    get { return _TagEn; }
+        //    set { _TagEn = value; }
+        //}
+        //private Guid _QueryGuid;
+        //public Guid QueryGuid
+        //{
+        //    get { return _QueryGuid; }
+        //    set { 
+        //        if(value!=null||value.GetType().ToString()!="Guid")
+        //            throw new ArgumentException("value", "输入值非空或不是Guid数据类型");
+        //        _QueryGuid = value; }
+        //}
+        //private string _Note;
+        //public string Note
+        //{
+        //    get { return _Note; }
+        //    set { _Note = value; }
+        //}
         private int _Display;
         public int Display
         {
             get { return _Display; }
-            set {
-                if(value!=0||value!=1)
+            set
+            {
+                if (value != 0 || value != 1)
                     throw new ArgumentException("value", "必须为0或1");
-                _Display = value; 
+                _Display = value;
             }
+        }
+        private int _SequenceNumber;
+        public int SequenceNumber
+        {
+            get { return _SequenceNumber; }
+            set { _SequenceNumber = value; }
         }
         private string _IDFolder;
         public string IDFolder
@@ -123,10 +170,7 @@ namespace WordRead
         public int Purposes
         {
             get { return _Purposes; }
-            set { 
-                if(value ==null)
-                    throw new ArgumentException("value", "输入值不能为空");
-                _Purposes = value; }
+            set { _Purposes = value; }
         }
         private string _ShortTitleCn;
         public string ShortTitleCn
@@ -146,5 +190,17 @@ namespace WordRead
             get { return _ConventionTypeKey; }
             set { _ConventionTypeKey = value; }
         }
+//         private DateTime _LastEditDate;
+//         public DateTime LastEditDate
+//         {
+//             get { return _LastEditDate; }
+//             set { _LastEditDate = value; }
+//         }
+//         private DateTime _CreationDate;
+//         public DateTime CreationDate
+//         {
+//             get { return _CreationDate; }
+//             set { _CreationDate = value; }
+//         }
     }
 }
