@@ -34,6 +34,7 @@ namespace WordRead
                 myDataSet = new DataSet();
                 myDataAdapter.Fill(myDataSet, tableName);
                 myTable = myDataSet.Tables[tableName];
+                Console.WriteLine( myTable.Rows[1]["Guid"].ToString());
             }
             catch(Exception err)
             {

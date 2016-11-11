@@ -15,31 +15,31 @@ namespace WordRead
         private void ConventionRow_Init()
         {
             this._Purposes = 0;
-            this._Display = (int)DISPLAY.IS_DISPLAY;
+            this._Display = (int)ConventionOptions.DISPLAY.IS_DISPLAY;
             this._ConventionTypeKey = 3;
         }
-        public ConventionRow(string titleCn, CATEGORY category)
+        public ConventionRow(string titleCn, ConventionOptions.CATEGORY category)
         {
             this._TitleCn = this._TitleEn = this._ShortTitleCn = this._ShortTitleEn = titleCn;
             this._Category = (int)category;
             this._Guid = Guid.NewGuid();
             ConventionRow_Init();
         }
-        public ConventionRow(CATEGORY category)
+        public ConventionRow(ConventionOptions.CATEGORY category)
         {
             this._Category = (int)category;
             this._Guid = Guid.NewGuid();
             ConventionRow_Init();
         }
-        public ConventionRow(Guid guid,int depth,CATEGORY category)
+        public ConventionRow(Guid guid, int depth, ConventionOptions.CATEGORY category)
         {
             this._Category = (int)category;
             this._Guid = guid;
             this._Depth = depth;
             ConventionRow_Init();
         }
-        public ConventionRow(Guid parentNodeGuid,int depth, string titleCn, 
-            int sequenceNumber, CATEGORY category)
+        public ConventionRow(Guid parentNodeGuid,int depth, string titleCn,
+            int sequenceNumber, ConventionOptions.CATEGORY category)
         {
             this._TitleCn = this._TitleEn = this._ShortTitleCn = this._ShortTitleEn = titleCn;
             this._Category = (int)category;
