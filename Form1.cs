@@ -13,9 +13,10 @@ using System.IO;
 using System.Data.SqlClient;
 namespace WordRead
 {
-    public partial class Form1 : Form
+    public partial class frmWordRead : Form
     {
-        public Form1()
+        ConventionRead conventionRead = new ConventionRead();
+        public frmWordRead()
         {
             InitializeComponent();
         }
@@ -27,10 +28,17 @@ namespace WordRead
 
         private void btnWordRead_Click(object sender, EventArgs e)
         {
-            
-            ConventionRead conventionRead=new ConventionRead();
-            ConventionRow rootNode=new ConventionRow(new Guid("1b506d0f-8956-46d3-a023-78d24e300ed0"),2,ConventionOptions.CATEGORY.IS_CATEGORY);
-            conventionRead.ReadCatalogue(rootNode);
+            ConventionRow rootNode = new ConventionRow(new Guid("1b506d0f-8956-46d3-a023-78d24e300ed0"), 2,
+                "#fa6fe77d-7a97-4735-9da2-cd54c1c5fdcd#6d6aee87-657f-4bdb-b957-623a16ff5fe2#a41bcdc5-ab31-4bdf-a203-09d4e122b84b",
+                "#@`其他公约#@`2011国内航行海船法定检验技术规则#@`第3篇  载重线"
+                );           
+            conventionRead.htmlPath = tbHtmlPath.Text;
+            conventionRead.ReadHtml(rootNode);
+            #region 废弃代码
+            // ConventionRow rootNode=new ConventionRow(new Guid("1b506d0f-8956-46d3-a023-78d24e300ed0"),2,ConventionOptions.CATEGORY.IS_CATEGORY);
+            // conventionRead.ReadCatalogue(rootNode);
+
+
             //    Word.Application app = new Word.Application();
             //    Word.Document doc = null;
             //    object unknow = Type.Missing;
@@ -82,71 +90,55 @@ namespace WordRead
             //    Console.WriteLine("\nFinished");
             //    doc.Close();
 
+            #endregion
         }
-
-        private void toolStripButton1_Click(object sender, EventArgs e)
+        private void btnHtmlPath_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            //    try
-            //    {
-            //        DataRow myRow = myTable.NewRow();
-            Guid guid1 = Guid.NewGuid();
-            //        Guid guid2 = Guid.NewGuid();
-            Console.WriteLine(guid1);
-            //        myRow["Guid"] = guid1;
-            //        myRow["Depth"] = 1;
-            //        myRow["ParentNodeGuid"] = guid2;
-            //        myRow["Category"] = 1;
-            //        myRow["Display"] = 0;
-            //        myRow["SequenceNumber"]=1;
-            //        myRow["Purposes"]=0;
-            //        myTable.Rows.Add(myRow);
-            //        SqlCommandBuilder mySqlCommandBuilder = new SqlCommandBuilder(myDataAdapter);
-            //        myDataAdapter.Update(myDataSet, "tblConvention");
-            //        connect.Close();
-
-            //    }                    
-            //    catch(Exception err)
-            //    {
-            //        connect.Close();
-            //        Console.WriteLine(err.Message + mycmd.CommandText);
-            //    }
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            test1 t1 = new test1();
-            t1.num = 2;
-            //test2 t2_2 = new test2(t1);
-            Console.WriteLine(t1.num);
-            for (int i = 1; i < 3; i++)
+            
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                test2 t2 = new test2();
-                t2.num2 = 1;
-                t2.num2 = t2.num2 + 1;
-                Console.WriteLine(t2.num2);
-
+                tbHtmlPath.Text = openFileDialog1.FileName;                
             }
-            Console.WriteLine(t1.num);
-
         }
-    }
-    class test1
-    {
-        public int num = 0;
-    }
-    class test2
-    {
-        public int num2;
 
-        public test2()
+        private void btnSQLTest_Click(object sender, EventArgs e)
         {
-
+            SQLUtils sqlUtils = SQLUtils.getInstance();
+            if (sqlUtils.isConnected)
+                MessageBox.Show("连接成功");
+            else
+                MessageBox.Show("连接失败");
+        }
+        private void btnTitle2Xpath_Click(object sender, EventArgs e)
+        {
+            if(tbTitle2Xpath1.Text.Trim()!=String.Empty&& tbTitle2Xpath2.Text.Trim() != String.Empty
+                && tbTitle2Xpath3.Text.Trim() != String.Empty)
+                conventionRead.title2_xPath = tbTitle2Xpath1.Text+tbTitle2Xpath2.Text+ tbTitle2Xpath3.Text;
         }
 
+        private void btnTitle1Xpath_Click(object sender, EventArgs e)
+        {
+            if (tbTitle1Xpath.Text != String.Empty)
+                conventionRead.title1_xPath = tbTitle1Xpath.Text;
+        }
+
+        private void rdbtCatagory_CheckedChanged(object sender, EventArgs e)
+        {
+            
+            if (((RadioButton)sender).Checked)
+            {
+                grpContent.Enabled = false;
+                grpCatagory.Enabled = true;
+            }
+        }
+
+        private void rdbtContent_CheckedChanged(object sender, EventArgs e)
+        {
+            if (((RadioButton)sender).Checked)
+            {
+                grpContent.Enabled = true;
+                grpCatagory.Enabled = false;
+            }
+        }
     }
 }

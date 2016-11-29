@@ -10,20 +10,22 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 namespace WordRead
 {
-    class SQLrecord
+    class SQLUtils
     {
-        private const string ConStr = @"Server=(local)\MILESGESQL;Database=mrcs;Integrated Security=true";
+       // private const string ConStr = @"Server=(local)\MILESGESQL;Database=mrcs_0515;Integrated Security=true;";
+        private const string ConStr = @"Server=(local);Database=mrcs_0515;Integrated Security=true;";
         private const string tblName = @"tblConvention";
         private SqlConnection connect;
         private SqlCommand mycmd;
         private SqlDataAdapter myDataAdapter;
         private DataSet myDataSet;
         private DataTable myTable;
-      
-        public SQLrecord(string connectString = ConStr, string tableName = tblName)
+        private static SQLUtils sqlUtils;
+        public bool isConnected;
+        private SQLUtils(string connectString = ConStr, string tableName = tblName)
         {
             try
-            {           
+            {
                 connect = new SqlConnection(connectString);
                 connect.Open();//打开数据连接
                 mycmd = new SqlCommand();
@@ -34,18 +36,54 @@ namespace WordRead
                 myDataSet = new DataSet();
                 myDataAdapter.Fill(myDataSet, tableName);
                 myTable = myDataSet.Tables[tableName];
-                Console.WriteLine( myTable.Rows[1]["Guid"].ToString());
+                isConnected = true;
+                //Console.WriteLine( myTable.Rows[1]["Guid"].ToString());
             }
-            catch(Exception err)
+            catch (Exception err)
             {
                 connect.Close();
+                isConnected = false;
                 MessageBox.Show(err.Message);
             }
         }
-        public void ins_Guid()
+        public static SQLUtils getInstance()
         {
-
+            if (sqlUtils == null)
+                sqlUtils = new SQLUtils();
+            return sqlUtils;
         }
-
+        public void writeRow_local(ConventionRow conventionRow)
+        {
+            DataRow myRow = myTable.NewRow();
+            myRow["Guid"] = conventionRow.Guid;
+            myRow["Depth"] = conventionRow.Depth;
+            myRow["ParentNodeGuid"] = conventionRow.ParentNodeGuid;
+            myRow["Category"] = conventionRow.Category;
+            myRow["TitleCn"] = conventionRow.TitleCn;
+            myRow["TitleEn"] = conventionRow.TitleEn;
+            myRow["TagCn"] = conventionRow.TagCn;
+            //myRow["TagEn"] = conventionRow.TagEn;
+            //myRow["QueryGuid"] = conventionRow.QueryGuid;
+            //myRow["Note"] = conventionRow.Note;
+            myRow["Display"] = conventionRow.Display;
+            myRow["SequenceNumber"] = conventionRow.SequenceNumber;
+            myRow["IDFolder"] = conventionRow.IDFolder;
+            myRow["TitleCnFolder"] = conventionRow.TitleCnFolder;
+            myRow["TitleEnFolder"] = conventionRow.TitleEnFolder;
+            myRow["Purposes"] = conventionRow.Purposes;
+            myRow["ShortTitleCn"] = conventionRow.ShortTitleCn;
+            myRow["ShortTitleEn"] = conventionRow.ShortTitleEn;
+            //myRow["LastEditDate"] = conventionRow.LastEditDate;
+            //myRow["CreationDate"] = conventionRow.CreationDate;
+            myRow["ConventionTypeKey"] = conventionRow.ConventionTypeKey;
+            myTable.Rows.Add(myRow);
+        }
+        public void updateTable()
+        {
+            SqlCommandBuilder mySqlCommandBuilder = new SqlCommandBuilder(myDataAdapter);
+            myDataAdapter.Update(myDataSet, "tblConvention");
+            connect.Close();
+            isConnected = false;
+        }
     }
 }
