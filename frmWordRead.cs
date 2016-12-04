@@ -15,7 +15,8 @@ namespace WordRead
 {
     public partial class frmWordRead : Form
     {
-        ConventionRead conventionRead = new ConventionRead();
+        internal ConventionRead conventionRead = new ConventionRead();
+        internal frmSingleAdd singleAdd;
         public frmWordRead()
         {
             InitializeComponent();
@@ -23,17 +24,46 @@ namespace WordRead
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            this.tbParentGuid.Text = "1b506d0f-8956-46d3-a023-78d24e300ed0";
+            this.tbParentDepth.Text = "2";
+            this.tbParentIDfolder.Text = "#fa6fe77d-7a97-4735-9da2-cd54c1c5fdcd#6d6aee87-657f-4bdb-b957-623a16ff5fe2#a41bcdc5-ab31-4bdf-a203-09d4e122b84b";
+            this.tbParentTitleCnFolder.Text = "#@`其他公约#@`2011国内航行海船法定检验技术规则#@`第3篇  载重线";
+            this.tbHtmlPath.Text = @"../../../htmlRcgTest/Part4.htm";
+            this.tbTitle1Xpath.Text = @"/html[1]/body[1]/div[@class='WordSection2']//b[1] |/html[1]/body[1]/div[@class='WordSection2']//h1[1]|/html[1]/body[1]/div[@class='WordSection2']//a[1]";
+            this.tbTitle2Xpath1.Text = @"//span[position()<3 and @style='";
+            this.tbTitle2Xpath2.Text = @"font-size:14.0pt;font-family:楷体_GB2312";
+            this.tbTitle2Xpath3.Text = @"']";
+            this.toolStripStatusLabel1.Text = "";
+            this.tbFilesPath.Text = @"/Uploads/imagesrc/guoneihaichuan/num2/di3pian";
         }
 
         private void btnWordRead_Click(object sender, EventArgs e)
         {
-            ConventionRow rootNode = new ConventionRow(new Guid("1b506d0f-8956-46d3-a023-78d24e300ed0"), 2,
-                "#fa6fe77d-7a97-4735-9da2-cd54c1c5fdcd#6d6aee87-657f-4bdb-b957-623a16ff5fe2#a41bcdc5-ab31-4bdf-a203-09d4e122b84b",
-                "#@`其他公约#@`2011国内航行海船法定检验技术规则#@`第3篇  载重线"
-                );           
-            conventionRead.htmlPath = tbHtmlPath.Text;
-            conventionRead.ReadHtml(rootNode);
+            if (this.tbHtmlPath.Text!=string.Empty&&this.tbParentGuid.Text != string.Empty && this.tbParentDepth.Text != string.Empty &&
+                this.tbParentIDfolder.Text != string.Empty && this.tbParentTitleCnFolder.Text != string.Empty&&
+                this.tbFilesPath.Text!=string.Empty&&this.tbTitle1Xpath.Text!=string.Empty&&
+                tbTitle2Xpath1.Text.Trim() != String.Empty && tbTitle2Xpath2.Text.Trim() != String.Empty
+                && tbTitle2Xpath3.Text.Trim() != String.Empty)
+            {
+                try
+                {
+                    conventionRead.title1_xPath = tbTitle1Xpath.Text;
+                    conventionRead.title2_xPath = tbTitle2Xpath1.Text + tbTitle2Xpath2.Text + tbTitle2Xpath3.Text;
+                    conventionRead.imageFilePath = tbFilesPath.Text;
+                    ConventionRow rootNode = new ConventionRow(new Guid(this.tbParentGuid.Text), int.Parse(this.tbParentDepth.Text), 
+                        this.tbParentIDfolder.Text, this.tbParentTitleCnFolder.Text);
+                    conventionRead.htmlPath = tbHtmlPath.Text;
+                    this.toolStripStatusLabel1.Text = conventionRead.ReadHtml(rootNode);                    
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.Message);
+                    this.toolStripStatusLabel1.Text = err.Message;
+                }
+            }
+            else
+                MessageBox.Show("请输入信息");
+
             #region 废弃代码
             // ConventionRow rootNode=new ConventionRow(new Guid("1b506d0f-8956-46d3-a023-78d24e300ed0"),2,ConventionOptions.CATEGORY.IS_CATEGORY);
             // conventionRead.ReadCatalogue(rootNode);
@@ -103,23 +133,7 @@ namespace WordRead
 
         private void btnSQLTest_Click(object sender, EventArgs e)
         {
-            SQLUtils sqlUtils = SQLUtils.getInstance();
-            if (sqlUtils.isConnected)
-                MessageBox.Show("连接成功");
-            else
-                MessageBox.Show("连接失败");
-        }
-        private void btnTitle2Xpath_Click(object sender, EventArgs e)
-        {
-            if(tbTitle2Xpath1.Text.Trim()!=String.Empty&& tbTitle2Xpath2.Text.Trim() != String.Empty
-                && tbTitle2Xpath3.Text.Trim() != String.Empty)
-                conventionRead.title2_xPath = tbTitle2Xpath1.Text+tbTitle2Xpath2.Text+ tbTitle2Xpath3.Text;
-        }
-
-        private void btnTitle1Xpath_Click(object sender, EventArgs e)
-        {
-            if (tbTitle1Xpath.Text != String.Empty)
-                conventionRead.title1_xPath = tbTitle1Xpath.Text;
+            
         }
 
         private void rdbtCatagory_CheckedChanged(object sender, EventArgs e)
@@ -139,6 +153,38 @@ namespace WordRead
                 grpContent.Enabled = true;
                 grpCatagory.Enabled = false;
             }
+        }
+
+        private void 单条录入ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (singleAdd == null)
+            {
+                singleAdd = new frmSingleAdd(this);
+                singleAdd.Show();
+            }
+            else
+            {
+                singleAdd.Activate();
+            }
+        }
+
+        private void 数据库连接测试ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SQLUtils sqlUtils = SQLUtils.getInstance();
+            try
+            {
+                if (sqlUtils.isConnected)
+                {
+                    MessageBox.Show("连接成功");
+                    this.toolStripStatusLabel1.Text = "连接成功";
+                }
+            }         
+            catch(Exception err)
+            {
+                MessageBox.Show("连接失败");
+                this.toolStripStatusLabel1.Text = "连接失败"+err.Message;
+            }
+
         }
     }
 }

@@ -19,20 +19,15 @@ namespace WordRead
             this._Display = (int)ConventionOptions.DISPLAY.IS_DISPLAY;
             this._ConventionTypeKey = 3;
         }
-        public ConventionRow(string titleCn, ConventionOptions.CATEGORY category)
-        {
-            this._TitleCn = this._TitleEn = this._ShortTitleCn = this._ShortTitleEn = titleCn;
-            this._Category = (int)category;
-            this._Guid = Guid.NewGuid();
-            ConventionRow_Init();
-        }
-        public ConventionRow(ConventionOptions.CATEGORY category)
-        {
-            this._Category = (int)category;
-            this._Guid = Guid.NewGuid();
-            ConventionRow_Init();
-        }
-        //用于创建根节点
+        
+        /// <summary>
+        /// 用于创建根节点,参数为父节点参数
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <param name="depth"></param>
+        /// <param name="sequenceNumber"></param>
+        /// <param name="IDfolder"></param>
+        /// <param name="titlecnfolder"></param>
         public ConventionRow(Guid guid,int depth,string IDfolder,string titlecnfolder)
         {
             this._Category = (int)ConventionOptions.CATEGORY.IS_CATEGORY;
@@ -42,18 +37,15 @@ namespace WordRead
             this._IDFolder = IDfolder;
             this._TitleCnFolder = this._TitleEnFolder = titlecnfolder;
         }
-        public ConventionRow(Guid parentNodeGuid, int depth, string titleCn,
-            int sequenceNumber, ConventionOptions.CATEGORY category)
-        {
-            this._TitleCn = this._TitleEn = this._ShortTitleCn = this._ShortTitleEn = titleCn;
-            this._Category = (int)category;
-            this._Guid = Guid.NewGuid();
-            ConventionRow_Init();
-            this._ParentNodeGuid = parentNodeGuid;
-            this._SequenceNumber = sequenceNumber;
-            this._Depth = depth;
-        }
-        //ConventionRow parentConventionRow,
+       
+        /// <summary>
+        /// 根据指定的父节点创建子记录
+        /// </summary>
+        /// <param name="parentConventionRow"></param>
+        /// <param name="titleCn"></param>
+        /// <param name="sequenceNumber"></param>
+        /// <param name="category"></param>
+        /// <param name="tagcn"></param>
         public ConventionRow(ConventionRow parentConventionRow, string titleCn,
             int sequenceNumber, ConventionOptions.CATEGORY category,string tagcn=null)
         {
@@ -68,8 +60,71 @@ namespace WordRead
             this._TitleCnFolder = this._TitleEnFolder=parentConventionRow.TitleCnFolder + "#@`" + this.TitleCn;
             this._TagCn  = tagcn; 
         }
+        /// <summary>
+        /// 新建一条记录，无需指定guid
+        /// </summary>
+        /// <param name="parentNodeGuid"></param>
+        /// <param name="depth"></param>
+        /// <param name="titleCn"></param>
+        /// <param name="sequenceNumber"></param>
+        /// <param name="category"></param>
+        /// <param name="idfolder"></param>
+        /// <param name="titlecnfolder"></param>
         public ConventionRow(Guid parentNodeGuid, int depth, string titleCn,
-         int sequenceNumber, ConventionOptions.CATEGORY category,string idfolder,string titlecnfolder)
+         int sequenceNumber, ConventionOptions.CATEGORY category,string idfolder,string titlecnfolder,string tag=null)
+        {
+            this._TitleCn = this._TitleEn = this._ShortTitleCn = this._ShortTitleEn = titleCn;
+            this._Category = (int)category;
+            this._Guid = Guid.NewGuid();
+            ConventionRow_Init();
+            this._ParentNodeGuid = parentNodeGuid;
+            this._SequenceNumber = sequenceNumber;
+            this._TagCn = tag;
+            this._Depth = depth;
+            this._IDFolder = idfolder;
+            this._TitleCnFolder =this._TitleEnFolder= titlecnfolder;
+        }
+        /// <summary>
+        /// 用于新建一条记录
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <param name="parentNodeGuid"></param>
+        /// <param name="depth"></param>
+        /// <param name="titleCn"></param>
+        /// <param name="sequenceNumber"></param>
+        /// <param name="category"></param>
+        /// <param name="idfolder"></param>
+        /// <param name="titlecnfolder"></param>
+        public ConventionRow(Guid guid,Guid parentNodeGuid, int depth, string titleCn,
+         int sequenceNumber, ConventionOptions.CATEGORY category, string idfolder, string titlecnfolder,string tag=null)
+        {
+            this._TitleCn = this._TitleEn = this._ShortTitleCn = this._ShortTitleEn = titleCn;
+            this._Category = (int)category;
+            this._Guid = guid;
+            ConventionRow_Init();
+            this._ParentNodeGuid = parentNodeGuid;
+            this._SequenceNumber = sequenceNumber;
+            this._Depth = depth;
+            this._IDFolder = idfolder;
+            this._TitleCnFolder = this._TitleEnFolder = titlecnfolder;
+            this._TagCn = tag;
+        }
+        #region 其他
+        public ConventionRow(string titleCn, ConventionOptions.CATEGORY category)
+        {
+            this._TitleCn = this._TitleEn = this._ShortTitleCn = this._ShortTitleEn = titleCn;
+            this._Category = (int)category;
+            this._Guid = Guid.NewGuid();
+            ConventionRow_Init();
+        }
+        public ConventionRow(ConventionOptions.CATEGORY category)
+        {
+            this._Category = (int)category;
+            this._Guid = Guid.NewGuid();
+            ConventionRow_Init();
+        }
+        public ConventionRow(Guid parentNodeGuid, int depth, string titleCn,
+            int sequenceNumber, ConventionOptions.CATEGORY category)
         {
             this._TitleCn = this._TitleEn = this._ShortTitleCn = this._ShortTitleEn = titleCn;
             this._Category = (int)category;
@@ -78,9 +133,8 @@ namespace WordRead
             this._ParentNodeGuid = parentNodeGuid;
             this._SequenceNumber = sequenceNumber;
             this._Depth = depth;
-            this._IDFolder = idfolder;
-            this._TitleCnFolder =this._TitleEnFolder= titlecnfolder;
         }
+        #endregion
         private Guid _Guid;
         public Guid Guid
         {

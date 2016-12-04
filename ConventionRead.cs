@@ -20,6 +20,7 @@ namespace WordRead
     class ConventionRead
     {
         const string catalogPath = @"F:/1work/WordRead/test.docx";
+        public string imageFilePath;
         public string htmlPath;//= @"D:\1work\htmlRcgTest\Part3_07.htm";
         //@"../../../htmlRcgTest/Part3_07.htm";
         //private ConventionRow rootNode;
@@ -65,7 +66,7 @@ namespace WordRead
         ///  附录需要在word里按目录要求，手动改为一级或者二级标题的格式
         /// </summary>
         /// <param name="rootConvention"></param>
-        public void ReadHtml(ConventionRow rootConvention)
+        public string ReadHtml(ConventionRow rootConvention)
         {
             HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
             doc.Load(htmlPath);
@@ -196,6 +197,15 @@ namespace WordRead
                         htmlTxt = htmlTxt.Replace(ftNoteRefnodes[i].OuterHtml, "");
                     }  
                 }
+                //替换图片路径
+                Regex reg=new Regex(Patterns.imageSrc);
+                htmlTxt = reg.Replace(htmlTxt, "${1}" + imageFilePath + "${2}");
+                MatchCollection a = reg.Matches(htmlTxt);
+                foreach (Match b in a)
+                {
+                    Console.WriteLine(b.Value );
+                }
+                System.IO.File.WriteAllText(@"../../../htmlRcgTest/1234.html", htmlTxt);
                 #endregion
 
                 #region 按二级标题，分小节存储html文本，HtmlNode节点存储在contentNodes,文本存储在str_contentList
@@ -256,15 +266,15 @@ namespace WordRead
                         ConventionRow tempRow1 = new ConventionRow(rootConvention, str_title1List[i],
                             i+1, ConventionOptions.CATEGORY.IS_CATEGORY);
                         sqlUtils.writeRow_local(tempRow1);
-                        for (int j = 0; j < title2Nodes.Count; j++)
+                        for (int j = 0,k=0; j < title2Nodes.Count; j++)
                         {
                             tmp_rootConvention = tempRow1;
                             if (i < title1Nodes.Count - 1)
                             {
                                 if (title2Nodes[j].Line < title1Nodes[i + 1].Line && title2Nodes[j].Line > title1Nodes[i].Line)
                                 {
-                                    ConventionRow tempRow2 = new ConventionRow(tmp_rootConvention, str_title2List[i],
-                                        j+1, ConventionOptions.CATEGORY.IS_CONTENT, str_contentList[j]);
+                                    ConventionRow tempRow2 = new ConventionRow(tmp_rootConvention, str_title2List[j],
+                                        ++k, ConventionOptions.CATEGORY.IS_CONTENT, str_contentList[j]);
                                     sqlUtils.writeRow_local(tempRow2);
                                     //title2InTitle1Nums[i]++;
                                 }
@@ -272,23 +282,26 @@ namespace WordRead
                             else
                                 if (title2Nodes[j].Line > title1Nodes[i].Line)
                             {
-                                ConventionRow tempRow2 = new ConventionRow(tmp_rootConvention, str_title2List[i],
-                                    j+1, ConventionOptions.CATEGORY.IS_CONTENT, str_contentList[j]);
+                                ConventionRow tempRow2 = new ConventionRow(tmp_rootConvention, str_title2List[j],
+                                    ++k, ConventionOptions.CATEGORY.IS_CONTENT, str_contentList[j]);
                                 sqlUtils.writeRow_local(tempRow2);
                                 //title2InTitle1Nums[i]++;
                             }
                         }
                     }
                     sqlUtils.updateTable();
+                    return "录入成功：一级目录有"+str_title1List.Count+"个,二级目录共有"+str_title2List.Count+"个";
                 }
                 catch (Exception err)
                 {
                     Console.WriteLine(err.Message);
+                    return "录入失败。错误原因：" + err.Message;
                 }
-
+                
                 #endregion
 
             }
+            return "";
         }
         //public MLTree<ConventionRow> ConventionRowTree;       
         public void ReadCatalogue(ConventionRow rootNode, string catalogue, string pattern)
@@ -343,8 +356,10 @@ namespace WordRead
             Console.WriteLine("Yes");
         }
     }
+
     public static class Patterns
     {
+        public static string imageSrc = @"(<img\s+width="+"\""+@"?\d+"+"\""+@"?\s+height="+"\""+@"?\d+"+"\""+@"?\s+src=['"+"\""+@"])[\s\S]+?(/image[\s\S]+?['"+"\""+@"]>)";
         public static string Title1 = @"第\d{1,}章[\s\S]+?(?=\s\d{1,3}\r)";//查找一级标题
         public static string subTitle = @"第\d{1,}章[\s\S]+?(?=\r)";//查找一级标题
         public static string allTitle = @"^[^\r][\s\S]+?(?=\s\d{1,3}\r)";//按行查找，去除空行，去除页码，匹配两种标题

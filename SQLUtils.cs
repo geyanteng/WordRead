@@ -12,7 +12,8 @@ namespace WordRead
 {
     class SQLUtils
     {
-       // private const string ConStr = @"Server=(local)\MILESGESQL;Database=mrcs_0515;Integrated Security=true;";
+        //private const string ConStr = @"server=60.30.247.219;database=MRCS_0515;uid=pscadmin1;pwd=http://psc20131105";
+        //private const string ConStr = @"Server=(local)\MILESGESQL;Database=mrcs_0515;Integrated Security=true;";
         private const string ConStr = @"Server=(local);Database=mrcs_0515;Integrated Security=true;";
         private const string tblName = @"tblConvention";
         private SqlConnection connect;
