@@ -68,7 +68,6 @@
   <ItemGroup>
     <Compile Include="ConventionRead.cs" />
     <Compile Include="ConventionRow.cs" />
-    <Compile Include="DataStructure.cs" />
     <Compile Include="frmWordRead.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -84,7 +83,6 @@
       <DependentUpon>frmSingleAdd.cs</DependentUpon>
     </Compile>
     <Compile Include="SQLUtils.cs" />
-    <Compile Include="Tree.cs" />
     <EmbeddedResource Include="frmWordRead.resx">
       <DependentUpon>frmWordRead.cs</DependentUpon>
     </EmbeddedResource>
