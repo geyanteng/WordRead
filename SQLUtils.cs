@@ -12,47 +12,70 @@ namespace WordRead
 {
     class SQLUtils
     {
-        //private const string ConStr = @"server=60.30.247.219;database=MRCS_0515;uid=pscadmin1;pwd=http://psc20131105";
-        //private const string ConStr = @"Server=(local)\MILESGESQL;Database=mrcs_0515;Integrated Security=true;";
-        private const string ConStr = @"Server=(local);Database=mrcs_0515;Integrated Security=true;";
+        public  string ConStr = @"server=60.30.247.219;database=MRCS_0515;uid=pscadmin1;pwd=http://psc20131105;Connect Timeout=900";
+        //public string ConStr = @"Server=(local)\MILESGESQL;Database=mrcs_0515;Integrated Security=true;";
+        //public string ConStr = @"Server=(local);Database=mrcs_0515;Integrated Security=true;";
         private const string tblName = @"tblConvention";
-        private SqlConnection connect;
+        public  SqlConnection connect;
         private SqlCommand mycmd;
         private SqlDataAdapter myDataAdapter;
         private DataSet myDataSet;
         private DataTable myTable;
         private static SQLUtils sqlUtils;
         public bool isConnected;
-        private SQLUtils(string connectString = ConStr, string tableName = tblName)
+        private SQLUtils()
         {
-            try
-            {
-                connect = new SqlConnection(connectString);
-                connect.Open();//打开数据连接
-                mycmd = new SqlCommand();
-                mycmd.Connection = connect;
-                mycmd.CommandType = CommandType.Text;
-                mycmd.CommandText = @"select * from " + tableName;
-                myDataAdapter = new SqlDataAdapter(mycmd);
-                myDataSet = new DataSet();
-                myDataAdapter.Fill(myDataSet, tableName);
-                myTable = myDataSet.Tables[tableName];
-                isConnected = true;
-                //Console.WriteLine( myTable.Rows[1]["Guid"].ToString());
-            }
-            catch (Exception err)
-            {
-                connect.Close();
-                isConnected = false;
-                MessageBox.Show(err.Message);
-            }
+            
         }
+        /// <summary>
+        /// 单例模式，获取实例
+        /// </summary>
+        /// <returns></returns>
         public static SQLUtils getInstance()
         {
             if (sqlUtils == null)
                 sqlUtils = new SQLUtils();
             return sqlUtils;
         }
+        public DataRow getInfo(Guid parentNodeGuid)
+        {
+            connect = new SqlConnection(ConStr);
+            connect.Open();//打开数据连接
+            mycmd = new SqlCommand();
+            mycmd.Connection = connect;
+            mycmd.CommandType = CommandType.Text;
+            mycmd.CommandText = "select * from " + tblName + " where guid='"+ parentNodeGuid.ToString()+"'";
+            myDataAdapter = new SqlDataAdapter(mycmd);
+            DataSet dataSet = new DataSet();
+            myDataAdapter.Fill(dataSet, tblName);
+            DataTable table = dataSet.Tables[tblName];
+            DataRow myRow = table.NewRow();
+            return table.Rows[0];           
+        }
+        public void makeConnect()
+        {
+            try
+            {
+                connect = new SqlConnection(ConStr);
+                connect.Open();//打开数据连接
+                mycmd = new SqlCommand();
+                mycmd.Connection = connect;
+                mycmd.CommandType = CommandType.Text;
+                mycmd.CommandText = "select * from " + tblName+" where guid="+ "'aa9059c8-c980-449d-beb3-33e98c34a7a8'";
+                myDataAdapter = new SqlDataAdapter(mycmd);
+                myDataSet = new DataSet();
+                myDataAdapter.Fill(myDataSet, tblName);
+                myTable = myDataSet.Tables[tblName];
+                isConnected = true;
+            }
+            catch (Exception err)
+            {
+                connect.Close();
+                isConnected = false;
+                Console.WriteLine(err.Message);
+            }
+        }
+
         public void writeRow_local(ConventionRow conventionRow)
         {
             DataRow myRow = myTable.NewRow();

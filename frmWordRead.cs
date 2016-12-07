@@ -17,6 +17,7 @@ namespace WordRead
     {
         internal ConventionRead conventionRead = new ConventionRead();
         internal frmSingleAdd singleAdd;
+        //SQLUtils sqlUtils;
         public frmWordRead()
         {
             InitializeComponent();
@@ -24,36 +25,44 @@ namespace WordRead
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.tbParentGuid.Text = "1b506d0f-8956-46d3-a023-78d24e300ed0";
-            this.tbParentDepth.Text = "2";
-            this.tbParentIDfolder.Text = "#fa6fe77d-7a97-4735-9da2-cd54c1c5fdcd#6d6aee87-657f-4bdb-b957-623a16ff5fe2#a41bcdc5-ab31-4bdf-a203-09d4e122b84b";
-            this.tbParentTitleCnFolder.Text = "#@`其他公约#@`2011国内航行海船法定检验技术规则#@`第3篇  载重线";
-            this.tbHtmlPath.Text = @"../../../htmlRcgTest/Part4.htm";
-            this.tbTitle1Xpath.Text = @"/html[1]/body[1]/div[@class='WordSection2']//b[1] |/html[1]/body[1]/div[@class='WordSection2']//h1[1]|/html[1]/body[1]/div[@class='WordSection2']//a[1]";
-            this.tbTitle2Xpath1.Text = @"//span[position()<3 and @style='";
+            this.tbParentGuid.Text = "e909ba4e-4fc4-45e8-be0f-b1dcbc8724fa";
+            this.tbParentDepth.Text = "3";
+            this.tbParentIDfolder.Text = "#fa6fe77d-7a97-4735-9da2-cd54c1c5fdcd#6d6aee87-657f-4bdb-b957-623a16ff5fe2#dd141ee3-00b9-4a90-9fdb-6822325283c8#e909ba4e-4fc4-45e8-be0f-b1dcbc8724fa";
+            this.tbParentTitleCnFolder.Text = "#@`其他公约#@`2011国内航行海船法定检验技术规则#@`第5篇  防止船舶造成污染的结构与设备#@`2014修改通报";
+            this.tbHtmlPath.Text = @"../../../htmlRcgTest/2/xiugaitongbao/5/1.htm";
+            //this.tbTitle1Xpath.Text = @"/html[1]/body[1]/div[@class='WordSection2']//b[1] |/html[1]/body[1]/div[@class='WordSection2']//h1[1]|/html[1]/body[1]/div[@class='WordSection2']//a[1]";
+            //this.tbTitle2Xpath1.Text = @"//span[position()<3 and @style='";
+            this.tbTitle1Xpath.Text = @"/html[1]/body[1]//b[1] |/html[1]/body[1]//h1[1]|/html[1]/body[1]//a[1]";
+            this.tbTitle2Xpath1.Text = @"//span[@style='";
             this.tbTitle2Xpath2.Text = @"font-size:14.0pt;font-family:楷体_GB2312";
-            this.tbTitle2Xpath3.Text = @"']";
+            this.tbTitle2Xpath3.Text = @"']|//span[@style='font-size:14.0pt;" + "\r\n" + "font-family:楷体_GB2312']|" +
+                @"//span[@style='font-size:" + "\r\n" + "14.0pt;font-family:楷体_GB2312']" +
+                @"//span[@style='font-size:14.0pt;font-family:" + "\r\n" + "楷体_GB2312']" +
+                @"//span[@style='font-size:14.0pt;line-height:300%;font-family:楷体_GB2312']";
             this.toolStripStatusLabel1.Text = "";
-            this.tbFilesPath.Text = @"/Uploads/imagesrc/guoneihaichuan/num2/di3pian";
+            this.tbFilesPath.Text = @"/Uploads/imagesrc/guoneihaichuan/num2/xiugaitongbao/5";
         }
 
         private void btnWordRead_Click(object sender, EventArgs e)
         {
-            if (this.tbHtmlPath.Text!=string.Empty&&this.tbParentGuid.Text != string.Empty && this.tbParentDepth.Text != string.Empty &&
-                this.tbParentIDfolder.Text != string.Empty && this.tbParentTitleCnFolder.Text != string.Empty&&
-                this.tbFilesPath.Text!=string.Empty&&this.tbTitle1Xpath.Text!=string.Empty&&
-                tbTitle2Xpath1.Text.Trim() != String.Empty && tbTitle2Xpath2.Text.Trim() != String.Empty
-                && tbTitle2Xpath3.Text.Trim() != String.Empty)
+            if (this.tbHtmlPath.Text != string.Empty && this.tbParentGuid.Text != string.Empty && this.tbParentDepth.Text != string.Empty &&
+            this.tbParentIDfolder.Text != string.Empty && this.tbParentTitleCnFolder.Text != string.Empty &&
+            this.tbFilesPath.Text != string.Empty && this.tbTitle1Xpath.Text != string.Empty &&
+            tbTitle2Xpath1.Text.Trim() != String.Empty && tbTitle2Xpath2.Text.Trim() != String.Empty
+            && tbTitle2Xpath3.Text.Trim() != String.Empty)
             {
                 try
                 {
                     conventionRead.title1_xPath = tbTitle1Xpath.Text;
                     conventionRead.title2_xPath = tbTitle2Xpath1.Text + tbTitle2Xpath2.Text + tbTitle2Xpath3.Text;
                     conventionRead.imageFilePath = tbFilesPath.Text;
-                    ConventionRow rootNode = new ConventionRow(new Guid(this.tbParentGuid.Text), int.Parse(this.tbParentDepth.Text), 
+                    ConventionRow rootNode = new ConventionRow(new Guid(this.tbParentGuid.Text), int.Parse(this.tbParentDepth.Text),
                         this.tbParentIDfolder.Text, this.tbParentTitleCnFolder.Text);
                     conventionRead.htmlPath = tbHtmlPath.Text;
-                    this.toolStripStatusLabel1.Text = conventionRead.ReadHtml(rootNode);                    
+                    if (rdbtContent.Checked)
+                        this.toolStripStatusLabel1.Text = conventionRead.ReadHtml(rootNode,ReadMethod.CONTENT);
+                    else if (rdbtTitleTag.Checked)
+                        this.toolStripStatusLabel1.Text = conventionRead.ReadHtml(rootNode, ReadMethod.TITLE_TAG);
                 }
                 catch (Exception err)
                 {
@@ -62,7 +71,7 @@ namespace WordRead
                 }
             }
             else
-                MessageBox.Show("请输入信息");
+                MessageBox.Show("请输入信息!");
 
             #region 废弃代码
             // ConventionRow rootNode=new ConventionRow(new Guid("1b506d0f-8956-46d3-a023-78d24e300ed0"),2,ConventionOptions.CATEGORY.IS_CATEGORY);
@@ -124,21 +133,15 @@ namespace WordRead
         }
         private void btnHtmlPath_Click(object sender, EventArgs e)
         {
-            
+
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                tbHtmlPath.Text = openFileDialog1.FileName;                
+                tbHtmlPath.Text = openFileDialog1.FileName;
             }
-        }
-
-        private void btnSQLTest_Click(object sender, EventArgs e)
-        {
-            
         }
 
         private void rdbtCatagory_CheckedChanged(object sender, EventArgs e)
         {
-            
             if (((RadioButton)sender).Checked)
             {
                 grpContent.Enabled = false;
@@ -155,7 +158,7 @@ namespace WordRead
             }
         }
 
-        private void 单条录入ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void menuSingle_Click(object sender, EventArgs e)
         {
             if (singleAdd == null)
             {
@@ -168,23 +171,69 @@ namespace WordRead
             }
         }
 
-        private void 数据库连接测试ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void menuSQLTest_Click(object sender, EventArgs e)
         {
             SQLUtils sqlUtils = SQLUtils.getInstance();
             try
             {
+                sqlUtils.makeConnect();
                 if (sqlUtils.isConnected)
                 {
                     MessageBox.Show("连接成功");
                     this.toolStripStatusLabel1.Text = "连接成功";
+                    //this.btnWordRead.Enabled = true;
+                    //this.singleAdd.Enabled = true;
                 }
-            }         
-            catch(Exception err)
+            }
+            catch (Exception err)
             {
                 MessageBox.Show("连接失败");
-                this.toolStripStatusLabel1.Text = "连接失败"+err.Message;
+                this.toolStripStatusLabel1.Text = "连接失败" + err.Message;
             }
+        }
 
+        private void rdbtConStrServer_CheckedChanged(object sender, EventArgs e)
+        {
+            SQLUtils sqlUtils = SQLUtils.getInstance();
+            if (((RadioButton)sender).Checked)
+            {
+                sqlUtils.ConStr = @"server=60.30.247.219;database=MRCS_0515;uid=pscadmin1;pwd=http://psc20131105";
+            }
+        }
+
+        private void rdbtConStrLocal_CheckedChanged(object sender, EventArgs e)
+        {
+            SQLUtils sqlUtils = SQLUtils.getInstance();
+            if (((RadioButton)sender).Checked)
+            {
+                sqlUtils.ConStr = @"Server=(local);Database=mrcs_0515;Integrated Security=true;";
+            }
+        }
+
+        private void rdbtConStrLocal_work_CheckedChanged(object sender, EventArgs e)
+        {
+            SQLUtils sqlUtils = SQLUtils.getInstance();
+            if (((RadioButton)sender).Checked)
+            {
+                sqlUtils.ConStr = @"Server=(local)\MILESGESQL;Database=mrcs_0515;Integrated Security=true;";
+            }
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            SQLUtils sqlUtils = SQLUtils.getInstance();
+            if (sqlUtils.isConnected)
+            {
+                try
+                {
+                    sqlUtils.updateTable();
+                    this.toolStripStatusLabel1.Text = "数据更新成功";
+                }
+                catch (Exception err)
+                {
+                    this.toolStripStatusLabel1.Text = err.Message;
+                }
+            }
         }
     }
 }
