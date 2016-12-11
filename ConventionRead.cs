@@ -11,60 +11,26 @@ using Word = Microsoft.Office.Interop.Word;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Data.SqlClient;
-using DataStructure;
-using mshtml;
 using System.Net;
 using HtmlAgilityPack;
 namespace WordRead
 {
     class ConventionRead
     {
-        const string catalogPath = @"F:/1work/WordRead/test.docx";
+        public string htmlPath;
         public string imageFilePath;
-        public string htmlPath;//= @"D:\1work\htmlRcgTest\Part3_07.htm";
-        //@"../../../htmlRcgTest/Part3_07.htm";
-        //private ConventionRow rootNode;
-        //public string title2Style= @"font-size:14.0pt;font-family:楷体_GB2312";
-        public string title2_xPath = @"//span[position()<3 and @style='font-size:14.0pt;font-family:楷体_GB2312']";
-        public string title1_xPath = @"/html[1]/body[1]/div[@class='WordSection2']//b[1] |" +
-                @"/html[1]/body[1]/div[@class='WordSection2']//h1[1]|" +
-                @"/html[1]/body[1]/div[@class='WordSection2']//a[1]";
-        private string text;
-        public Tree<ConventionRow> ConventionRowTree = new Tree<ConventionRow>();
+        public string title1_select;
+        public string title2_select;
+        public ReturnInfo retInfo=new ReturnInfo();
+        public ReadMethod method;
         public ConventionRead()
         {
-        }
-        public void ReadWordText()
-        {
-            Word.Application app = new Word.Application();
-            Word.Document doc = null;
-            try
-            {
-                object unknow = Type.Missing;
-                app.Visible = false;
-                object file = catalogPath;
-                doc = app.Documents.Open(ref file,
-                    ref unknow, ref unknow, ref unknow, ref unknow,
-                    ref unknow, ref unknow, ref unknow, ref unknow,
-                    ref unknow, ref unknow, ref unknow, ref unknow,
-                    ref unknow, ref unknow, ref unknow);
-                doc.ActiveWindow.Selection.WholeStory();
-                doc.ActiveWindow.Selection.Copy();
-                IDataObject data = Clipboard.GetDataObject();
-                text = data.GetData(DataFormats.Text).ToString();
-                doc.Close();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                doc.Close();
-            }
         }
         /// <summary>
         ///  附录需要在word里按目录要求，手动改为一级或者二级标题的格式
         /// </summary>
         /// <param name="rootConvention"></param>
-        public string ReadHtml(ConventionRow rootConvention, ReadMethod method)
+        public ReturnInfo ReadHtml(ConventionRow rootConvention)
         {
             HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
             doc.Load(htmlPath);
@@ -73,22 +39,25 @@ namespace WordRead
             HtmlNodeCollection title1Nodes_init;
             HtmlNodeCollection title2Nodes_init;
             List<string> str_contentList = new List<string>();
-            List<string> str_title2List = new List<string>();
-            List<string> str_title1List = new List<string>();
             List<string> str_titleList = new List<string>();
+            List<string> str_title1List = new List<string>();
+            List<string> str_title2List = new List<string>();
             HtmlNodeCollection contentNodes = new HtmlNodeCollection(htmlRootNode.Clone());
-            HtmlNodeCollection title1Nodes = new HtmlNodeCollection(htmlRootNode.Clone());
+            Dictionary<int, string> dic_title1Content = new Dictionary<int, string>();
             HtmlNodeCollection titleNodes = new HtmlNodeCollection(htmlRootNode.Clone());
+            HtmlNodeCollection title1Nodes = new HtmlNodeCollection(htmlRootNode.Clone());
             HtmlNodeCollection title2Nodes = new HtmlNodeCollection(htmlRootNode.Clone());
             HtmlNodeCollection ftNoteRefnodes = new HtmlNodeCollection(htmlRootNode.Clone());
             string htmlTxt = htmlRootNode.InnerHtml;
             //正文识别标题
-            if (method== ReadMethod.CONTENT)
+
+            #region 选项1：一级标题粗体识别
+            if (method == ReadMethod.TITLE1_BOLD)
             {
                 //一级标题
-                title1Nodes_init = htmlRootNode.SelectNodes(title1_xPath);
+                title1Nodes_init = htmlRootNode.SelectNodes(title1_select);
                 //二级标题可能所在span
-                title2Nodes_init = htmlRootNode.SelectNodes(title2_xPath);
+                title2Nodes_init = htmlRootNode.SelectNodes(title2_select);
                 #region 找出一级标题，HtmlNode保存在title1Nodes,文本存储在 str_title1List
 
                 if (title1Nodes_init != null)
@@ -101,13 +70,13 @@ namespace WordRead
                             || (title1Nodes_init[i].ParentNode.Name == "a" && title1Nodes_init[i].ParentNode.ParentNode.Name == "p")
                             )
                         {
-                            foreach (var child in title1Nodes_init[i].ChildNodes)
+                            foreach (var child in title1Nodes_init[i].DescendantsAndSelf())
                             {
                                 if (child.Name == "span" && child.HasAttributes)
                                 {
                                     foreach (var atbt in child.Attributes)
                                     {
-                                        if (atbt.Name == "style")//&& atbt.Value== "font-size:14.0pt;font-family:宋体")
+                                        if (atbt.Name == "style")//&& atbt.Value== "font-size:15.0pt;font-family:黑体")
                                         {
                                             if ((title1Nodes_init[i].ParentNode.InnerText.Contains("第") && title1Nodes_init[i].ParentNode.InnerText.Contains("章"))
                                                 )
@@ -120,12 +89,12 @@ namespace WordRead
                                                 else if (title1Nodes_init[i].ParentNode.Name == "p")
                                                 {
                                                     title1Nodes.Add(title1Nodes_init[i].ParentNode);
-                                                    str_title1List.Add(title1Nodes_init[i].ParentNode.InnerText.Replace("&nbsp;", " ").Replace("\r\n", ""));
+                                                    str_title1List.Add(title1Nodes_init[i].ParentNode.InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
                                                 }
                                                 else if (title1Nodes_init[i].Name == "h" || title1Nodes_init[i].Name == "h1" || title1Nodes_init[i].Name == "h2")
                                                 {
                                                     title1Nodes.Add(title1Nodes_init[i]);
-                                                    str_title1List.Add(title1Nodes_init[i].InnerText.Replace("&nbsp;", " ").Replace("\r\n", ""));
+                                                    str_title1List.Add(title1Nodes_init[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
                                                 }
                                             }
                                             break;
@@ -153,7 +122,7 @@ namespace WordRead
                             if ((i == 0) || (i > 0 && title2Nodes_init[i].ParentNode.ParentNode.Line != title2Nodes_init[i - 1].ParentNode.ParentNode.Line))
                             {
                                 title2Nodes.Add(title2Nodes_init[i].ParentNode.ParentNode);
-                                str_title2List.Add(title2Nodes_init[i].ParentNode.ParentNode.InnerText.Replace("&nbsp;", " ").Replace("\r\n", ""));
+                                str_title2List.Add(title2Nodes_init[i].ParentNode.ParentNode.InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
                             }
                         }
                         //标题span存在的情形2、3
@@ -164,7 +133,7 @@ namespace WordRead
                             if ((i == 0) || (i > 0 && title2Nodes_init[i].ParentNode.Line != title2Nodes_init[i - 1].ParentNode.Line))
                             {
                                 title2Nodes.Add(title2Nodes_init[i].ParentNode);
-                                str_title2List.Add(title2Nodes_init[i].ParentNode.InnerText.Replace("&nbsp;", " ").Replace("\r\n", ""));
+                                str_title2List.Add(title2Nodes_init[i].ParentNode.InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
                             }
                         }
                     }
@@ -175,16 +144,112 @@ namespace WordRead
                             str_title2List.RemoveAt(i);
                             title2Nodes.RemoveAt(i);
                         }
-                    }                  
+                    }
                 }
                 #endregion
             }
-            //h1/h2/h3标签识别标题
-            else if(method==ReadMethod.TITLE_TAG)
+            #endregion
+
+            #region 选项2：标题中Span 标签 Style属性识别
+            else if (method == ReadMethod.TITLE_SPANSTYLE)
             {
-                titleNodes_init = htmlRootNode.SelectNodes(@"//h2|//h3");
-                title1Nodes_init = htmlRootNode.SelectNodes(@"//h2");
-                title2Nodes_init = htmlRootNode.SelectNodes(@"//h3");
+                title1Nodes_init = title2Nodes_init = htmlRootNode.SelectNodes(@"//span[@style]");
+
+                #region 提取一级标题节点，生成一级目录的节点集合title1Nodes，和字符串集合str_title1List
+                if (title1Nodes_init != null)
+                {
+                    for (int i = 0; i < title1Nodes_init.Count; i++)
+                    {
+                        string tmpstr = title1Nodes_init[i].InnerText;
+                        if (title1Nodes_init[i].Attributes["style"].Value == title1_select)
+                        {
+                            foreach (var match in title1Nodes_init[i].AncestorsAndSelf())
+                            {
+                                if (match.Name == "p")
+                                {
+                                    title1Nodes.Add(match);
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+                    for (int i = 0; i < title1Nodes.Count; i++)
+                    {
+                        if (title1Nodes[i].InnerText.Trim() != string.Empty &&
+                        (i == 0 || (i > 0 && title1Nodes[i].Line != title1Nodes[i - 1].Line)))
+                        {
+                            str_title1List.Add(title1Nodes[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
+                        }
+                        else
+                        {
+                            title1Nodes.RemoveAt(i);
+                        }
+                    }
+                }
+                #endregion
+
+                #region 提取二级标题节点，生成二级目录的节点集合title2Nodes，和字符串集合str_title2List
+                if (title2Nodes_init != null)
+                {
+                    HtmlNodeCollection tempNodes = new HtmlNodeCollection(htmlRootNode.Clone());
+
+                    for (int i = 0; i < title2Nodes_init.Count; i++)
+                    {
+                        if (title2Nodes_init[i].Attributes["style"].Value.Replace("\r\n", "") == title2_select)
+                        {
+                            foreach (var match in title2Nodes_init[i].AncestorsAndSelf())
+                            {
+                                if (match.Name == "p")
+                                {
+                                    tempNodes.Add(match);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    for (int i = 0; i < tempNodes.Count; i++)
+                    {
+                        if (tempNodes[i].InnerText.Replace("&nbsp;", "").Trim() != String.Empty &&
+                        (i == 0 || (i > 0 && tempNodes[i].Line != tempNodes[i - 1].Line)))
+                        {
+                            title2Nodes.Add(tempNodes[i]);
+                            str_title2List.Add(tempNodes[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
+                        }
+                    }
+                }
+                #endregion
+
+                #region 生成包含按序排列的一二级目录的节点集合titleNodes，和字符串集合str_titleList
+                foreach (var match in title1Nodes)
+                    titleNodes.Add(match);
+                foreach (var match in title2Nodes)
+                    titleNodes.Add(match);
+                for (int i = 0; i < titleNodes.Count; i++)
+                {
+                    for (int j = i; j < titleNodes.Count; j++)
+                    {
+                        if (titleNodes[i].Line > titleNodes[j].Line)
+                        {
+                            var temp = titleNodes[i];
+                            titleNodes[i] = titleNodes[j];
+                            titleNodes[j] = temp;
+                        }
+                    }
+                }
+                for (int i = 0; i < titleNodes.Count; i++)
+                {
+                    str_titleList.Add(titleNodes[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
+                }
+                #endregion
+            }
+            #endregion
+
+            #region 选项3：h1/h2/h3标签识别标题
+            else if (method == ReadMethod.TITLE_TAG)
+            {
+                titleNodes_init = htmlRootNode.SelectNodes(@"//" + title1_select + @"|" + @"//" + title2_select);
+                title1Nodes_init = htmlRootNode.SelectNodes(@"//" + title1_select);
+                title2Nodes_init = htmlRootNode.SelectNodes(@"//" + title2_select);
                 for (int i = 0; i < titleNodes_init.Count; i++)
                 {
                     string tmpstr = titleNodes_init[i].InnerText;
@@ -192,18 +257,22 @@ namespace WordRead
                     {
                         titleNodes.Add(titleNodes_init[i]);
                         title1Nodes.Add(titleNodes_init[i]);
-                        str_titleList.Add(titleNodes_init[i].InnerText.Replace("&nbsp;", " ").Replace("\r\n", ""));
-                        str_title1List.Add(titleNodes_init[i].InnerText.Replace("&nbsp;", " ").Replace("\r\n", ""));
+                        str_titleList.Add(titleNodes_init[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
+                        str_title1List.Add(titleNodes_init[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
                     }
                     else if (titleNodes_init[i].Name == "h3")
                     {
                         titleNodes.Add(titleNodes_init[i]);
                         title2Nodes.Add(titleNodes_init[i]);
-                        str_titleList.Add(titleNodes_init[i].InnerText.Replace("&nbsp;", " ").Replace("\r\n", ""));
-                        str_title2List.Add(titleNodes_init[i].InnerText.Replace("&nbsp;", " ").Replace("\r\n", ""));
+                        str_titleList.Add(titleNodes_init[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
+                        str_title2List.Add(titleNodes_init[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
                     }
                 }
             }
+            #endregion
+
+            try
+            {
                 #region 找出html文本末尾可能存在的各脚注div，HtmlNode存储在ftNoteRefnodes
 
                 foreach (var match in htmlRootNode.Descendants())
@@ -219,16 +288,7 @@ namespace WordRead
                 }
                 #endregion
 
-                #region html文档中去除一级标题部分，以及文档末尾的脚注，保存在 htmlTxt 字符串
-
-                if (title1Nodes != null)
-                {
-                    for (int i = 0; i < title1Nodes.Count; i++)
-                    {
-                        //Console.WriteLine(title1Nodes[i].OuterHtml + "\r\n");
-                        htmlTxt = htmlTxt.Replace(title1Nodes[i].OuterHtml, "");
-                    }
-                }
+                #region html文档中去除文档末尾的脚注，保存在 htmlTxt 字符串          
                 if (ftNoteRefnodes != null)
                 {
                     for (int i = 0; i < ftNoteRefnodes.Count; i++)
@@ -240,160 +300,194 @@ namespace WordRead
                 Regex reg = new Regex(Patterns.imageSrc);
                 htmlTxt = reg.Replace(htmlTxt, "${1}" + imageFilePath + "${2}");
                 MatchCollection a = reg.Matches(htmlTxt);
-
-                System.IO.File.WriteAllText(@"../../../htmlRcgTest/1234.html", htmlTxt);
+                System.IO.File.WriteAllText(@"../../../htmlRcgTest/全文.html", htmlTxt);
                 #endregion
 
-                #region 按二级标题，分小节存储html文本，HtmlNode节点存储在contentNodes,文本存储在str_contentList
-
-
-                try
+                #region 提取一级标题下可能有的正文，此标题序号和正文键值对 存储在字典dic_title1Content
+                Dictionary<int, string> dic_title1Content_tmp = new Dictionary<int, string>();
+                for (int i = 0; i < titleNodes.Count; i++)
                 {
-                    for (int i = 0; i < title2Nodes.Count; i++)
+                    for (int j = 0; j < title1Nodes.Count - 1; j++)
                     {
-                        HtmlAgilityPack.HtmlDocument contentNodeDoc = new HtmlAgilityPack.HtmlDocument();
-                        string str_content;
-                        int index_PartStart = 0;
-                        if (i < title2Nodes.Count - 1)
+                        if (titleNodes[i].Line == title1Nodes[j].Line)
                         {
-                            index_PartStart = htmlTxt.IndexOf(title2Nodes[i].OuterHtml);
-                            int index_PartEnd = htmlTxt.IndexOf(title2Nodes[i + 1].OuterHtml, index_PartStart + 1);
-                            if (index_PartStart != -1 && index_PartEnd > index_PartStart)
-                                str_content = htmlTxt.Substring(index_PartStart, index_PartEnd - index_PartStart);
-                            else
-                                throw new Exception("提取出错");
-                        }
-                        else
-                        {
-                            index_PartStart = htmlTxt.IndexOf(title2Nodes[title2Nodes.Count - 1].OuterHtml);
-                            if (index_PartStart != -1)
-                                str_content = htmlTxt.Substring(index_PartStart);
-                            else
-                                throw new Exception("提取出错");
-                        }
-                        foreach (var ftnref in ftNoteRefnodes)
-                        {
-                            if (str_content.Contains("href=\"#_" + ftnref.Attributes["id"].Value + "\""))
+                            if ((i < titleNodes.Count - 1 && titleNodes[i + 1].Line == title1Nodes[j + 1].Line))
                             {
-                                str_content = str_content + ftnref.OuterHtml;
+                                int start = htmlTxt.IndexOf(title1Nodes[j].OuterHtml);
+                                int end = htmlTxt.IndexOf(title1Nodes[j + 1].OuterHtml, start + 1);
+                                if (start != -1 && end > start)
+                                    dic_title1Content_tmp.Add(j, htmlTxt.Substring(start, end - start));
+                                else
+                                    throw new Exception("title1 content提取出错");
+                            }
+                            else if (titleNodes.Last().Line == title1Nodes.Last().Line)
+                            {
+                                int start = htmlTxt.IndexOf(title1Nodes.Last().OuterHtml);
+                                if (start != -1)
+                                    dic_title1Content_tmp.Add(title1Nodes.Count - 1, htmlTxt.Substring(start));
+                                else
+                                    throw new Exception("title1 last content提取出错");
                             }
                         }
-                        contentNodeDoc.LoadHtml(str_content);
-                        contentNodes.Add(contentNodeDoc.DocumentNode);
-                        str_contentList.Add(contentNodes[i].OuterHtml);
-                        System.IO.File.WriteAllText(@"../../../htmlRcgTest/" + i + @".html", str_contentList[i]);
                     }
                 }
-                catch (Exception err)
+                foreach (var pair in dic_title1Content_tmp)
                 {
-                    Console.WriteLine(err + "\r\n");
+                    string v = pair.Value;
+                    foreach (var ftnref in ftNoteRefnodes)
+                    {
+                        if (pair.Value.Contains("href=\"#_" + ftnref.Attributes["id"].Value + "\""))
+                        {
+                            v = v + ftnref.OuterHtml;
+                        }
+                    }
+                    dic_title1Content.Add(pair.Key, v);
                 }
                 #endregion
 
-                #region 获取各一级目录下小节的数量，存储在title2InTitle1Nums[]。将两级标题录入数据库（如何任意多级别都可以录入？）
-                try
+                #region 更新 htmlTxt 字符串，将html文本中一级标题内容删除
+                if (title1Nodes != null)
                 {
-                    SQLUtils sqlUtils = SQLUtils.getInstance();
-                    sqlUtils.makeConnect();
-                    ConventionRow tmp_rootConvention = rootConvention;
                     for (int i = 0; i < title1Nodes.Count; i++)
                     {
-                        ConventionRow tempRow1 = new ConventionRow(rootConvention, str_title1List[i],
-                            i + 1, ConventionOptions.CATEGORY.IS_CATEGORY);
-                        sqlUtils.writeRow_local(tempRow1);
-                        for (int j = 0, k = 0; j < title2Nodes.Count; j++)
-                        {
-                            tmp_rootConvention = tempRow1;
-                            if (i < title1Nodes.Count - 1)
-                            {
-                                if (title2Nodes[j].Line < title1Nodes[i + 1].Line && title2Nodes[j].Line > title1Nodes[i].Line)
-                                {
-                                    ConventionRow tempRow2 = new ConventionRow(tmp_rootConvention, str_title2List[j],
-                                        ++k, ConventionOptions.CATEGORY.IS_CONTENT, str_contentList[j]);
-                                    sqlUtils.writeRow_local(tempRow2);
-                                    //title2InTitle1Nums[i]++;
-                                }
-                            }
-                            else
-                                if (title2Nodes[j].Line > title1Nodes[i].Line)
-                            {
-                                ConventionRow tempRow2 = new ConventionRow(tmp_rootConvention, str_title2List[j],
-                                    ++k, ConventionOptions.CATEGORY.IS_CONTENT, str_contentList[j]);
-                                sqlUtils.writeRow_local(tempRow2);
-                                //title2InTitle1Nums[i]++;
-                            }
-                        }
+                        htmlTxt = htmlTxt.Replace(title1Nodes[i].OuterHtml, "");
                     }
-                    //Console.WriteLine("aaa");
-                    return "Html识别成功：一级目录有" + str_title1List.Count + "个,二级目录共有" + str_title2List.Count + "个";
                 }
-                catch (Exception err)
-                {
-                    Console.WriteLine(err.Message);
-                    return "录入失败。错误原因：" + err.Message;
-                }
-
                 #endregion
 
-            
-            //return "";
-        }
-        /// <summary>
-        /// 文档中的一级标题被设置为h2,二级标题被设置为h3 时用此方法
-        /// </summary>
-        /// <param name="rootNode"></param>
-        public string ReadCatalogue1(ConventionRow rootConvention)
-        {
-            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-            doc.Load(htmlPath);
-            HtmlNode htmlRootNode = doc.DocumentNode;
-            var titleNodes_init = htmlRootNode.SelectNodes(@"//h2|//h3");
-            var title1Nodes_init = htmlRootNode.SelectNodes(@"//h2");
-            var title2Nodes_init = htmlRootNode.SelectNodes(@"//h3");
-            List<string> str_contentList = new List<string>();
-            List<string> str_titleList = new List<string>();
-            List<string> str_title1List = new List<string>();
-            List<string> str_title2List = new List<string>();
-            HtmlNodeCollection titleNodes = new HtmlNodeCollection(htmlRootNode.Clone());
-            HtmlNodeCollection title1Nodes = new HtmlNodeCollection(htmlRootNode.Clone());
-            HtmlNodeCollection title2Nodes = new HtmlNodeCollection(htmlRootNode.Clone());
-            for (int i = 0; i < titleNodes_init.Count; i++)
-            {
-                string tmpstr = titleNodes_init[i].InnerText;
-                if (titleNodes_init[i].Name == "h2" && tmpstr.Contains("第") && tmpstr.Contains("章"))
+                #region 提取二级标题下Html正文，分小节存储，HtmlNode节点存储在contentNodes,文本存储在str_contentList
+                for (int i = 0; i < title2Nodes.Count; i++)
                 {
-                    titleNodes.Add(titleNodes_init[i]);
-                    title1Nodes.Add(titleNodes_init[i]);
-                    str_titleList.Add(titleNodes_init[i].InnerText.Replace("&nbsp;", " ").Replace("\r\n", ""));
-                    str_title1List.Add(titleNodes_init[i].InnerText.Replace("&nbsp;", " ").Replace("\r\n", ""));
+                    HtmlAgilityPack.HtmlDocument contentNodeDoc = new HtmlAgilityPack.HtmlDocument();
+                    string str_content;
+                    int index_PartStart = 0;
+                    if (i < title2Nodes.Count - 1)
+                    {
+                        index_PartStart = htmlTxt.IndexOf(title2Nodes[i].OuterHtml);
+                        int index_PartEnd = htmlTxt.IndexOf(title2Nodes[i + 1].OuterHtml, index_PartStart + 1);
+                        if (index_PartStart != -1 && index_PartEnd > index_PartStart)
+                            str_content = htmlTxt.Substring(index_PartStart, index_PartEnd - index_PartStart);
+                        else
+                            throw new Exception("提取出错");
+                    }
+                    else
+                    {
+                        index_PartStart = htmlTxt.IndexOf(title2Nodes[title2Nodes.Count - 1].OuterHtml);
+                        if (index_PartStart != -1)
+                            str_content = htmlTxt.Substring(index_PartStart);
+                        else
+                            throw new Exception("提取出错");
+                    }
+                    foreach (var ftnref in ftNoteRefnodes)
+                    {
+                        if (str_content.Contains("href=\"#_" + ftnref.Attributes["id"].Value + "\""))
+                        {
+                            str_content = str_content + ftnref.OuterHtml;
+                        }
+                    }
+                    contentNodeDoc.LoadHtml(str_content);
+                    contentNodes.Add(contentNodeDoc.DocumentNode);
+                    str_contentList.Add(contentNodes[i].OuterHtml);
+                    //System.IO.File.WriteAllText(@"../../../htmlRcgTest/" + i + @".html", str_contentList[i]);
                 }
-                else if (titleNodes_init[i].Name == "h3")
-                {
-                    titleNodes.Add(titleNodes_init[i]);
-                    title2Nodes.Add(titleNodes_init[i]);
-                    str_titleList.Add(titleNodes_init[i].InnerText.Replace("&nbsp;", " ").Replace("\r\n", ""));
-                    str_title2List.Add(titleNodes_init[i].InnerText.Replace("&nbsp;", " ").Replace("\r\n", ""));
-                }
+                #endregion
             }
-            SQLUtils sqlUtils = SQLUtils.getInstance();
-            sqlUtils.makeConnect();
-            ConventionRow tmp_rootConvention = rootConvention;
-            //for (int i = -1, j = 0; j < titleNodes.Count; j++)
-            //{
-            //    if (title1Nodes[i + 1].Line == titleNodes[j].Line)
-            //    {
-            //        i++;
-            //        ConventionRow tempRow2 = new ConventionRow(tmp_rootConvention, str_title1List[j],
-            //            ++k, ConventionOptions.CATEGORY.IS_CATEGORY);
-            //        sqlUtils.writeRow_local(tempRow2);
-            //        continue;
-            //    }
+            catch (Exception err)
+            {
+                Console.WriteLine(err.Message);
+            }
 
-
-            //}
-
-            return "";
+            #region 将一、二级标题及内容录入数据库
+            try
+            {
+                SQLUtils sqlUtils = SQLUtils.getInstance();
+                sqlUtils.makeConnect();
+                ConventionRow tmp_rootConvention = rootConvention;
+                for (int i = 0; i < title1Nodes.Count; i++)
+                {
+                    ConventionRow tempRow1 = null;
+                    foreach (var pair in dic_title1Content)
+                    {
+                        if (pair.Key == i)//若一级标题下有内容，而无二级目录
+                        {
+                            tempRow1 = new ConventionRow(rootConvention, str_title1List[i],
+                                i + 1, ConventionOptions.CATEGORY.IS_TITLE1_BOLD, pair.Value);
+                            sqlUtils.writeRow_local(tempRow1);
+                            retInfo.title1Guids.Add(tempRow1.TitleCn + "\r\n" + tempRow1.Guid);
+                            //retInfo.retTable.Rows.Add(tempRow1);
+                            break;
+                        }
+                    }
+                    if (tempRow1 == null)////若一级标题下无内容，有二级目录
+                    {
+                        tempRow1 = new ConventionRow(rootConvention, str_title1List[i],
+                                i + 1, ConventionOptions.CATEGORY.IS_CATEGORY);
+                        sqlUtils.writeRow_local(tempRow1);
+                        retInfo.title1Guids.Add(tempRow1.TitleCn + "\r\n" + tempRow1.Guid);
+                        //retInfo.retTable.Rows.Add(tempRow1);
+                    }
+                    for (int j = 0, k = 0; j < title2Nodes.Count; j++)
+                    {
+                        tmp_rootConvention = tempRow1;
+                        if (i < title1Nodes.Count - 1)
+                        {
+                            if (title2Nodes[j].Line < title1Nodes[i + 1].Line && title2Nodes[j].Line > title1Nodes[i].Line)
+                            {
+                                ConventionRow tempRow2 = new ConventionRow(tmp_rootConvention, str_title2List[j],
+                                    ++k, ConventionOptions.CATEGORY.IS_TITLE1_BOLD, str_contentList[j]);
+                                sqlUtils.writeRow_local(tempRow2);
+                                //retInfo.retTable.Rows.Add(tempRow2);                         
+                            }
+                        }
+                        else if (title2Nodes[j].Line > title1Nodes[i].Line)
+                        {
+                            ConventionRow tempRow2 = new ConventionRow(tmp_rootConvention, str_title2List[j],
+                                ++k, ConventionOptions.CATEGORY.IS_TITLE1_BOLD, str_contentList[j]);
+                            sqlUtils.writeRow_local(tempRow2);
+                            //retInfo.retTable.Rows.Add(tempRow2);
+                        }
+                    }
+                }
+                retInfo.title1s = str_title1List;
+                retInfo.title2s = str_title2List;
+                retInfo.dic_title1Contents = str_title2List;
+                retInfo.title2Contents = str_contentList;
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine(err.Message);
+                retInfo.errorInfo="录入失败。错误原因：" + err.Message;
+            }
+            return retInfo;
+            #endregion
         }
+        #region 废弃代码
+        //public void ReadWordText()
+        //{
+        //    Word.Application app = new Word.Application();
+        //    Word.Document doc = null;
+        //    try
+        //    {
+        //        object unknow = Type.Missing;
+        //        app.Visible = false;
+        //        object file = catalogPath;
+        //        doc = app.Documents.Open(ref file,
+        //            ref unknow, ref unknow, ref unknow, ref unknow,
+        //            ref unknow, ref unknow, ref unknow, ref unknow,
+        //            ref unknow, ref unknow, ref unknow, ref unknow,
+        //            ref unknow, ref unknow, ref unknow);
+        //        doc.ActiveWindow.Selection.WholeStory();
+        //        doc.ActiveWindow.Selection.Copy();
+        //        IDataObject data = Clipboard.GetDataObject();
+        //        text = data.GetData(DataFormats.Text).ToString();
+        //        doc.Close();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex.Message);
+        //        doc.Close();
+        //    }
+        //}
         //public void ReadCatalogue(ConventionRow rootNode)
         //{
         //    ConventionRowTree.Data = rootNode;
@@ -423,24 +517,38 @@ namespace WordRead
         //        }
         //        ConventionRow tempRow2 = new ConventionRow(ConventionRowTree.Nodes[i].Data.Guid,
         //            ConventionRowTree.Nodes[i].Data.Depth + 1, allTitle_matches[j].Value,
-        //            ConventionRowTree.Nodes[i].NodeNumber + 1, ConventionOptions.CATEGORY.IS_CONTENT);
+        //            ConventionRowTree.Nodes[i].NodeNumber + 1, ConventionOptions.CATEGORY.IS_TITLE1_BOLD);
         //        Tree<ConventionRow> ConventionNode2 = new Tree<ConventionRow>(tempRow2);
         //        ConventionRowTree.Nodes[i].AddNode(ConventionNode2);
         //        Console.WriteLine(ConventionNode2.Data.TitleCn);
         //    }
         //    Console.WriteLine("Yes");
-        //}
+        //} 
+        #endregion
+       
+    }
+    public class ReturnInfo
+    {
+        public List<string> titles=new List<string> ();
+        public List<string> title1s=new List<string> ();
+        public List<string> title2s=new List<string>();
+        public List<string> dic_title1Contents=new List<string> ();
+        public List<string> title2Contents=new List<string>();
+        public List<string> title1Guids=new List<string>();
+        public string errorInfo;
+        public DataTable retTable=new DataTable ();
     }
     public static class Patterns
     {
         public static string imageSrc = @"(<img\s+width=" + "\"" + @"?\d+" + "\"" + @"?\s+height=" + "\"" + @"?\d+" + "\"" + @"?\s+src=['" + "\"" + @"])[\s\S]+?(/image[\s\S]+?['" + "\"" + @"]>)";
-        public static string Title1 = @"第\d{1,}章[\s\S]+?(?=\s\d{1,3}\r)";//查找一级标题
-        public static string subTitle = @"第\d{1,}章[\s\S]+?(?=\r)";//查找一级标题
-        public static string allTitle = @"^[^\r][\s\S]+?(?=\s\d{1,3}\r)";//按行查找，去除空行，去除页码，匹配两种标题
+        //public static string Title1 = @"第\d{1,}章[\s\S]+?(?=\s\d{1,3}\r)";//查找一级标题
+        //public static string subTitle = @"第\d{1,}章[\s\S]+?(?=\r)";//查找一级标题
+        //public static string allTitle = @"^[^\r][\s\S]+?(?=\s\d{1,3}\r)";//按行查找，去除空行，去除页码，匹配两种标题
     }
     public enum ReadMethod
     {
-        CONTENT = 0,
+        TITLE1_BOLD = 0,
         TITLE_TAG = 1,
+        TITLE_SPANSTYLE = 2,
     }
 }

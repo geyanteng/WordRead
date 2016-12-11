@@ -15,7 +15,7 @@ namespace WordRead
         public enum CATEGORY
         {
             IS_CATEGORY = 1,
-            IS_CONTENT = 2,
+            IS_TITLE1_BOLD = 2,
         }
         public enum DISPLAY
         {

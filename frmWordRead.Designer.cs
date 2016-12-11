@@ -33,21 +33,22 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btnHtmlPath = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.tbTitle2Xpath2 = new System.Windows.Forms.TextBox();
+            this.tbTitle2SpanStyle = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.tbTitle2Xpath1 = new System.Windows.Forms.TextBox();
-            this.tbTitle2Xpath3 = new System.Windows.Forms.TextBox();
+            this.tbTitle2Xpath = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.tbTitle1Xpath = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.tbcMode = new System.Windows.Forms.TabControl();
-            this.tabcontent = new System.Windows.Forms.TabPage();
-            this.grpContent = new System.Windows.Forms.GroupBox();
-            this.tabCategory = new System.Windows.Forms.TabPage();
-            this.grpCatagory = new System.Windows.Forms.GroupBox();
-            this.rdbtContent = new System.Windows.Forms.RadioButton();
-            this.rdbtTitleTag = new System.Windows.Forms.RadioButton();
+            this.tabRecognize = new System.Windows.Forms.TabPage();
+            this.grpRecognize = new System.Windows.Forms.GroupBox();
+            this.tbTitle1SpanStyle = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.tabInfo = new System.Windows.Forms.TabPage();
+            this.rdbtTitle1Bold = new System.Windows.Forms.RadioButton();
+            this.rdbtTitleHTag = new System.Windows.Forms.RadioButton();
             this.grpMode = new System.Windows.Forms.GroupBox();
+            this.rdbtTitleSpanStyle = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label8 = new System.Windows.Forms.Label();
             this.tbParentTitleCnFolder = new System.Windows.Forms.TextBox();
@@ -69,10 +70,16 @@
             this.rdbtConStrLocal = new System.Windows.Forms.RadioButton();
             this.rdbtConStrServer = new System.Windows.Forms.RadioButton();
             this.btnUpdate = new System.Windows.Forms.Button();
+            this.tbTitle1TagName = new System.Windows.Forms.TextBox();
+            this.lblTitle1TagName = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.tbTitle2TagName = new System.Windows.Forms.TextBox();
+            this.tbTitle1Guids = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
             this.tbcMode.SuspendLayout();
-            this.tabcontent.SuspendLayout();
-            this.grpContent.SuspendLayout();
-            this.tabCategory.SuspendLayout();
+            this.tabRecognize.SuspendLayout();
+            this.grpRecognize.SuspendLayout();
+            this.tabInfo.SuspendLayout();
             this.grpMode.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -82,7 +89,7 @@
             // 
             // btnWordRead
             // 
-            this.btnWordRead.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnWordRead.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnWordRead.Location = new System.Drawing.Point(493, 36);
             this.btnWordRead.Name = "btnWordRead";
             this.btnWordRead.Size = new System.Drawing.Size(65, 23);
@@ -96,25 +103,25 @@
             this.tbHtmlPath.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbHtmlPath.Location = new System.Drawing.Point(13, 92);
             this.tbHtmlPath.Name = "tbHtmlPath";
-            this.tbHtmlPath.Size = new System.Drawing.Size(244, 22);
+            this.tbHtmlPath.Size = new System.Drawing.Size(273, 22);
             this.tbHtmlPath.TabIndex = 2;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label1.Location = new System.Drawing.Point(10, 72);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(63, 14);
+            this.label1.Size = new System.Drawing.Size(66, 17);
             this.label1.TabIndex = 3;
             this.label1.Text = "Html 路径:";
             // 
             // btnHtmlPath
             // 
-            this.btnHtmlPath.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnHtmlPath.Location = new System.Drawing.Point(259, 91);
+            this.btnHtmlPath.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnHtmlPath.Location = new System.Drawing.Point(294, 91);
             this.btnHtmlPath.Name = "btnHtmlPath";
-            this.btnHtmlPath.Size = new System.Drawing.Size(63, 23);
+            this.btnHtmlPath.Size = new System.Drawing.Size(41, 23);
             this.btnHtmlPath.TabIndex = 4;
             this.btnHtmlPath.Text = "选择Html";
             this.btnHtmlPath.UseVisualStyleBackColor = true;
@@ -125,160 +132,185 @@
             this.openFileDialog1.InitialDirectory = "../";
             this.openFileDialog1.Title = "选择Html";
             // 
-            // tbTitle2Xpath2
+            // tbTitle2SpanStyle
             // 
-            this.tbTitle2Xpath2.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbTitle2Xpath2.Location = new System.Drawing.Point(5, 167);
-            this.tbTitle2Xpath2.Multiline = true;
-            this.tbTitle2Xpath2.Name = "tbTitle2Xpath2";
-            this.tbTitle2Xpath2.Size = new System.Drawing.Size(387, 43);
-            this.tbTitle2Xpath2.TabIndex = 5;
+            this.tbTitle2SpanStyle.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbTitle2SpanStyle.Location = new System.Drawing.Point(5, 196);
+            this.tbTitle2SpanStyle.Multiline = true;
+            this.tbTitle2SpanStyle.Name = "tbTitle2SpanStyle";
+            this.tbTitle2SpanStyle.Size = new System.Drawing.Size(302, 26);
+            this.tbTitle2SpanStyle.TabIndex = 5;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(5, 149);
+            this.label2.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(3, 178);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(84, 14);
+            this.label2.Size = new System.Drawing.Size(119, 17);
             this.label2.TabIndex = 6;
-            this.label2.Text = "二级标题style:";
+            this.label2.Text = "二级标题Span Style:";
             // 
-            // tbTitle2Xpath1
+            // tbTitle2Xpath
             // 
-            this.tbTitle2Xpath1.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbTitle2Xpath1.Location = new System.Drawing.Point(5, 124);
-            this.tbTitle2Xpath1.Name = "tbTitle2Xpath1";
-            this.tbTitle2Xpath1.Size = new System.Drawing.Size(387, 22);
-            this.tbTitle2Xpath1.TabIndex = 8;
-            // 
-            // tbTitle2Xpath3
-            // 
-            this.tbTitle2Xpath3.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbTitle2Xpath3.Location = new System.Drawing.Point(4, 216);
-            this.tbTitle2Xpath3.Multiline = true;
-            this.tbTitle2Xpath3.Name = "tbTitle2Xpath3";
-            this.tbTitle2Xpath3.Size = new System.Drawing.Size(388, 50);
-            this.tbTitle2Xpath3.TabIndex = 9;
+            this.tbTitle2Xpath.Enabled = false;
+            this.tbTitle2Xpath.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbTitle2Xpath.Location = new System.Drawing.Point(6, 136);
+            this.tbTitle2Xpath.Multiline = true;
+            this.tbTitle2Xpath.Name = "tbTitle2Xpath";
+            this.tbTitle2Xpath.Size = new System.Drawing.Size(386, 39);
+            this.tbTitle2Xpath.TabIndex = 8;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(5, 107);
+            this.label3.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(3, 119);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(87, 14);
+            this.label3.Size = new System.Drawing.Size(90, 17);
             this.label3.TabIndex = 10;
             this.label3.Text = "二级标题xPath:";
             // 
             // tbTitle1Xpath
             // 
+            this.tbTitle1Xpath.Enabled = false;
             this.tbTitle1Xpath.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbTitle1Xpath.Location = new System.Drawing.Point(5, 35);
+            this.tbTitle1Xpath.Location = new System.Drawing.Point(5, 31);
             this.tbTitle1Xpath.Multiline = true;
             this.tbTitle1Xpath.Name = "tbTitle1Xpath";
-            this.tbTitle1Xpath.Size = new System.Drawing.Size(387, 69);
+            this.tbTitle1Xpath.Size = new System.Drawing.Size(387, 39);
             this.tbTitle1Xpath.TabIndex = 11;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(5, 18);
+            this.label4.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(6, 12);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(87, 14);
+            this.label4.Size = new System.Drawing.Size(90, 17);
             this.label4.TabIndex = 12;
             this.label4.Text = "一级标题xPath:";
             // 
             // tbcMode
             // 
-            this.tbcMode.Controls.Add(this.tabcontent);
-            this.tbcMode.Controls.Add(this.tabCategory);
-            this.tbcMode.Location = new System.Drawing.Point(292, 120);
+            this.tbcMode.Controls.Add(this.tabRecognize);
+            this.tbcMode.Controls.Add(this.tabInfo);
+            this.tbcMode.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.tbcMode.Location = new System.Drawing.Point(294, 148);
             this.tbcMode.Name = "tbcMode";
             this.tbcMode.SelectedIndex = 0;
-            this.tbcMode.Size = new System.Drawing.Size(412, 307);
+            this.tbcMode.Size = new System.Drawing.Size(412, 290);
             this.tbcMode.TabIndex = 14;
             // 
-            // tabcontent
+            // tabRecognize
             // 
-            this.tabcontent.BackColor = System.Drawing.SystemColors.Control;
-            this.tabcontent.Controls.Add(this.grpContent);
-            this.tabcontent.Location = new System.Drawing.Point(4, 22);
-            this.tabcontent.Name = "tabcontent";
-            this.tabcontent.Padding = new System.Windows.Forms.Padding(3);
-            this.tabcontent.Size = new System.Drawing.Size(404, 281);
-            this.tabcontent.TabIndex = 0;
-            this.tabcontent.Text = "从正文";
+            this.tabRecognize.BackColor = System.Drawing.SystemColors.Control;
+            this.tabRecognize.Controls.Add(this.grpRecognize);
+            this.tabRecognize.Location = new System.Drawing.Point(4, 26);
+            this.tabRecognize.Name = "tabRecognize";
+            this.tabRecognize.Padding = new System.Windows.Forms.Padding(3);
+            this.tabRecognize.Size = new System.Drawing.Size(404, 260);
+            this.tabRecognize.TabIndex = 0;
+            this.tabRecognize.Text = "从正文";
             // 
-            // grpContent
+            // grpRecognize
             // 
-            this.grpContent.Controls.Add(this.tbTitle1Xpath);
-            this.grpContent.Controls.Add(this.tbTitle2Xpath1);
-            this.grpContent.Controls.Add(this.label4);
-            this.grpContent.Controls.Add(this.label2);
-            this.grpContent.Controls.Add(this.tbTitle2Xpath3);
-            this.grpContent.Controls.Add(this.tbTitle2Xpath2);
-            this.grpContent.Controls.Add(this.label3);
-            this.grpContent.Location = new System.Drawing.Point(3, 4);
-            this.grpContent.Name = "grpContent";
-            this.grpContent.Size = new System.Drawing.Size(398, 273);
-            this.grpContent.TabIndex = 18;
-            this.grpContent.TabStop = false;
+            this.grpRecognize.Controls.Add(this.tbTitle2TagName);
+            this.grpRecognize.Controls.Add(this.label12);
+            this.grpRecognize.Controls.Add(this.lblTitle1TagName);
+            this.grpRecognize.Controls.Add(this.tbTitle1TagName);
+            this.grpRecognize.Controls.Add(this.tbTitle1SpanStyle);
+            this.grpRecognize.Controls.Add(this.label10);
+            this.grpRecognize.Controls.Add(this.tbTitle1Xpath);
+            this.grpRecognize.Controls.Add(this.tbTitle2Xpath);
+            this.grpRecognize.Controls.Add(this.label4);
+            this.grpRecognize.Controls.Add(this.label2);
+            this.grpRecognize.Controls.Add(this.tbTitle2SpanStyle);
+            this.grpRecognize.Controls.Add(this.label3);
+            this.grpRecognize.Location = new System.Drawing.Point(3, 4);
+            this.grpRecognize.Name = "grpRecognize";
+            this.grpRecognize.Size = new System.Drawing.Size(398, 257);
+            this.grpRecognize.TabIndex = 18;
+            this.grpRecognize.TabStop = false;
             // 
-            // tabCategory
+            // tbTitle1SpanStyle
             // 
-            this.tabCategory.BackColor = System.Drawing.SystemColors.Control;
-            this.tabCategory.Controls.Add(this.grpCatagory);
-            this.tabCategory.Location = new System.Drawing.Point(4, 22);
-            this.tabCategory.Name = "tabCategory";
-            this.tabCategory.Padding = new System.Windows.Forms.Padding(3);
-            this.tabCategory.Size = new System.Drawing.Size(374, 281);
-            this.tabCategory.TabIndex = 1;
-            this.tabCategory.Text = "从目录";
+            this.tbTitle1SpanStyle.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbTitle1SpanStyle.Location = new System.Drawing.Point(6, 91);
+            this.tbTitle1SpanStyle.Multiline = true;
+            this.tbTitle1SpanStyle.Name = "tbTitle1SpanStyle";
+            this.tbTitle1SpanStyle.Size = new System.Drawing.Size(302, 26);
+            this.tbTitle1SpanStyle.TabIndex = 13;
             // 
-            // grpCatagory
+            // label10
             // 
-            this.grpCatagory.Location = new System.Drawing.Point(6, 6);
-            this.grpCatagory.Name = "grpCatagory";
-            this.grpCatagory.Size = new System.Drawing.Size(659, 188);
-            this.grpCatagory.TabIndex = 18;
-            this.grpCatagory.TabStop = false;
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(6, 73);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(119, 17);
+            this.label10.TabIndex = 14;
+            this.label10.Text = "一级标题Span Style:";
             // 
-            // rdbtContent
+            // tabInfo
             // 
-            this.rdbtContent.AutoSize = true;
-            this.rdbtContent.Checked = true;
-            this.rdbtContent.Location = new System.Drawing.Point(6, 16);
-            this.rdbtContent.Name = "rdbtContent";
-            this.rdbtContent.Size = new System.Drawing.Size(107, 16);
-            this.rdbtContent.TabIndex = 15;
-            this.rdbtContent.TabStop = true;
-            this.rdbtContent.Text = "从正文识别标题";
-            this.rdbtContent.UseVisualStyleBackColor = true;
-            this.rdbtContent.CheckedChanged += new System.EventHandler(this.rdbtContent_CheckedChanged);
+            this.tabInfo.BackColor = System.Drawing.SystemColors.Control;
+            this.tabInfo.Controls.Add(this.label11);
+            this.tabInfo.Controls.Add(this.tbTitle1Guids);
+            this.tabInfo.Location = new System.Drawing.Point(4, 26);
+            this.tabInfo.Name = "tabInfo";
+            this.tabInfo.Padding = new System.Windows.Forms.Padding(3);
+            this.tabInfo.Size = new System.Drawing.Size(404, 260);
+            this.tabInfo.TabIndex = 1;
+            this.tabInfo.Text = "生成条目信息";
             // 
-            // rdbtTitleTag
+            // rdbtTitle1Bold
             // 
-            this.rdbtTitleTag.AutoSize = true;
-            this.rdbtTitleTag.Location = new System.Drawing.Point(6, 38);
-            this.rdbtTitleTag.Name = "rdbtTitleTag";
-            this.rdbtTitleTag.Size = new System.Drawing.Size(137, 16);
-            this.rdbtTitleTag.TabIndex = 16;
-            this.rdbtTitleTag.Text = "从标题h标签识别标题";
-            this.rdbtTitleTag.UseVisualStyleBackColor = true;
-            this.rdbtTitleTag.CheckedChanged += new System.EventHandler(this.rdbtCatagory_CheckedChanged);
+            this.rdbtTitle1Bold.AutoSize = true;
+            this.rdbtTitle1Bold.Location = new System.Drawing.Point(6, 16);
+            this.rdbtTitle1Bold.Name = "rdbtTitle1Bold";
+            this.rdbtTitle1Bold.Size = new System.Drawing.Size(134, 21);
+            this.rdbtTitle1Bold.TabIndex = 15;
+            this.rdbtTitle1Bold.Text = "从一级标题加粗识别";
+            this.rdbtTitle1Bold.UseVisualStyleBackColor = true;
+            this.rdbtTitle1Bold.CheckedChanged += new System.EventHandler(this.rdbtTitle1Bold_CheckedChanged);
+            // 
+            // rdbtTitleHTag
+            // 
+            this.rdbtTitleHTag.AutoSize = true;
+            this.rdbtTitleHTag.Location = new System.Drawing.Point(6, 61);
+            this.rdbtTitleHTag.Name = "rdbtTitleHTag";
+            this.rdbtTitleHTag.Size = new System.Drawing.Size(141, 21);
+            this.rdbtTitleHTag.TabIndex = 16;
+            this.rdbtTitleHTag.Text = "从标题h标签识别标题";
+            this.rdbtTitleHTag.UseVisualStyleBackColor = true;
+            this.rdbtTitleHTag.CheckedChanged += new System.EventHandler(this.rdbtTitleTag_CheckedChanged);
             // 
             // grpMode
             // 
-            this.grpMode.Controls.Add(this.rdbtTitleTag);
-            this.grpMode.Controls.Add(this.rdbtContent);
+            this.grpMode.Controls.Add(this.rdbtTitleSpanStyle);
+            this.grpMode.Controls.Add(this.rdbtTitleHTag);
+            this.grpMode.Controls.Add(this.rdbtTitle1Bold);
+            this.grpMode.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.grpMode.Location = new System.Drawing.Point(561, 30);
             this.grpMode.Name = "grpMode";
-            this.grpMode.Size = new System.Drawing.Size(145, 58);
+            this.grpMode.Size = new System.Drawing.Size(145, 84);
             this.grpMode.TabIndex = 17;
             this.grpMode.TabStop = false;
             this.grpMode.Text = "识别模式";
+            // 
+            // rdbtTitleSpanStyle
+            // 
+            this.rdbtTitleSpanStyle.AutoSize = true;
+            this.rdbtTitleSpanStyle.Checked = true;
+            this.rdbtTitleSpanStyle.Location = new System.Drawing.Point(6, 38);
+            this.rdbtTitleSpanStyle.Name = "rdbtTitleSpanStyle";
+            this.rdbtTitleSpanStyle.Size = new System.Drawing.Size(142, 21);
+            this.rdbtTitleSpanStyle.TabIndex = 17;
+            this.rdbtTitleSpanStyle.TabStop = true;
+            this.rdbtTitleSpanStyle.Text = "从标题SpanStyle识别";
+            this.rdbtTitleSpanStyle.UseVisualStyleBackColor = true;
+            this.rdbtTitleSpanStyle.CheckedChanged += new System.EventHandler(this.rdbtTitleSpanStyle_CheckedChanged);
             // 
             // groupBox1
             // 
@@ -290,7 +322,7 @@
             this.groupBox1.Controls.Add(this.tbParentDepth);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.tbParentGuid);
-            this.groupBox1.Font = new System.Drawing.Font("Calibri", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.groupBox1.Location = new System.Drawing.Point(13, 120);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(278, 307);
@@ -301,10 +333,10 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label8.Location = new System.Drawing.Point(8, 210);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(119, 14);
+            this.label8.Size = new System.Drawing.Size(123, 17);
             this.label8.TabIndex = 26;
             this.label8.Text = "父节点TitleCnFloder:";
             // 
@@ -320,10 +352,10 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label7.Location = new System.Drawing.Point(8, 101);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(91, 14);
+            this.label7.Size = new System.Drawing.Size(95, 17);
             this.label7.TabIndex = 24;
             this.label7.Text = "父节点IDfolder:";
             // 
@@ -339,10 +371,10 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label6.Location = new System.Drawing.Point(8, 60);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(79, 14);
+            this.label6.Size = new System.Drawing.Size(82, 17);
             this.label6.TabIndex = 22;
             this.label6.Text = "父节点Depth:";
             // 
@@ -350,16 +382,16 @@
             // 
             this.tbParentDepth.Location = new System.Drawing.Point(8, 78);
             this.tbParentDepth.Name = "tbParentDepth";
-            this.tbParentDepth.Size = new System.Drawing.Size(74, 22);
+            this.tbParentDepth.Size = new System.Drawing.Size(74, 23);
             this.tbParentDepth.TabIndex = 21;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label5.Location = new System.Drawing.Point(8, 17);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(72, 14);
+            this.label5.Size = new System.Drawing.Size(74, 17);
             this.label5.TabIndex = 20;
             this.label5.Text = "父节点Guid:";
             // 
@@ -367,7 +399,7 @@
             // 
             this.tbParentGuid.Location = new System.Drawing.Point(8, 35);
             this.tbParentGuid.Name = "tbParentGuid";
-            this.tbParentGuid.Size = new System.Drawing.Size(265, 22);
+            this.tbParentGuid.Size = new System.Drawing.Size(265, 23);
             this.tbParentGuid.TabIndex = 19;
             // 
             // menuStrip1
@@ -417,20 +449,20 @@
             // tbFilesPath
             // 
             this.tbFilesPath.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbFilesPath.Location = new System.Drawing.Point(324, 92);
+            this.tbFilesPath.Location = new System.Drawing.Point(344, 120);
             this.tbFilesPath.Name = "tbFilesPath";
-            this.tbFilesPath.Size = new System.Drawing.Size(380, 22);
+            this.tbFilesPath.Size = new System.Drawing.Size(360, 22);
             this.tbFilesPath.TabIndex = 21;
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(321, 72);
+            this.label9.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label9.Location = new System.Drawing.Point(341, 95);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(147, 14);
+            this.label9.Size = new System.Drawing.Size(107, 17);
             this.label9.TabIndex = 22;
-            this.label9.Text = "图片文件xxx.files所在路径:";
+            this.label9.Text = "图片文件所在路径:";
             // 
             // grpConnectStr
             // 
@@ -482,7 +514,7 @@
             // 
             // btnUpdate
             // 
-            this.btnUpdate.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnUpdate.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnUpdate.Location = new System.Drawing.Point(493, 63);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(65, 23);
@@ -490,6 +522,63 @@
             this.btnUpdate.Text = "数据提交";
             this.btnUpdate.UseVisualStyleBackColor = true;
             this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
+            // 
+            // tbTitle1TagName
+            // 
+            this.tbTitle1TagName.Enabled = false;
+            this.tbTitle1TagName.Location = new System.Drawing.Point(313, 90);
+            this.tbTitle1TagName.Multiline = true;
+            this.tbTitle1TagName.Name = "tbTitle1TagName";
+            this.tbTitle1TagName.Size = new System.Drawing.Size(79, 27);
+            this.tbTitle1TagName.TabIndex = 22;
+            // 
+            // lblTitle1TagName
+            // 
+            this.lblTitle1TagName.AutoSize = true;
+            this.lblTitle1TagName.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitle1TagName.Location = new System.Drawing.Point(278, 73);
+            this.lblTitle1TagName.Name = "lblTitle1TagName";
+            this.lblTitle1TagName.Size = new System.Drawing.Size(119, 17);
+            this.lblTitle1TagName.TabIndex = 23;
+            this.lblTitle1TagName.Text = "一级标题唯一标签名:";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.Location = new System.Drawing.Point(274, 178);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(119, 17);
+            this.label12.TabIndex = 24;
+            this.label12.Text = "二级标题唯一标签名:";
+            // 
+            // tbTitle2TagName
+            // 
+            this.tbTitle2TagName.Enabled = false;
+            this.tbTitle2TagName.Location = new System.Drawing.Point(313, 195);
+            this.tbTitle2TagName.Multiline = true;
+            this.tbTitle2TagName.Name = "tbTitle2TagName";
+            this.tbTitle2TagName.Size = new System.Drawing.Size(79, 27);
+            this.tbTitle2TagName.TabIndex = 25;
+            // 
+            // tbTitle1Guids
+            // 
+            this.tbTitle1Guids.Location = new System.Drawing.Point(9, 24);
+            this.tbTitle1Guids.Multiline = true;
+            this.tbTitle1Guids.Name = "tbTitle1Guids";
+            this.tbTitle1Guids.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.tbTitle1Guids.Size = new System.Drawing.Size(389, 229);
+            this.tbTitle1Guids.TabIndex = 0;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(6, 6);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(161, 17);
+            this.label11.TabIndex = 21;
+            this.label11.Text = "所生成的一级标题的Guids：";
             // 
             // frmWordRead
             // 
@@ -515,10 +604,11 @@
             this.Text = "法规录入";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tbcMode.ResumeLayout(false);
-            this.tabcontent.ResumeLayout(false);
-            this.grpContent.ResumeLayout(false);
-            this.grpContent.PerformLayout();
-            this.tabCategory.ResumeLayout(false);
+            this.tabRecognize.ResumeLayout(false);
+            this.grpRecognize.ResumeLayout(false);
+            this.grpRecognize.PerformLayout();
+            this.tabInfo.ResumeLayout(false);
+            this.tabInfo.PerformLayout();
             this.grpMode.ResumeLayout(false);
             this.grpMode.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -541,21 +631,19 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnHtmlPath;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.TextBox tbTitle2Xpath2;
+        private System.Windows.Forms.TextBox tbTitle2SpanStyle;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox tbTitle2Xpath1;
-        private System.Windows.Forms.TextBox tbTitle2Xpath3;
+        private System.Windows.Forms.TextBox tbTitle2Xpath;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox tbTitle1Xpath;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TabControl tbcMode;
-        private System.Windows.Forms.TabPage tabcontent;
-        private System.Windows.Forms.TabPage tabCategory;
-        private System.Windows.Forms.RadioButton rdbtContent;
-        private System.Windows.Forms.RadioButton rdbtTitleTag;
+        private System.Windows.Forms.TabPage tabRecognize;
+        private System.Windows.Forms.TabPage tabInfo;
+        private System.Windows.Forms.RadioButton rdbtTitle1Bold;
+        private System.Windows.Forms.RadioButton rdbtTitleHTag;
         private System.Windows.Forms.GroupBox grpMode;
-        private System.Windows.Forms.GroupBox grpContent;
-        private System.Windows.Forms.GroupBox grpCatagory;
+        private System.Windows.Forms.GroupBox grpRecognize;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
@@ -577,6 +665,15 @@
         internal System.Windows.Forms.TextBox tbParentDepth;
         internal System.Windows.Forms.TextBox tbParentIDfolder;
         internal System.Windows.Forms.TextBox tbParentTitleCnFolder;
+        private System.Windows.Forms.RadioButton rdbtTitleSpanStyle;
+        private System.Windows.Forms.TextBox tbTitle1SpanStyle;
+        private System.Windows.Forms.Label label10;
+        internal System.Windows.Forms.TextBox tbTitle2TagName;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label lblTitle1TagName;
+        internal System.Windows.Forms.TextBox tbTitle1TagName;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox tbTitle1Guids;
     }
 }
 
