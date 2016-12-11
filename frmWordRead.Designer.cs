@@ -42,9 +42,15 @@
             this.tbcMode = new System.Windows.Forms.TabControl();
             this.tabRecognize = new System.Windows.Forms.TabPage();
             this.grpRecognize = new System.Windows.Forms.GroupBox();
+            this.tbTitle2TagName = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.lblTitle1TagName = new System.Windows.Forms.Label();
+            this.tbTitle1TagName = new System.Windows.Forms.TextBox();
             this.tbTitle1SpanStyle = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.tabInfo = new System.Windows.Forms.TabPage();
+            this.label11 = new System.Windows.Forms.Label();
+            this.tbTitle1Guids = new System.Windows.Forms.TextBox();
             this.rdbtTitle1Bold = new System.Windows.Forms.RadioButton();
             this.rdbtTitleHTag = new System.Windows.Forms.RadioButton();
             this.grpMode = new System.Windows.Forms.GroupBox();
@@ -70,12 +76,6 @@
             this.rdbtConStrLocal = new System.Windows.Forms.RadioButton();
             this.rdbtConStrServer = new System.Windows.Forms.RadioButton();
             this.btnUpdate = new System.Windows.Forms.Button();
-            this.tbTitle1TagName = new System.Windows.Forms.TextBox();
-            this.lblTitle1TagName = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.tbTitle2TagName = new System.Windows.Forms.TextBox();
-            this.tbTitle1Guids = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
             this.tbcMode.SuspendLayout();
             this.tabRecognize.SuspendLayout();
             this.grpRecognize.SuspendLayout();
@@ -227,11 +227,49 @@
             this.grpRecognize.Controls.Add(this.label2);
             this.grpRecognize.Controls.Add(this.tbTitle2SpanStyle);
             this.grpRecognize.Controls.Add(this.label3);
-            this.grpRecognize.Location = new System.Drawing.Point(3, 4);
+            this.grpRecognize.Location = new System.Drawing.Point(3, 15);
             this.grpRecognize.Name = "grpRecognize";
-            this.grpRecognize.Size = new System.Drawing.Size(398, 257);
+            this.grpRecognize.Size = new System.Drawing.Size(398, 239);
             this.grpRecognize.TabIndex = 18;
             this.grpRecognize.TabStop = false;
+            // 
+            // tbTitle2TagName
+            // 
+            this.tbTitle2TagName.Enabled = false;
+            this.tbTitle2TagName.Location = new System.Drawing.Point(313, 195);
+            this.tbTitle2TagName.Multiline = true;
+            this.tbTitle2TagName.Name = "tbTitle2TagName";
+            this.tbTitle2TagName.Size = new System.Drawing.Size(79, 27);
+            this.tbTitle2TagName.TabIndex = 25;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.Location = new System.Drawing.Point(274, 178);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(119, 17);
+            this.label12.TabIndex = 24;
+            this.label12.Text = "二级标题唯一标签名:";
+            // 
+            // lblTitle1TagName
+            // 
+            this.lblTitle1TagName.AutoSize = true;
+            this.lblTitle1TagName.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitle1TagName.Location = new System.Drawing.Point(278, 73);
+            this.lblTitle1TagName.Name = "lblTitle1TagName";
+            this.lblTitle1TagName.Size = new System.Drawing.Size(119, 17);
+            this.lblTitle1TagName.TabIndex = 23;
+            this.lblTitle1TagName.Text = "一级标题唯一标签名:";
+            // 
+            // tbTitle1TagName
+            // 
+            this.tbTitle1TagName.Enabled = false;
+            this.tbTitle1TagName.Location = new System.Drawing.Point(313, 90);
+            this.tbTitle1TagName.Multiline = true;
+            this.tbTitle1TagName.Name = "tbTitle1TagName";
+            this.tbTitle1TagName.Size = new System.Drawing.Size(79, 27);
+            this.tbTitle1TagName.TabIndex = 22;
             // 
             // tbTitle1SpanStyle
             // 
@@ -263,6 +301,25 @@
             this.tabInfo.Size = new System.Drawing.Size(404, 260);
             this.tabInfo.TabIndex = 1;
             this.tabInfo.Text = "生成条目信息";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(6, 6);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(221, 17);
+            this.label11.TabIndex = 21;
+            this.label11.Text = "所生成的一级标题的Guids和二级标题：";
+            // 
+            // tbTitle1Guids
+            // 
+            this.tbTitle1Guids.Location = new System.Drawing.Point(9, 24);
+            this.tbTitle1Guids.Multiline = true;
+            this.tbTitle1Guids.Name = "tbTitle1Guids";
+            this.tbTitle1Guids.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.tbTitle1Guids.Size = new System.Drawing.Size(389, 229);
+            this.tbTitle1Guids.TabIndex = 0;
             // 
             // rdbtTitle1Bold
             // 
@@ -522,63 +579,6 @@
             this.btnUpdate.Text = "数据提交";
             this.btnUpdate.UseVisualStyleBackColor = true;
             this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
-            // 
-            // tbTitle1TagName
-            // 
-            this.tbTitle1TagName.Enabled = false;
-            this.tbTitle1TagName.Location = new System.Drawing.Point(313, 90);
-            this.tbTitle1TagName.Multiline = true;
-            this.tbTitle1TagName.Name = "tbTitle1TagName";
-            this.tbTitle1TagName.Size = new System.Drawing.Size(79, 27);
-            this.tbTitle1TagName.TabIndex = 22;
-            // 
-            // lblTitle1TagName
-            // 
-            this.lblTitle1TagName.AutoSize = true;
-            this.lblTitle1TagName.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTitle1TagName.Location = new System.Drawing.Point(278, 73);
-            this.lblTitle1TagName.Name = "lblTitle1TagName";
-            this.lblTitle1TagName.Size = new System.Drawing.Size(119, 17);
-            this.lblTitle1TagName.TabIndex = 23;
-            this.lblTitle1TagName.Text = "一级标题唯一标签名:";
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(274, 178);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(119, 17);
-            this.label12.TabIndex = 24;
-            this.label12.Text = "二级标题唯一标签名:";
-            // 
-            // tbTitle2TagName
-            // 
-            this.tbTitle2TagName.Enabled = false;
-            this.tbTitle2TagName.Location = new System.Drawing.Point(313, 195);
-            this.tbTitle2TagName.Multiline = true;
-            this.tbTitle2TagName.Name = "tbTitle2TagName";
-            this.tbTitle2TagName.Size = new System.Drawing.Size(79, 27);
-            this.tbTitle2TagName.TabIndex = 25;
-            // 
-            // tbTitle1Guids
-            // 
-            this.tbTitle1Guids.Location = new System.Drawing.Point(9, 24);
-            this.tbTitle1Guids.Multiline = true;
-            this.tbTitle1Guids.Name = "tbTitle1Guids";
-            this.tbTitle1Guids.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbTitle1Guids.Size = new System.Drawing.Size(389, 229);
-            this.tbTitle1Guids.TabIndex = 0;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(6, 6);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(161, 17);
-            this.label11.TabIndex = 21;
-            this.label11.Text = "所生成的一级标题的Guids：";
             // 
             // frmWordRead
             // 

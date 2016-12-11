@@ -25,23 +25,22 @@ namespace WordRead
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.tbParentGuid.Text = "4a2d1293-2f13-46da-9b0c-ae14c99fa6a0";
+            this.tbParentGuid.Text = "66bf06c8-ec04-4daa-b737-a3002a7c852c";
             this.tbParentDepth.Text = "3";
-            this.tbParentIDfolder.Text = "#f088ad64-8a9e-4ef6-a3e3-ac872a380283#ea00e0c5-53ca-4ce3-80b6-ff727c27f0b0#8addb82d-dd27-456b-9ff2-bb179bacb549#4a2d1293-2f13-46da-9b0c-ae14c99fa6a0";
-            this.tbParentTitleCnFolder.Text = "0#@`船舶检验技术规则#@`国内海船#@`沿海小型船舶检验技术规则2016";
-            this.tbHtmlPath.Text = @"../../../htmlRcgTest/1/1_2016.htm";
-            this.tbFilesPath.Text = @"/Uploads/imagesrc/guoneihaichuan/num1";
-            this.tbTitle1SpanStyle.Text = @"font-size:15.0pt;font-family:黑体";
+            this.tbParentIDfolder.Text = "#f088ad64-8a9e-4ef6-a3e3-ac872a380283#ea00e0c5-53ca-4ce3-80b6-ff727c27f0b0#8addb82d-dd27-456b-9ff2-bb179bacb549#66bf06c8-ec04-4daa-b737-a3002a7c852c";
+            this.tbParentTitleCnFolder.Text = "0#@`船舶检验技术规则#@`国内海船#@`海船法定建造检验技术规程（2011）";
+            this.tbHtmlPath.Text = @"D:\1work\htmlRcgTest\4\海船建造检验规程2011.htm";
+            this.tbFilesPath.Text = @"/Uploads/imagesrc/guoneihaichuan/num4";
+            this.tbTitle1SpanStyle.Text = @"font-size:16.0pt;line-height:240%;font-family:宋体";
             this.tbTitle1Xpath.Text = @"/html[1]/body[1]//span[@style='font-size:15.0pt;font-family:黑体']";
-            this.tbTitle2Xpath.Text = @"//span[@style='";
-            this.tbTitle2SpanStyle.Text = @"font-size:14.0pt;font-family:" + "\"" + "楷体_GB2312" + "\"" + ",serif";
-            this.tbTitle1TagName.Text = "h2";
-            this.tbTitle2TagName.Text = "h3";
+            this.tbTitle2Xpath.Text="";
+            this.tbTitle2SpanStyle.Text = @"font-size:12.0pt;font-family:宋体-18030;color:black";
+            this.tbTitle1TagName.Text = "h1";
+            this.tbTitle2TagName.Text = "b";
             this.toolStripStatusLabel1.Text = "";
             //this.tbTitle2Xpath1.Text = @"//span[position()<3 and @style='";
             //this.tbTitle1Xpath.Text = @"/html[1]/body[1]//b[1] |/html[1]/body[1]//h1[1]|/html[1]/body[1]//a[1]";
         }
-
         private void btnWordRead_Click(object sender, EventArgs e)
         {
             if (this.tbHtmlPath.Text != string.Empty && this.tbParentGuid.Text != string.Empty && 
