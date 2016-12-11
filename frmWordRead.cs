@@ -89,7 +89,7 @@ namespace WordRead
                     for (int i = 0; i < info.title2s.Count; i++)
                         this.tbTitle1Guids.Text += info.title2s[i] + "\r\n";
                 }
-                catch (Exception err)
+                catch (Exception err) 
                 {
                     MessageBox.Show(err.Message);
                     this.toolStripStatusLabel1.Text = err.Message;

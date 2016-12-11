@@ -49,7 +49,7 @@ namespace WordRead
             HtmlNodeCollection title2Nodes = new HtmlNodeCollection(htmlRootNode.Clone());
             HtmlNodeCollection ftNoteRefnodes = new HtmlNodeCollection(htmlRootNode.Clone());
             string htmlTxt = htmlRootNode.InnerHtml;
-            //正文识别标题
+            //正文识别标题 
 
             #region 选项1：一级标题粗体识别
             if (method == ReadMethod.TITLE1_BOLD)
