@@ -76,6 +76,7 @@
             this.rdbtConStrLocal = new System.Windows.Forms.RadioButton();
             this.rdbtConStrServer = new System.Windows.Forms.RadioButton();
             this.btnUpdate = new System.Windows.Forms.Button();
+            this.btnReDo = new System.Windows.Forms.Button();
             this.tbcMode.SuspendLayout();
             this.tabRecognize.SuspendLayout();
             this.grpRecognize.SuspendLayout();
@@ -580,11 +581,23 @@
             this.btnUpdate.UseVisualStyleBackColor = true;
             this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
+            // btnReDo
+            // 
+            this.btnReDo.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnReDo.Location = new System.Drawing.Point(493, 89);
+            this.btnReDo.Name = "btnReDo";
+            this.btnReDo.Size = new System.Drawing.Size(65, 23);
+            this.btnReDo.TabIndex = 27;
+            this.btnReDo.Text = "撤销提交";
+            this.btnReDo.UseVisualStyleBackColor = true;
+            this.btnReDo.Click += new System.EventHandler(this.btnReDo_Click);
+            // 
             // frmWordRead
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(718, 463);
+            this.Controls.Add(this.btnReDo);
             this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.grpConnectStr);
             this.Controls.Add(this.label9);
@@ -654,7 +667,6 @@
         private System.Windows.Forms.ToolStripMenuItem menuSQLTest;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.Windows.Forms.TextBox tbFilesPath;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.GroupBox grpConnectStr;
         private System.Windows.Forms.RadioButton rdbtConStrLocal_work;
@@ -674,6 +686,8 @@
         internal System.Windows.Forms.TextBox tbTitle1TagName;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox tbTitle1Guids;
+        private System.Windows.Forms.Button btnReDo;
+        internal System.Windows.Forms.TextBox tbFilesPath;
     }
 }
 

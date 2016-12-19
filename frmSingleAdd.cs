@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -42,16 +43,16 @@ namespace WordRead
             try
             {
                 ConventionRow tempRow = new ConventionRow(guid, new Guid(this.tbParentGuid.Text),
-                    int.Parse(this.tbDepth.Text), this.tbTitle.Text, int.Parse(this.tbSNum.Text),
-                    isCategory, this.tbIDfloder.Text + "#"+guid, this.tbTitleCNFolder.Text + "#@`"+this.tbTitle.Text,this.tbTag.Text);
+                    int.Parse(this.tbParentDepth.Text), this.tbTitle.Text, int.Parse(this.tbSNum.Text),
+                    isCategory, this.tbParentIDfloder.Text + "#"+guid, this.tbParentTitleCNFolder.Text + "#@`"+this.tbTitle.Text,this.tbTag.Text);
                 SQLUtils sqlUtils = SQLUtils.getInstance();
                 sqlUtils.writeRow_local(tempRow);
                 sqlUtils.updateTable();
                 this.toolStripStatusLabel1.Text = "添加成功";
-                this.frm_WordRead.tbParentDepth.Text = this.tbDepth.Text;
+                this.frm_WordRead.tbParentDepth.Text = this.tbParentDepth.Text;
                 this.frm_WordRead.tbParentGuid.Text = this.tbGuid.Text;
-                this.frm_WordRead.tbParentIDfolder.Text = this.tbIDfloder.Text + "#" + this.tbGuid.Text;
-                this.frm_WordRead.tbParentTitleCnFolder.Text = this.tbTitleCNFolder.Text + "@#`" + this.tbTitle.Text;
+                this.frm_WordRead.tbParentIDfolder.Text = this.tbParentIDfloder.Text + "#" + this.tbGuid.Text;
+                this.frm_WordRead.tbParentTitleCnFolder.Text = this.tbParentTitleCNFolder.Text + "@#`" + this.tbTitle.Text;
             }
             catch(Exception err)
             {
@@ -74,9 +75,9 @@ namespace WordRead
                     Guid guid = new Guid(this.tbParentGuid.Text);
                     SQLUtils sqlUtils = SQLUtils.getInstance();
                     DataRow infoRow=sqlUtils.getInfo(new Guid(this.tbParentGuid.Text));
-                    this.tbTitleCNFolder.Text = infoRow["TitleCnFolder"].ToString();
-                    this.tbIDfloder.Text = infoRow["IDFolder"].ToString();
-                    this.tbDepth.Text = (int.Parse(infoRow["Depth"].ToString())+1).ToString();
+                    this.tbParentTitleCNFolder.Text = infoRow["TitleCnFolder"].ToString();
+                    this.tbParentIDfloder.Text = infoRow["IDFolder"].ToString();
+                    this.tbParentDepth.Text = (int.Parse(infoRow["Depth"].ToString())+1).ToString();
                     this.toolStripStatusLabel1.Text = "获取信息成功";                 
                 }
                 catch(Exception err)
@@ -98,5 +99,7 @@ namespace WordRead
                 this.tbTag.Enabled = false;
             }
         }
+
+
     }
 }

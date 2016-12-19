@@ -30,7 +30,7 @@
         {
             this.tbGuid = new System.Windows.Forms.TextBox();
             this.tbParentGuid = new System.Windows.Forms.TextBox();
-            this.tbDepth = new System.Windows.Forms.TextBox();
+            this.tbParentDepth = new System.Windows.Forms.TextBox();
             this.tbTitle = new System.Windows.Forms.TextBox();
             this.tbSNum = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -39,8 +39,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.tbIDfloder = new System.Windows.Forms.TextBox();
-            this.tbTitleCNFolder = new System.Windows.Forms.TextBox();
+            this.tbParentIDfloder = new System.Windows.Forms.TextBox();
+            this.tbParentTitleCNFolder = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.cbkIsCategory = new System.Windows.Forms.CheckBox();
             this.btnAdd = new System.Windows.Forms.Button();
@@ -68,13 +68,13 @@
             this.tbParentGuid.Size = new System.Drawing.Size(235, 22);
             this.tbParentGuid.TabIndex = 1;
             // 
-            // tbDepth
+            // tbParentDepth
             // 
-            this.tbDepth.Font = new System.Drawing.Font("Calibri", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbDepth.Location = new System.Drawing.Point(92, 65);
-            this.tbDepth.Name = "tbDepth";
-            this.tbDepth.Size = new System.Drawing.Size(75, 22);
-            this.tbDepth.TabIndex = 2;
+            this.tbParentDepth.Font = new System.Drawing.Font("Calibri", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbParentDepth.Location = new System.Drawing.Point(92, 65);
+            this.tbParentDepth.Name = "tbParentDepth";
+            this.tbParentDepth.Size = new System.Drawing.Size(75, 22);
+            this.tbParentDepth.TabIndex = 2;
             // 
             // tbTitle
             // 
@@ -118,9 +118,9 @@
             this.label3.Font = new System.Drawing.Font("微软雅黑", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label3.Location = new System.Drawing.Point(10, 65);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(46, 17);
+            this.label3.Size = new System.Drawing.Size(82, 17);
             this.label3.TabIndex = 11;
-            this.label3.Text = "Depth:";
+            this.label3.Text = "父节点Depth:";
             // 
             // label4
             // 
@@ -151,23 +151,25 @@
             this.label6.TabIndex = 13;
             this.label6.Text = "父节点IDfolder:";
             // 
-            // tbIDfloder
+            // tbParentIDfloder
             // 
-            this.tbIDfloder.Font = new System.Drawing.Font("Calibri", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbIDfloder.Location = new System.Drawing.Point(92, 215);
-            this.tbIDfloder.Multiline = true;
-            this.tbIDfloder.Name = "tbIDfloder";
-            this.tbIDfloder.Size = new System.Drawing.Size(310, 54);
-            this.tbIDfloder.TabIndex = 5;
+            this.tbParentIDfloder.Font = new System.Drawing.Font("Calibri", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbParentIDfloder.Location = new System.Drawing.Point(92, 215);
+            this.tbParentIDfloder.Multiline = true;
+            this.tbParentIDfloder.Name = "tbParentIDfloder";
+            this.tbParentIDfloder.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.tbParentIDfloder.Size = new System.Drawing.Size(310, 54);
+            this.tbParentIDfloder.TabIndex = 5;
             // 
-            // tbTitleCNFolder
+            // tbParentTitleCNFolder
             // 
-            this.tbTitleCNFolder.Font = new System.Drawing.Font("Calibri", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbTitleCNFolder.Location = new System.Drawing.Point(92, 274);
-            this.tbTitleCNFolder.Multiline = true;
-            this.tbTitleCNFolder.Name = "tbTitleCNFolder";
-            this.tbTitleCNFolder.Size = new System.Drawing.Size(310, 48);
-            this.tbTitleCNFolder.TabIndex = 6;
+            this.tbParentTitleCNFolder.Font = new System.Drawing.Font("Calibri", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbParentTitleCNFolder.Location = new System.Drawing.Point(92, 274);
+            this.tbParentTitleCNFolder.Multiline = true;
+            this.tbParentTitleCNFolder.Name = "tbParentTitleCNFolder";
+            this.tbParentTitleCNFolder.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.tbParentTitleCNFolder.Size = new System.Drawing.Size(310, 48);
+            this.tbParentTitleCNFolder.TabIndex = 6;
             // 
             // label7
             // 
@@ -211,7 +213,7 @@
             this.statusStrip1.Location = new System.Drawing.Point(0, 356);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 12, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(408, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(421, 22);
             this.statusStrip1.TabIndex = 16;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -225,8 +227,10 @@
             this.tbTag.Enabled = false;
             this.tbTag.Font = new System.Drawing.Font("Calibri", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbTag.Location = new System.Drawing.Point(92, 118);
+            this.tbTag.MaxLength = 3276700;
             this.tbTag.Multiline = true;
             this.tbTag.Name = "tbTag";
+            this.tbTag.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.tbTag.Size = new System.Drawing.Size(310, 92);
             this.tbTag.TabIndex = 17;
             // 
@@ -255,16 +259,16 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(408, 378);
+            this.ClientSize = new System.Drawing.Size(421, 378);
             this.Controls.Add(this.btnGetInfo);
             this.Controls.Add(this.label8);
-            this.Controls.Add(this.tbTitleCNFolder);
+            this.Controls.Add(this.tbParentTitleCNFolder);
             this.Controls.Add(this.tbTag);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.cbkIsCategory);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.tbIDfloder);
+            this.Controls.Add(this.tbParentIDfloder);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
@@ -273,7 +277,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tbSNum);
             this.Controls.Add(this.tbTitle);
-            this.Controls.Add(this.tbDepth);
+            this.Controls.Add(this.tbParentDepth);
             this.Controls.Add(this.tbParentGuid);
             this.Controls.Add(this.tbGuid);
             this.Name = "frmSingleAdd";
@@ -291,7 +295,7 @@
 
         private System.Windows.Forms.TextBox tbGuid;
         private System.Windows.Forms.TextBox tbParentGuid;
-        private System.Windows.Forms.TextBox tbDepth;
+        private System.Windows.Forms.TextBox tbParentDepth;
         private System.Windows.Forms.TextBox tbTitle;
         private System.Windows.Forms.TextBox tbSNum;
         private System.Windows.Forms.Label label1;
@@ -300,8 +304,8 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox tbIDfloder;
-        private System.Windows.Forms.TextBox tbTitleCNFolder;
+        private System.Windows.Forms.TextBox tbParentIDfloder;
+        private System.Windows.Forms.TextBox tbParentTitleCNFolder;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.CheckBox cbkIsCategory;
         private System.Windows.Forms.Button btnAdd;

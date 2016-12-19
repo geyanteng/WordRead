@@ -15,7 +15,7 @@ namespace WordRead
 {
     public partial class frmWordRead : Form
     {
-        internal ConventionRead conventionRead = new ConventionRead();
+        internal ConventionRead conventionRead;
         internal frmSingleAdd singleAdd;
         internal ReturnInfo info;
         //SQLUtils sqlUtils;
@@ -25,18 +25,18 @@ namespace WordRead
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.tbParentGuid.Text = "66bf06c8-ec04-4daa-b737-a3002a7c852c";
-            this.tbParentDepth.Text = "3";
-            this.tbParentIDfolder.Text = "#f088ad64-8a9e-4ef6-a3e3-ac872a380283#ea00e0c5-53ca-4ce3-80b6-ff727c27f0b0#8addb82d-dd27-456b-9ff2-bb179bacb549#66bf06c8-ec04-4daa-b737-a3002a7c852c";
-            this.tbParentTitleCnFolder.Text = "0#@`船舶检验技术规则#@`国内海船#@`海船法定建造检验技术规程（2011）";
-            this.tbHtmlPath.Text = @"D:\1work\htmlRcgTest\4\海船建造检验规程2011.htm";
-            this.tbFilesPath.Text = @"/Uploads/imagesrc/guoneihaichuan/num4";
-            this.tbTitle1SpanStyle.Text = @"font-size:16.0pt;line-height:240%;font-family:宋体";
-            this.tbTitle1Xpath.Text = @"/html[1]/body[1]//span[@style='font-size:15.0pt;font-family:黑体']";
-            this.tbTitle2Xpath.Text="";
-            this.tbTitle2SpanStyle.Text = @"font-size:12.0pt;font-family:宋体-18030;color:black";
+            this.tbParentGuid.Text = "0c08fb9d-9d22-46f0-b4aa-235ac775909a";
+            this.tbParentDepth.Text = "6";
+            this.tbParentIDfolder.Text = "#f088ad64-8a9e-4ef6-a3e3-ac872a380283#ea00e0c5-53ca-4ce3-80b6-ff727c27f0b0#ce49ecc9-10cb-4760-8e9c-9446ad3f0eec#983e34e1-7d54-4f46-b980-ee53b21f22f9#6087dc06-f6b7-45a6-91c0-84d2e0db5144#532dfdeb-5642-49e0-9916-b975c797d3a2#0c08fb9d-9d22-46f0-b4aa-235ac775909a";
+            this.tbParentTitleCnFolder.Text = "0#@`船舶检验技术规则#@`国际海船#@`国际航行海船法定检验技术规则2014#@`第4篇 船舶安全#@`2014规则#@`第4章  无线电通信设备(SOLAS公约第IV章)";
+            this.tbHtmlPath.Text = @"D:\1work\htmlRcgTest\1-gjhc\4\4.htm";
+            this.tbFilesPath.Text = @"/Uploads/imagesrc/guojihaichuan/num1/4/4";
+            this.tbTitle1SpanStyle.Text = @"font-size:15.0pt;font-family:楷体_GB2312";
+            this.tbTitle2SpanStyle.Text = @"font-size:12.0pt;font-family:黑体";
+            this.tbTitle1Xpath.Text = @"/html[1]/body[1]//span[@style]";
             this.tbTitle1TagName.Text = "h1";
             this.tbTitle2TagName.Text = "b";
+            this.tbTitle2Xpath.Text = "";
             this.toolStripStatusLabel1.Text = "";
             //this.tbTitle2Xpath1.Text = @"//span[position()<3 and @style='";
             //this.tbTitle1Xpath.Text = @"/html[1]/body[1]//b[1] |/html[1]/body[1]//h1[1]|/html[1]/body[1]//a[1]";
@@ -49,6 +49,7 @@ namespace WordRead
             {
                 try
                 {
+                    conventionRead = new ConventionRead();
                     conventionRead.imageFilePath = tbFilesPath.Text;
                     ConventionRow rootNode = new ConventionRow(new Guid(this.tbParentGuid.Text), int.Parse(this.tbParentDepth.Text),
                         this.tbParentIDfolder.Text, this.tbParentTitleCnFolder.Text);
@@ -83,7 +84,7 @@ namespace WordRead
                     info = conventionRead.ReadHtml(rootNode);
                     this.toolStripStatusLabel1.Text = "Html识别成功：一级目录有" + info.title1s.Count + "个,二级目录共有" + info.title2s.Count+"个";
                     for (int i = 0; i < info.title1Guids.Count; i++)
-                        this.tbTitle1Guids.Text += info.title1Guids[i]+"\r\n";
+                        this.tbTitle1Guids.Text += info.title1s[i]+" : "+info.title1Guids[i]+"\r\n";
                     this.tbTitle1Guids.Text += "\r\n\r\n";
                     for (int i = 0; i < info.title2s.Count; i++)
                         this.tbTitle1Guids.Text += info.title2s[i] + "\r\n";
@@ -239,6 +240,7 @@ namespace WordRead
         private void menuSQLTest_Click(object sender, EventArgs e)
         {
             SQLUtils sqlUtils = SQLUtils.getInstance();
+            conventionRead = null;
             try
             {
                 sqlUtils.makeConnect();
@@ -284,5 +286,20 @@ namespace WordRead
             }
         }
         #endregion
+
+        private void btnReDo_Click(object sender, EventArgs e)
+        {
+            SQLUtils sqlUtils = SQLUtils.getInstance();
+            if (info != null)
+            {
+                bool tmp1, tmp2;
+                tmp1=sqlUtils.executeDelete(info.title1Guids);
+                tmp2=sqlUtils.executeDelete(new Guid(this.tbParentGuid.Text));
+                if (tmp1 && tmp2)
+                    this.toolStripStatusLabel1.Text = "撤销成功";
+                else
+                    this.toolStripStatusLabel1.Text = "撤销失败";
+            }
+        }
     }
 }

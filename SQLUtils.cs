@@ -109,5 +109,72 @@ namespace WordRead
             connect.Close();
             isConnected = false;
         }
+        /// <summary>
+        /// 根据父节点列表删除各父节点下的子节点
+        /// </summary>
+        /// <param name="parentGuids"></param>
+        public bool executeDelete(List<Guid> parentGuids)
+        {
+            try
+            {
+                SqlCommand sqlComm = new SqlCommand();
+                SqlConnection conn = new SqlConnection(ConStr);
+                sqlComm.Connection = conn;
+                foreach (var each in parentGuids)
+                {
+                    sqlComm.CommandText = "delete from " + tblName + " where ParentNodeGuid = '" + each + "'";
+                    sqlComm.ExecuteNonQuery();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+        /// <summary>
+        /// 删除一个父节点下的子节点
+        /// </summary>
+        /// <param name="parentGuid"></param>
+        public bool executeDelete(Guid parentGuid)
+        {
+            try
+            {
+                SqlCommand sqlComm = new SqlCommand();
+                SqlConnection conn = new SqlConnection(ConStr);
+                sqlComm.Connection = conn;
+                sqlComm.CommandText = "delete from " + tblName + " where ParentNodeGuid = '" + parentGuid + "'";
+                sqlComm.ExecuteNonQuery();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+        /// <summary>
+        /// 执行一条sql指令
+        /// </summary>
+        /// <param name="strCmd"></param>
+        /// <returns></returns>
+        public bool executeCommand(string strCmd)
+        {
+            try
+            {
+                SqlCommand sqlComm = new SqlCommand();
+                SqlConnection conn = new SqlConnection(ConStr);
+                sqlComm.Connection = conn;
+                sqlComm.CommandText = strCmd;
+                sqlComm.ExecuteNonQuery();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
     }
 }

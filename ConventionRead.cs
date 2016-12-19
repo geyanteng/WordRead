@@ -153,38 +153,36 @@ namespace WordRead
             #region 选项2：标题中Span 标签 Style属性识别
             else if (method == ReadMethod.TITLE_SPANSTYLE)
             {
-                title1Nodes_init = htmlRootNode.SelectNodes(@"//h1");//span[@style]");
+                title1Nodes_init = htmlRootNode.SelectNodes (@"//p");
                 title2Nodes_init = htmlRootNode.SelectNodes(@"//span[@style]");
+                HtmlNodeCollection title1Nodes_tmp = new HtmlNodeCollection(htmlRootNode.Clone());
                 #region 提取一级标题节点，生成一级目录的节点集合title1Nodes，和字符串集合str_title1List
                 if (title1Nodes_init != null)
                 {
                     for (int i = 0; i < title1Nodes_init.Count; i++)
                     {
-                        //string tmpstr = title1Nodes_init[i].InnerText;
-                        //if (title1Nodes_init[i].Attributes["style"].Value.Replace("\r\n", "").Contains(title1_select))
-                        //{
-                        //    foreach (var match in title1Nodes_init[i].AncestorsAndSelf())
-                        //    {
-                        //        Console.WriteLine(match.Name);
-                        //        if (match.Name == "p")
-                        //        {
-                        //            title1Nodes.Add(match);
-                        //            break;
-                        //        }
-                        //    }
-                        //}
-                        title1Nodes.Add(title1Nodes_init[i]);
-                    }
-                    for (int i = 0; i < title1Nodes.Count; i++)
-                    {
-                        if (title1Nodes[i].InnerText.Trim() != string.Empty &&
-                        (i == 0 || (i > 0 && title1Nodes[i].Line != title1Nodes[i - 1].Line)))
+                        if (title1Nodes_init[i].InnerHtml.Replace("\r\n", "").Contains(title1_select))
+                            //(title1Nodes_init[i].Attributes["style"].Value.Replace("\r\n", "").Contains(title1_select))
                         {
-                            str_title1List.Add(title1Nodes[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
+                            foreach (var match in title1Nodes_init[i].AncestorsAndSelf())
+                            {
+                                Console.WriteLine(match.Name);
+                                if (match.Name == "p")
+                                {
+                                    title1Nodes_tmp.Add(match);
+                                    break;
+                                }
+                            }
+                            //title1Nodes_tmp.Add(title1Nodes_init[i]);
                         }
-                        else
+                    }
+                    for (int i = 0; i < title1Nodes_tmp.Count; i++)
+                    {
+                        if (title1Nodes_tmp[i].InnerText.Replace("&nbsp;", "").Trim() != string.Empty &&
+                        (i == 0 || (i > 0 && title1Nodes_tmp[i].Line != title1Nodes_tmp[i - 1].Line)))
                         {
-                            title1Nodes.RemoveAt(i);
+                            str_title1List.Add(title1Nodes_tmp[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
+                            title1Nodes.Add(title1Nodes_tmp[i]);
                         }
                     }
                 }
@@ -198,20 +196,21 @@ namespace WordRead
                     for (int i = 0; i < title2Nodes_init.Count; i++)
                     {
                         if (title2Nodes_init[i].Attributes["style"].Value.Replace("\r\n", "").Contains(title2_select)
-                            && title2Nodes_init[i].ParentNode.Name=="b")
+                            )//&& title2Nodes_init[i].ParentNode.Name=="b")
                         {
                             foreach (var match in title2Nodes_init[i].AncestorsAndSelf())
                             {
                                 if (match.Name == "p")
                                 {
-                                    foreach(var match1 in match.Descendants())
-                                    {
-                                        if (match1.Name == "a")
-                                        {
-                                            tempNodes.Add(match);
-                                            break;
-                                       }                                           
-                                    }
+                                    //foreach(var match1 in match.Descendants())
+                                    //{
+                                    //    if (match1.Name == "a")
+                                    //    {
+                                    //        tempNodes.Add(match);
+                                    //        break;
+                                    //   }                                           
+                                    //}
+                                    tempNodes.Add(match);
                                     break;                                  
                                 }
                             }
@@ -306,11 +305,12 @@ namespace WordRead
                         htmlTxt = htmlTxt.Replace(ftNoteRefnodes[i].OuterHtml, "");
                     }
                 }
-                //替换图片路径
+                #endregion
+
+                #region 替换图片路径
                 Regex reg = new Regex(Patterns.imageSrc);
                 htmlTxt = reg.Replace(htmlTxt, "${1}" + imageFilePath + "${2}");
-                MatchCollection a = reg.Matches(htmlTxt);
-                //System.IO.File.WriteAllText(@"../../../htmlRcgTest/全文.html", htmlTxt);
+                //System.IO.File.WriteAllText(@"../../../htmlRcgTest/全文.html", htmlTxt); 
                 #endregion
 
                 #region 提取一级标题下可能有的正文，此标题序号和正文键值对 存储在字典dic_title1Content
@@ -335,18 +335,21 @@ namespace WordRead
                                     throw new Exception("title1 content提取出错");
                             }
                         }
-                        else if(titleNodes[i].Line == title1Nodes.Last().Line)
+                    }
+                }
+                for(int i = 0; i < title1Nodes.Count; i++)
+                {
+                    if (titleNodes.Last().Line == title1Nodes[i].Line)
+                    {
+                        Console.WriteLine("2:" + title1Nodes.Count);
+                        int start = htmlTxt.IndexOf(title1Nodes.Last().OuterHtml);
+                        if (start != -1)
                         {
-                            Console.WriteLine("2:"+title1Nodes.Count);
-                            int start = htmlTxt.IndexOf(title1Nodes.Last().OuterHtml);
-                            if (start != -1)
-                            {
-                                dic_title1Content_tmp.Add(title1Nodes.Count - 1, htmlTxt.Substring(start));
-                                break;
-                            }
-                            else
-                                throw new Exception("title1 last content提取出错");
+                            dic_title1Content_tmp.Add(title1Nodes.Count - 1, htmlTxt.Substring(start));
+                            break;
                         }
+                        else
+                            throw new Exception("title1 last content提取出错");
                     }
                 }
                 foreach (var pair in dic_title1Content_tmp)
@@ -363,26 +366,38 @@ namespace WordRead
                 }
                 #endregion
 
-                #region 更新 htmlTxt 字符串，将html文本中一级标题内容删除
+                #region 更新 htmlTxt 字符串，将html文本中一级标题和一级标题下直接的正文  删除
                 if (title1Nodes != null)
                 {
                     for (int i = 0; i < title1Nodes.Count; i++)
                     {
-                        htmlTxt = htmlTxt.Replace(title1Nodes[i].OuterHtml, "");
+                        if (dic_title1Content.Count!=0)//若存在一级标题下直接的正文
+                        {
+                            foreach (var pair in dic_title1Content)
+                            {
+                                htmlTxt = htmlTxt.Replace(pair.Value, "");
+                                if(i!=pair.Key)
+                                    htmlTxt = htmlTxt.Replace(title1Nodes[i].OuterHtml, "");
+                            }
+                        }
+                        else //若不存在一级标题下直接的正文
+                            htmlTxt = htmlTxt.Replace(title1Nodes[i].OuterHtml, "");
                     }
                 }
+
                 #endregion
 
                 #region 提取二级标题下Html正文，分小节存储，HtmlNode节点存储在contentNodes,文本存储在str_contentList
+                int index_PartStart = 0, index_PartEnd = 0;
                 for (int i = 0; i < title2Nodes.Count; i++)
                 {
                     HtmlAgilityPack.HtmlDocument contentNodeDoc = new HtmlAgilityPack.HtmlDocument();
                     string str_content;
-                    int index_PartStart = 0;
+                    
                     if (i < title2Nodes.Count - 1)
                     {
-                        index_PartStart = htmlTxt.IndexOf(title2Nodes[i].OuterHtml);
-                        int index_PartEnd = htmlTxt.IndexOf(title2Nodes[i + 1].OuterHtml, index_PartStart + 1);
+                        index_PartStart = htmlTxt.IndexOf(title2Nodes[i].OuterHtml, index_PartStart + 1);
+                        index_PartEnd = htmlTxt.IndexOf(title2Nodes[i + 1].OuterHtml, index_PartStart + 1);
                         if (index_PartStart != -1 && index_PartEnd > index_PartStart)
                             str_content = htmlTxt.Substring(index_PartStart, index_PartEnd - index_PartStart);
                         else
@@ -390,7 +405,7 @@ namespace WordRead
                     }
                     else
                     {
-                        index_PartStart = htmlTxt.IndexOf(title2Nodes[title2Nodes.Count - 1].OuterHtml);
+                        index_PartStart = htmlTxt.IndexOf(title2Nodes[title2Nodes.Count - 1].OuterHtml, index_PartStart + 1);
                         if (index_PartStart != -1)
                             str_content = htmlTxt.Substring(index_PartStart);
                         else
@@ -406,9 +421,14 @@ namespace WordRead
                     contentNodeDoc.LoadHtml(str_content);
                     contentNodes.Add(contentNodeDoc.DocumentNode);
                     str_contentList.Add(contentNodes[i].OuterHtml);
-                    //System.IO.File.WriteAllText(@"../../../htmlRcgTest/" + i + @".html", str_contentList[i]);
+                    System.IO.File.WriteAllText(@"../../../htmlRcgTest/" + i + @".html", str_contentList[i]);
                 }
                 #endregion
+//  断点位置：在局部变量窗口中检查str_contentList/str_titleList/
+//  str_title1List /str_title2List/dic_title1Content
+//  1、数目是否正确
+//  2、的内容是否正确，是否有缺失（二级标题下的正文可以在输出的文件
+//     "../../../htmlRcgTest/" + i + @".html"中查看）
             }
             catch (Exception err)
             {
@@ -430,8 +450,8 @@ namespace WordRead
                         {
                             tempRow1 = new ConventionRow(rootConvention, str_title1List[i],
                                 i + 1, ConventionOptions.CATEGORY.IS_TITLE1_BOLD, pair.Value);
-                            sqlUtils.writeRow_local(tempRow1);
-                            retInfo.title1Guids.Add(tempRow1.TitleCn + "\r\n" + tempRow1.Guid);
+                                sqlUtils.writeRow_local(tempRow1);
+                            retInfo.title1Guids.Add(tempRow1.Guid);
                             //retInfo.retTable.Rows.Add(tempRow1);
                             break;
                         }
@@ -441,7 +461,7 @@ namespace WordRead
                         tempRow1 = new ConventionRow(rootConvention, str_title1List[i],
                                 i + 1, ConventionOptions.CATEGORY.IS_CATEGORY);
                         sqlUtils.writeRow_local(tempRow1);
-                        retInfo.title1Guids.Add(tempRow1.TitleCn + "\r\n" + tempRow1.Guid);
+                        retInfo.title1Guids.Add(tempRow1.Guid);
                         //retInfo.retTable.Rows.Add(tempRow1);
                     }
                     for (int j = 0, k = 0; j < title2Nodes.Count; j++)
@@ -468,7 +488,6 @@ namespace WordRead
                 }
                 retInfo.title1s = str_title1List;
                 retInfo.title2s = str_title2List;
-                retInfo.dic_title1Contents = str_title2List;
                 retInfo.title2Contents = str_contentList;
             }
             catch (Exception err)
@@ -552,7 +571,7 @@ namespace WordRead
         public List<string> title2s=new List<string>();
         public List<string> dic_title1Contents=new List<string> ();
         public List<string> title2Contents=new List<string>();
-        public List<string> title1Guids=new List<string>();
+        public List<Guid> title1Guids=new List<Guid>();
         public string errorInfo;
         public DataTable retTable=new DataTable ();
     }
