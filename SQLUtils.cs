@@ -37,6 +37,11 @@ namespace WordRead
                 sqlUtils = new SQLUtils();
             return sqlUtils;
         }
+        /// <summary>
+        /// 根据Guid获取一条记录。用来获取根节点信息
+        /// </summary>
+        /// <param name="parentNodeGuid"></param>
+        /// <returns></returns>
         public DataRow getInfo(Guid parentNodeGuid)
         {
             connect = new SqlConnection(ConStr);
@@ -52,6 +57,9 @@ namespace WordRead
             DataRow myRow = table.NewRow();
             return table.Rows[0];           
         }
+        /// <summary>
+        /// 连接数据库，创建本地myTable
+        /// </summary>
         public void makeConnect()
         {
             try
@@ -75,7 +83,10 @@ namespace WordRead
                 Console.WriteLine(err.Message);
             }
         }
-
+        /// <summary>
+        /// 向本地myTable中写入一条记录。
+        /// </summary>
+        /// <param name="conventionRow"></param>
         public void writeRow_local(ConventionRow conventionRow)
         {
             DataRow myRow = myTable.NewRow();
@@ -102,6 +113,9 @@ namespace WordRead
             myRow["ConventionTypeKey"] = conventionRow.ConventionTypeKey;
             myTable.Rows.Add(myRow);
         }
+        /// <summary>
+        /// 提交myTable到数据库，更新数据
+        /// </summary>
         public void updateTable()
         {
             SqlCommandBuilder mySqlCommandBuilder = new SqlCommandBuilder(myDataAdapter);
