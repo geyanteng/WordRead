@@ -25,16 +25,16 @@ namespace WordRead
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.tbParentGuid.Text = "1bd7e08c-0fca-46b0-81da-9f60592da553";
-            this.tbParentDepth.Text = "8";
+            this.tbParentGuid.Text = "67ed1f76-0916-4b26-a81c-409cc74cc19a";
+            this.tbParentDepth.Text = "6";
             this.tbParentIDfolder.Text =
-            "#f088ad64-8a9e-4ef6-a3e3-ac872a380283#ea00e0c5-53ca-4ce3-80b6-ff727c27f0b0#ce49ecc9-10cb-4760-8e9c-9446ad3f0eec#983e34e1-7d54-4f46-b980-ee53b21f22f9#4ea6e595-c23d-4b0f-ab6a-37f19d0827b7#0d161a54-756f-46ab-a4c0-ff862609c297#67ed1f76-0916-4b26-a81c-409cc74cc19a#1bd7e08c-0fca-46b0-81da-9f60592da553";
+            "#f088ad64-8a9e-4ef6-a3e3-ac872a380283#ea00e0c5-53ca-4ce3-80b6-ff727c27f0b0#ce49ecc9-10cb-4760-8e9c-9446ad3f0eec#983e34e1-7d54-4f46-b980-ee53b21f22f9#4ea6e595-c23d-4b0f-ab6a-37f19d0827b7#0d161a54-756f-46ab-a4c0-ff862609c297#67ed1f76-0916-4b26-a81c-409cc74cc19a";
             this.tbParentTitleCnFolder.Text =
-            "0#@`船舶检验技术规则#@`国际海船#@`国际航行海船法定检验技术规则2014#@`附 则#@`2014规则#@`附则2  2000年国际高速船安全规则#@`第9章   轮机";
-            this.tbHtmlPath.Text = @"D:\1work\htmlRcgTest\1-gjhc\fuze\fuze2\di9zhang\9.htm";
-            this.tbFilesPath.Text = @"/Uploads/imagesrc/guojihaichuan/num1/fuze/fuze2/di9zhang";
-            this.tbTitle1SpanStyle.Text = @"font-size:15.0pt;font-family:楷体_GB2312";
-            this.tbTitle2SpanStyle.Text = @"font-size:12.0pt;font-family:黑体";
+            "0#@`船舶检验技术规则#@`国际海船#@`国际航行海船法定检验技术规则2014#@`附 则#@`2014规则#@`附则2  2000年国际高速船安全规则";
+            this.tbHtmlPath.Text = @"../../../htmlRcgTest/1-gjhc/fuze/fuze2/di19zhang/19.htm";
+            this.tbFilesPath.Text = @"/Uploads/imagesrc/guojihaichuan/num1/fuze/fuze2/di19zhang";
+            this.tbTitle1SpanStyle.Text = @"font-size:18.0pt;font-family:黑体";
+            this.tbTitle2SpanStyle.Text = @"font-size:15.0pt;font-family:黑体";
             /*****************************************/
             this.tbTitle1Xpath.Text = @"/html[1]/body[1]//span[@style]";
             this.tbTitle1TagName.Text = "h1";
@@ -303,6 +303,12 @@ namespace WordRead
                 else
                     this.toolStripStatusLabel1.Text = "撤销失败";
             }
+        }
+
+        private void menuUpdateData_Click(object sender, EventArgs e)
+        {
+            SQLUtils sqlUtils = SQLUtils.getInstance();
+            sqlUtils.updateData();
         }
     }
 }

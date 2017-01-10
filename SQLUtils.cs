@@ -12,10 +12,10 @@ namespace WordRead
 {
     class SQLUtils
     {
-        public  string ConStr = @"server=60.30.247.219;database=MRCS_0515;uid=pscadmin1;pwd=http://psc20131105;Connect Timeout=900";
+        public string ConStr = @"server=60.30.247.219;database=MRCS_0515;uid=pscadmin1;pwd=http://psc20131105;Connect Timeout=900";
         //public string ConStr = @"Server=(local)\MILESGESQL;Database=mrcs_0515;Integrated Security=true;";
-        //public string ConStr = @"Server=(local);Database=mrcs_0515;Integrated Security=true;";
-        private const string tblName = @"tblConvention";
+        public string ConStrLocal = @"Server=(local);Database=mrcs_0515;Integrated Security=true;";
+        private string tblName = @"tblConvention";
         public  SqlConnection connect;
         private SqlCommand mycmd;
         private SqlDataAdapter myDataAdapter;
@@ -188,6 +188,41 @@ namespace WordRead
             {
                 Console.WriteLine(ex.Message);
                 return false;
+            }
+        }
+        public void updateData()
+        {
+            try
+            {
+                string tableName = "tblConventionQuery";
+                SqlConnection sqlconnect = new SqlConnection(ConStrLocal);
+                sqlconnect.Open();//打开数据连接
+                SqlCommand sqlcmd = new SqlCommand();
+                sqlcmd.Connection = sqlconnect;
+                sqlcmd.CommandType = CommandType.Text;
+                sqlcmd.CommandText = "select * from " + tableName;
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlcmd);
+                DataSet sqlDataSet = new DataSet();
+                sqlDataAdapter.Fill(sqlDataSet, tableName);
+                DataTable sqlTable = sqlDataSet.Tables[tableName];
+                for (int i=0;i<sqlTable.Rows.Count;i++)
+                {
+                    string GTLimit = sqlTable.Rows[i]["GTLimit"].ToString();
+                    string regExp_9999 = @"9{4,}";
+                    Regex reg = new Regex(regExp_9999);
+                    Match match = reg.Match(GTLimit);
+                    if (match.Length > 0)
+                    {
+                        sqlTable.Rows[i]["GTLimit"] = null;
+                    }
+                }                
+                // 将DataSet的修改提交至“数据库”
+                SqlCommandBuilder sqlSqlCommandBuilder = new SqlCommandBuilder(sqlDataAdapter);
+                sqlDataAdapter.Update(sqlDataSet, tableName);
+            }
+            catch (Exception err)
+            {            
+                Console.WriteLine(err.Message);
             }
         }
     }

@@ -77,6 +77,7 @@
             this.rdbtConStrServer = new System.Windows.Forms.RadioButton();
             this.btnUpdate = new System.Windows.Forms.Button();
             this.btnReDo = new System.Windows.Forms.Button();
+            this.menuUpdateData = new System.Windows.Forms.ToolStripMenuItem();
             this.tbcMode.SuspendLayout();
             this.tabRecognize.SuspendLayout();
             this.grpRecognize.SuspendLayout();
@@ -467,7 +468,8 @@
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(18, 18);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuSQLTest,
-            this.menuSingle});
+            this.menuSingle,
+            this.menuUpdateData});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
@@ -551,10 +553,12 @@
             // rdbtConStrLocal
             // 
             this.rdbtConStrLocal.AutoSize = true;
+            this.rdbtConStrLocal.Checked = true;
             this.rdbtConStrLocal.Location = new System.Drawing.Point(166, 16);
             this.rdbtConStrLocal.Name = "rdbtConStrLocal";
             this.rdbtConStrLocal.Size = new System.Drawing.Size(134, 21);
             this.rdbtConStrLocal.TabIndex = 27;
+            this.rdbtConStrLocal.TabStop = true;
             this.rdbtConStrLocal.Text = "我的电脑本地数据库";
             this.rdbtConStrLocal.UseVisualStyleBackColor = true;
             this.rdbtConStrLocal.CheckedChanged += new System.EventHandler(this.rdbtConStrLocal_CheckedChanged);
@@ -562,12 +566,10 @@
             // rdbtConStrServer
             // 
             this.rdbtConStrServer.AutoSize = true;
-            this.rdbtConStrServer.Checked = true;
             this.rdbtConStrServer.Location = new System.Drawing.Point(7, 16);
             this.rdbtConStrServer.Name = "rdbtConStrServer";
             this.rdbtConStrServer.Size = new System.Drawing.Size(122, 21);
             this.rdbtConStrServer.TabIndex = 26;
-            this.rdbtConStrServer.TabStop = true;
             this.rdbtConStrServer.Text = "正式服务器数据库";
             this.rdbtConStrServer.UseVisualStyleBackColor = true;
             this.rdbtConStrServer.CheckedChanged += new System.EventHandler(this.rdbtConStrServer_CheckedChanged);
@@ -593,6 +595,13 @@
             this.btnReDo.Text = "撤销提交";
             this.btnReDo.UseVisualStyleBackColor = true;
             this.btnReDo.Click += new System.EventHandler(this.btnReDo_Click);
+            // 
+            // menuUpdateData
+            // 
+            this.menuUpdateData.Name = "menuUpdateData";
+            this.menuUpdateData.Size = new System.Drawing.Size(80, 21);
+            this.menuUpdateData.Text = "修改脏数据";
+            this.menuUpdateData.Click += new System.EventHandler(this.menuUpdateData_Click);
             // 
             // frmWordRead
             // 
@@ -690,6 +699,7 @@
         private System.Windows.Forms.TextBox tbTitle1Guids;
         private System.Windows.Forms.Button btnReDo;
         internal System.Windows.Forms.TextBox tbFilesPath;
+        private System.Windows.Forms.ToolStripMenuItem menuUpdateData;
     }
 }
 

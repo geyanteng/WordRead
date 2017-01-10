@@ -23,7 +23,7 @@ namespace WordRead
         public string title2_select;
         public ReturnInfo retInfo = new ReturnInfo();
         public ReadMethod method;
-        public const int title2RecogMethod = 1;//0->style;1->正则表达式识别
+        public const int title2RecogMethod = 0;//0->style;1->正则表达式识别
         public ConventionRead()
         {
         }
@@ -455,7 +455,7 @@ namespace WordRead
                     contentNodeDoc.LoadHtml(str_content);
                     contentNodes.Add(contentNodeDoc.DocumentNode);
                     str_contentList.Add(contentNodes[i].OuterHtml);
-                    System.IO.File.WriteAllText(@"../../../htmlRcgTest/" + i + @".html", str_contentList[i]);
+                    //System.IO.File.WriteAllText(@"../../../htmlRcgTest/" + i + @".html", str_contentList[i]);
                 }
                 #endregion
                 //  断点位置：在局部变量窗口中检查str_contentList/str_titleList/
