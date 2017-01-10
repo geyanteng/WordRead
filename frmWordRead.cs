@@ -25,14 +25,17 @@ namespace WordRead
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.tbParentGuid.Text = "0c08fb9d-9d22-46f0-b4aa-235ac775909a";
-            this.tbParentDepth.Text = "6";
-            this.tbParentIDfolder.Text = "#f088ad64-8a9e-4ef6-a3e3-ac872a380283#ea00e0c5-53ca-4ce3-80b6-ff727c27f0b0#ce49ecc9-10cb-4760-8e9c-9446ad3f0eec#983e34e1-7d54-4f46-b980-ee53b21f22f9#6087dc06-f6b7-45a6-91c0-84d2e0db5144#532dfdeb-5642-49e0-9916-b975c797d3a2#0c08fb9d-9d22-46f0-b4aa-235ac775909a";
-            this.tbParentTitleCnFolder.Text = "0#@`船舶检验技术规则#@`国际海船#@`国际航行海船法定检验技术规则2014#@`第4篇 船舶安全#@`2014规则#@`第4章  无线电通信设备(SOLAS公约第IV章)";
-            this.tbHtmlPath.Text = @"D:\1work\htmlRcgTest\1-gjhc\4\4.htm";
-            this.tbFilesPath.Text = @"/Uploads/imagesrc/guojihaichuan/num1/4/4";
+            this.tbParentGuid.Text = "1bd7e08c-0fca-46b0-81da-9f60592da553";
+            this.tbParentDepth.Text = "8";
+            this.tbParentIDfolder.Text =
+            "#f088ad64-8a9e-4ef6-a3e3-ac872a380283#ea00e0c5-53ca-4ce3-80b6-ff727c27f0b0#ce49ecc9-10cb-4760-8e9c-9446ad3f0eec#983e34e1-7d54-4f46-b980-ee53b21f22f9#4ea6e595-c23d-4b0f-ab6a-37f19d0827b7#0d161a54-756f-46ab-a4c0-ff862609c297#67ed1f76-0916-4b26-a81c-409cc74cc19a#1bd7e08c-0fca-46b0-81da-9f60592da553";
+            this.tbParentTitleCnFolder.Text =
+            "0#@`船舶检验技术规则#@`国际海船#@`国际航行海船法定检验技术规则2014#@`附 则#@`2014规则#@`附则2  2000年国际高速船安全规则#@`第9章   轮机";
+            this.tbHtmlPath.Text = @"D:\1work\htmlRcgTest\1-gjhc\fuze\fuze2\di9zhang\9.htm";
+            this.tbFilesPath.Text = @"/Uploads/imagesrc/guojihaichuan/num1/fuze/fuze2/di9zhang";
             this.tbTitle1SpanStyle.Text = @"font-size:15.0pt;font-family:楷体_GB2312";
             this.tbTitle2SpanStyle.Text = @"font-size:12.0pt;font-family:黑体";
+            /*****************************************/
             this.tbTitle1Xpath.Text = @"/html[1]/body[1]//span[@style]";
             this.tbTitle1TagName.Text = "h1";
             this.tbTitle2TagName.Text = "b";
@@ -82,7 +85,7 @@ namespace WordRead
                         }
                     }
                     info = conventionRead.ReadHtml(rootNode);
-                    this.toolStripStatusLabel1.Text = "Html识别成功：一级目录有" + info.title1s.Count + "个,二级目录共有" + info.title2s.Count+"个";
+                    this.toolStripStatusLabel1.Text = "Html识别成功：一级目录有" + info.title1s.Count + "个,二级目录共有" + info.title2s.Count+"个"+" 图片识别结果 "+info.picResult;
                     for (int i = 0; i < info.title1Guids.Count; i++)
                         this.tbTitle1Guids.Text += info.title1s[i]+" : "+info.title1Guids[i]+"\r\n";
                     this.tbTitle1Guids.Text += "\r\n\r\n";

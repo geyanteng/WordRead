@@ -21,8 +21,9 @@ namespace WordRead
         public string imageFilePath;
         public string title1_select;
         public string title2_select;
-        public ReturnInfo retInfo=new ReturnInfo();
+        public ReturnInfo retInfo = new ReturnInfo();
         public ReadMethod method;
+        public const int title2RecogMethod = 1;//0->style;1->正则表达式识别
         public ConventionRead()
         {
         }
@@ -153,20 +154,18 @@ namespace WordRead
             #region 选项2：标题中Span 标签 Style属性识别
             else if (method == ReadMethod.TITLE_SPANSTYLE)
             {
-                title1Nodes_init = htmlRootNode.SelectNodes (@"//p");
-                title2Nodes_init = htmlRootNode.SelectNodes(@"//span[@style]");
                 HtmlNodeCollection title1Nodes_tmp = new HtmlNodeCollection(htmlRootNode.Clone());
                 #region 提取一级标题节点，生成一级目录的节点集合title1Nodes，和字符串集合str_title1List
+                title1Nodes_init = htmlRootNode.SelectNodes(@"//p");
                 if (title1Nodes_init != null)
                 {
                     for (int i = 0; i < title1Nodes_init.Count; i++)
                     {
                         if (title1Nodes_init[i].InnerHtml.Replace("\r\n", "").Contains(title1_select))
-                            //(title1Nodes_init[i].Attributes["style"].Value.Replace("\r\n", "").Contains(title1_select))
+                        //(title1Nodes_init[i].Attributes["style"].Value.Replace("\r\n", "").Contains(title1_select))
                         {
                             foreach (var match in title1Nodes_init[i].AncestorsAndSelf())
                             {
-                                Console.WriteLine(match.Name);
                                 if (match.Name == "p")
                                 {
                                     title1Nodes_tmp.Add(match);
@@ -189,41 +188,69 @@ namespace WordRead
                 #endregion
 
                 #region 提取二级标题节点，生成二级目录的节点集合title2Nodes，和字符串集合str_title2List
-                if (title2Nodes_init != null)
-                {
-                    HtmlNodeCollection tempNodes = new HtmlNodeCollection(htmlRootNode.Clone());
 
-                    for (int i = 0; i < title2Nodes_init.Count; i++)
+                HtmlNodeCollection tempNodes = new HtmlNodeCollection(htmlRootNode.Clone());
+                if (title2RecogMethod == 1)
+                {
+                    title2Nodes_init = htmlRootNode.SelectNodes(@"//p");
+                    if (title2Nodes_init != null)
                     {
-                        if (title2Nodes_init[i].Attributes["style"].Value.Replace("\r\n", "").Contains(title2_select)
-                            )//&& title2Nodes_init[i].ParentNode.Name=="b")
+                        for (int i = 0; i < title2Nodes_init.Count; i++)
                         {
-                            foreach (var match in title2Nodes_init[i].AncestorsAndSelf())
+                            string str_tmp = title2Nodes_init[i].InnerText.Replace("&nbsp;", " ");
+                            string regExp = @"(?<=^\s+)\d+.\d+(?![.])\s+[\s\S]+?$";
+                            Regex reg = new Regex(regExp);
+                            MatchCollection matches = reg.Matches(str_tmp);
+                            if (matches.Count > 0)
                             {
-                                if (match.Name == "p")
+                                tempNodes.Add(title2Nodes_init[i]);
+                            }
+                        }
+                    }
+                }
+                if (title2RecogMethod == 0)
+                {
+                    title2Nodes_init = htmlRootNode.SelectNodes(@"//span[@style]");
+                    if (title2Nodes_init != null)
+                    {
+                        for (int i = 0; i < title2Nodes_init.Count; i++)
+                        {
+                            if (title2Nodes_init[i].Attributes["style"].Value.Replace("\r\n", "").Contains(title2_select)
+                                )//&& title2Nodes_init[i].ParentNode.Name=="b")
+                            {
+                                foreach (var match in title2Nodes_init[i].AncestorsAndSelf())
                                 {
-                                    //foreach(var match1 in match.Descendants())
-                                    //{
-                                    //    if (match1.Name == "a")
-                                    //    {
-                                    //        tempNodes.Add(match);
-                                    //        break;
-                                    //   }                                           
-                                    //}
-                                    tempNodes.Add(match);
-                                    break;                                  
+                                    if (match.Name == "p")
+                                    {
+                                        //foreach(var match1 in match.Descendants())
+                                        //{
+                                        //    if (match1.Name == "a")
+                                        //    {
+                                        //        tempNodes.Add(match);
+                                        //        break;
+                                        //   }                                           
+                                        //}
+                                        string tmp = match.InnerText.Trim().Replace("&nbsp;", "").Replace("\r\n", "");
+                                        if (tmp.Length > 1)
+                                            //有些文档中形如“1 XXX”的不是二级标题，需要手动在程序中修改
+                                            //if(tmp.Substring(0, 1) == "第" || tmp.Substring(0, 1) == "附" || tmp.Substring(0, 1) == "修")
+                                            if (!tmp.Contains("。") && tmp.Substring(tmp.Length - 1, 1) != "：" && !tmp.Contains("；"))
+                                                //tmp.Length>0&&(tmp.Substring(0,1)=="第"|| tmp.Substring(0, 1) == "附"|| tmp.Substring(0, 1) == "修"))
+                                                tempNodes.Add(match);
+                                        break;
+                                    }
                                 }
                             }
                         }
                     }
-                    for (int i = 0; i < tempNodes.Count; i++)
+                }
+                for (int i = 0; i < tempNodes.Count; i++)
+                {
+                    if (tempNodes[i].InnerText.Replace("&nbsp;", "").Trim() != String.Empty &&
+                    (i == 0 || (i > 0 && tempNodes[i].Line != tempNodes[i - 1].Line)))
                     {
-                        if (tempNodes[i].InnerText.Replace("&nbsp;", "").Trim() != String.Empty &&
-                        (i == 0 || (i > 0 && tempNodes[i].Line != tempNodes[i - 1].Line)))
-                        {
-                            title2Nodes.Add(tempNodes[i]);
-                            str_title2List.Add(tempNodes[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
-                        }
+                        title2Nodes.Add(tempNodes[i]);
+                        str_title2List.Add(tempNodes[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
                     }
                 }
                 #endregion
@@ -309,11 +336,18 @@ namespace WordRead
 
                 #region 替换图片路径
                 Regex reg = new Regex(Patterns.imageSrc);
-                htmlTxt = reg.Replace(htmlTxt, "${1}" + imageFilePath + "${2}");
+                MatchCollection matches = reg.Matches(htmlTxt);
+                if (matches.Count == 0)
+                    retInfo.picResult = "无匹配图片";
+                else
+                {
+                    htmlTxt = reg.Replace(htmlTxt, "${1}" + imageFilePath + "${2}");
+                    retInfo.picResult = "识别到图片数目：" + matches.Count.ToString();
+                }
                 //System.IO.File.WriteAllText(@"../../../htmlRcgTest/全文.html", htmlTxt); 
                 #endregion
 
-                #region 提取一级标题下可能有的正文，此标题序号和正文键值对 存储在字典dic_title1Content
+                #region 提取一级标题下可能有的正文，此标题序号和正文键值对 存储在字典dic_title1Content(包含脚注)dic_title1Content_tmp（不含脚注）
                 Dictionary<int, string> dic_title1Content_tmp = new Dictionary<int, string>();
                 for (int i = 0; i < titleNodes.Count; i++)
                 {
@@ -325,7 +359,6 @@ namespace WordRead
                             {
                                 int start = htmlTxt.IndexOf(title1Nodes[j].OuterHtml);
                                 int end = htmlTxt.IndexOf(title1Nodes[j + 1].OuterHtml, start + 1);
-                                Console.WriteLine("1:"+j);
                                 if (start != -1 && end > start)
                                 {
                                     dic_title1Content_tmp.Add(j, htmlTxt.Substring(start, end - start));
@@ -337,11 +370,10 @@ namespace WordRead
                         }
                     }
                 }
-                for(int i = 0; i < title1Nodes.Count; i++)
+                for (int i = 0; i < title1Nodes.Count; i++)
                 {
                     if (titleNodes.Last().Line == title1Nodes[i].Line)
                     {
-                        Console.WriteLine("2:" + title1Nodes.Count);
                         int start = htmlTxt.IndexOf(title1Nodes.Last().OuterHtml);
                         if (start != -1)
                         {
@@ -371,12 +403,14 @@ namespace WordRead
                 {
                     for (int i = 0; i < title1Nodes.Count; i++)
                     {
-                        if (dic_title1Content.Count!=0)//若存在一级标题下直接的正文
+                        if (dic_title1Content_tmp.Count != 0)//若存在一级标题下直接的正文
                         {
-                            foreach (var pair in dic_title1Content)
+                            foreach (var pair in dic_title1Content_tmp)
                             {
+                                int index = htmlTxt.IndexOf(pair.Value);
                                 htmlTxt = htmlTxt.Replace(pair.Value, "");
-                                if(i!=pair.Key)
+                                if (i != pair.Key)
+
                                     htmlTxt = htmlTxt.Replace(title1Nodes[i].OuterHtml, "");
                             }
                         }
@@ -393,7 +427,7 @@ namespace WordRead
                 {
                     HtmlAgilityPack.HtmlDocument contentNodeDoc = new HtmlAgilityPack.HtmlDocument();
                     string str_content;
-                    
+
                     if (i < title2Nodes.Count - 1)
                     {
                         index_PartStart = htmlTxt.IndexOf(title2Nodes[i].OuterHtml, index_PartStart + 1);
@@ -424,11 +458,11 @@ namespace WordRead
                     System.IO.File.WriteAllText(@"../../../htmlRcgTest/" + i + @".html", str_contentList[i]);
                 }
                 #endregion
-//  断点位置：在局部变量窗口中检查str_contentList/str_titleList/
-//  str_title1List /str_title2List/dic_title1Content
-//  1、数目是否正确
-//  2、的内容是否正确，是否有缺失（二级标题下的正文可以在输出的文件
-//     "../../../htmlRcgTest/" + i + @".html"中查看）
+                //  断点位置：在局部变量窗口中检查str_contentList/str_titleList/
+                //  str_title1List /str_title2List/dic_title1Content
+                //  1、数目是否正确
+                //  2、的内容是否正确，是否有缺失（二级标题下的正文可以在输出的文件
+                //     "../../../htmlRcgTest/" + i + @".html"中查看）
             }
             catch (Exception err)
             {
@@ -450,7 +484,7 @@ namespace WordRead
                         {
                             tempRow1 = new ConventionRow(rootConvention, str_title1List[i],
                                 i + 1, ConventionOptions.CATEGORY.IS_TITLE1_BOLD, pair.Value);
-                                sqlUtils.writeRow_local(tempRow1);
+                            sqlUtils.writeRow_local(tempRow1);
                             retInfo.title1Guids.Add(tempRow1.Guid);
                             //retInfo.retTable.Rows.Add(tempRow1);
                             break;
@@ -493,7 +527,7 @@ namespace WordRead
             catch (Exception err)
             {
                 Console.WriteLine(err.Message);
-                retInfo.errorInfo="录入失败。错误原因：" + err.Message;
+                retInfo.errorInfo = "录入失败。错误原因：" + err.Message;
             }
             return retInfo;
             #endregion
@@ -562,22 +596,24 @@ namespace WordRead
         //    Console.WriteLine("Yes");
         //} 
         #endregion
-       
+
     }
     public class ReturnInfo
     {
-        public List<string> titles=new List<string> ();
-        public List<string> title1s=new List<string> ();
-        public List<string> title2s=new List<string>();
-        public List<string> dic_title1Contents=new List<string> ();
-        public List<string> title2Contents=new List<string>();
-        public List<Guid> title1Guids=new List<Guid>();
+        public List<string> titles = new List<string>();
+        public List<string> title1s = new List<string>();
+        public List<string> title2s = new List<string>();
+        public List<string> dic_title1Contents = new List<string>();
+        public List<string> title2Contents = new List<string>();
+        public List<Guid> title1Guids = new List<Guid>();
         public string errorInfo;
-        public DataTable retTable=new DataTable ();
+        public DataTable retTable = new DataTable();
+        public string picResult;
     }
     public static class Patterns
     {
-        public static string imageSrc = @"(<img\s+width=" + "\"" + @"?\d+" + "\"" + @"?\s+height=" + "\"" + @"?\d+" + "\"" + @"?\s+src=['" + "\"" + @"])[\s\S]+?(/image[\s\S]+?['" + "\"" + @"]>)";
+        public static string imageSrc = @"(src=" + "\"" + @")[\s\S]+?(/image[\s\S]+?['" + "\"" + @"]>)";
+        //@"(<img\s+width=" + "\"" + @"?\d+" + "\"" + @"?\s+height=" + "\"" + @"?\d+" + "\"" + @"?\s+src=['" + "\"" + @"])[\s\S]+?(/image[\s\S]+?['" + "\"" + @"]>)";
         //public static string Title1 = @"第\d{1,}章[\s\S]+?(?=\s\d{1,3}\r)";//查找一级标题
         //public static string subTitle = @"第\d{1,}章[\s\S]+?(?=\r)";//查找一级标题
         //public static string allTitle = @"^[^\r][\s\S]+?(?=\s\d{1,3}\r)";//按行查找，去除空行，去除页码，匹配两种标题

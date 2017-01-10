@@ -404,6 +404,7 @@
             this.tbParentTitleCnFolder.Location = new System.Drawing.Point(8, 229);
             this.tbParentTitleCnFolder.Multiline = true;
             this.tbParentTitleCnFolder.Name = "tbParentTitleCnFolder";
+            this.tbParentTitleCnFolder.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.tbParentTitleCnFolder.Size = new System.Drawing.Size(265, 63);
             this.tbParentTitleCnFolder.TabIndex = 25;
             // 
@@ -423,6 +424,7 @@
             this.tbParentIDfolder.Location = new System.Drawing.Point(8, 119);
             this.tbParentIDfolder.Multiline = true;
             this.tbParentIDfolder.Name = "tbParentIDfolder";
+            this.tbParentIDfolder.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.tbParentIDfolder.Size = new System.Drawing.Size(265, 89);
             this.tbParentIDfolder.TabIndex = 23;
             // 
