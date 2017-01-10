@@ -199,7 +199,7 @@ namespace WordRead
                         {
                             string str_tmp = title2Nodes_init[i].InnerText.Replace("&nbsp;", " ");
                             string regExp = @"(?<=^\s+)\d+.\d+(?![.])\s+[\s\S]+?$";
-                            Regex reg = new Regex(regExp);
+                            Regex reg = new Regex(regExp,RegexOptions.Multiline);
                             MatchCollection matches = reg.Matches(str_tmp);
                             if (matches.Count > 0)
                             {
