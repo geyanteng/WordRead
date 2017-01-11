@@ -310,5 +310,12 @@ namespace WordRead
             SQLUtils sqlUtils = SQLUtils.getInstance();
             sqlUtils.updateData();
         }
+
+        private void menuCount_Click(object sender, EventArgs e)
+        {
+            SQLUtils sqlUtils = SQLUtils.getInstance();
+            sqlUtils.conventionCount(this.treeConventionCount);
+            ToXML.SaveToXml(this.treeConventionCount, "../../TreeXml.xml");
+        }
     }
 }

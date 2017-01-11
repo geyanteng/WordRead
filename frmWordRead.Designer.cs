@@ -67,6 +67,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.menuSQLTest = new System.Windows.Forms.ToolStripMenuItem();
             this.menuSingle = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuUpdateData = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tbFilesPath = new System.Windows.Forms.TextBox();
@@ -77,7 +78,8 @@
             this.rdbtConStrServer = new System.Windows.Forms.RadioButton();
             this.btnUpdate = new System.Windows.Forms.Button();
             this.btnReDo = new System.Windows.Forms.Button();
-            this.menuUpdateData = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuCount = new System.Windows.Forms.ToolStripMenuItem();
+            this.treeConventionCount = new System.Windows.Forms.TreeView();
             this.tbcMode.SuspendLayout();
             this.tabRecognize.SuspendLayout();
             this.grpRecognize.SuspendLayout();
@@ -469,11 +471,12 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuSQLTest,
             this.menuSingle,
-            this.menuUpdateData});
+            this.menuUpdateData,
+            this.menuCount});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(718, 25);
+            this.menuStrip1.Size = new System.Drawing.Size(986, 25);
             this.menuStrip1.TabIndex = 19;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -491,6 +494,13 @@
             this.menuSingle.Text = "单条录入";
             this.menuSingle.Click += new System.EventHandler(this.menuSingle_Click);
             // 
+            // menuUpdateData
+            // 
+            this.menuUpdateData.Name = "menuUpdateData";
+            this.menuUpdateData.Size = new System.Drawing.Size(80, 21);
+            this.menuUpdateData.Text = "修改脏数据";
+            this.menuUpdateData.Click += new System.EventHandler(this.menuUpdateData_Click);
+            // 
             // statusStrip1
             // 
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(18, 18);
@@ -499,7 +509,7 @@
             this.statusStrip1.Location = new System.Drawing.Point(0, 441);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 12, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(718, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(986, 22);
             this.statusStrip1.TabIndex = 20;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -596,18 +606,26 @@
             this.btnReDo.UseVisualStyleBackColor = true;
             this.btnReDo.Click += new System.EventHandler(this.btnReDo_Click);
             // 
-            // menuUpdateData
+            // menuCount
             // 
-            this.menuUpdateData.Name = "menuUpdateData";
-            this.menuUpdateData.Size = new System.Drawing.Size(80, 21);
-            this.menuUpdateData.Text = "修改脏数据";
-            this.menuUpdateData.Click += new System.EventHandler(this.menuUpdateData_Click);
+            this.menuCount.Name = "menuCount";
+            this.menuCount.Size = new System.Drawing.Size(68, 21);
+            this.menuCount.Text = "条目统计";
+            this.menuCount.Click += new System.EventHandler(this.menuCount_Click);
+            // 
+            // treeConventionCount
+            // 
+            this.treeConventionCount.Location = new System.Drawing.Point(715, 36);
+            this.treeConventionCount.Name = "treeConventionCount";
+            this.treeConventionCount.Size = new System.Drawing.Size(259, 398);
+            this.treeConventionCount.TabIndex = 28;
             // 
             // frmWordRead
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(718, 463);
+            this.ClientSize = new System.Drawing.Size(986, 463);
+            this.Controls.Add(this.treeConventionCount);
             this.Controls.Add(this.btnReDo);
             this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.grpConnectStr);
@@ -700,6 +718,8 @@
         private System.Windows.Forms.Button btnReDo;
         internal System.Windows.Forms.TextBox tbFilesPath;
         private System.Windows.Forms.ToolStripMenuItem menuUpdateData;
+        private System.Windows.Forms.ToolStripMenuItem menuCount;
+        private System.Windows.Forms.TreeView treeConventionCount;
     }
 }
 
