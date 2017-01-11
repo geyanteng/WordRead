@@ -49,6 +49,7 @@
             this.tbTag = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.btnGetInfo = new System.Windows.Forms.Button();
+            this.btnUpdateTofrm1 = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -145,7 +146,7 @@
             // label6
             // 
             this.label6.Font = new System.Drawing.Font("微软雅黑", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label6.Location = new System.Drawing.Point(10, 215);
+            this.label6.Location = new System.Drawing.Point(7, 193);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(75, 47);
             this.label6.TabIndex = 13;
@@ -154,27 +155,27 @@
             // tbParentIDfloder
             // 
             this.tbParentIDfloder.Font = new System.Drawing.Font("Calibri", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbParentIDfloder.Location = new System.Drawing.Point(92, 215);
+            this.tbParentIDfloder.Location = new System.Drawing.Point(92, 183);
             this.tbParentIDfloder.Multiline = true;
             this.tbParentIDfloder.Name = "tbParentIDfloder";
             this.tbParentIDfloder.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.tbParentIDfloder.Size = new System.Drawing.Size(310, 54);
+            this.tbParentIDfloder.Size = new System.Drawing.Size(310, 66);
             this.tbParentIDfloder.TabIndex = 5;
             // 
             // tbParentTitleCNFolder
             // 
             this.tbParentTitleCNFolder.Font = new System.Drawing.Font("Calibri", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbParentTitleCNFolder.Location = new System.Drawing.Point(92, 274);
+            this.tbParentTitleCNFolder.Location = new System.Drawing.Point(92, 255);
             this.tbParentTitleCNFolder.Multiline = true;
             this.tbParentTitleCNFolder.Name = "tbParentTitleCNFolder";
             this.tbParentTitleCNFolder.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.tbParentTitleCNFolder.Size = new System.Drawing.Size(310, 48);
+            this.tbParentTitleCNFolder.Size = new System.Drawing.Size(310, 67);
             this.tbParentTitleCNFolder.TabIndex = 6;
             // 
             // label7
             // 
             this.label7.Font = new System.Drawing.Font("微软雅黑", 8.830189F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label7.Location = new System.Drawing.Point(7, 274);
+            this.label7.Location = new System.Drawing.Point(7, 256);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(90, 41);
             this.label7.TabIndex = 14;
@@ -231,7 +232,7 @@
             this.tbTag.Multiline = true;
             this.tbTag.Name = "tbTag";
             this.tbTag.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbTag.Size = new System.Drawing.Size(310, 92);
+            this.tbTag.Size = new System.Drawing.Size(310, 59);
             this.tbTag.TabIndex = 17;
             // 
             // label8
@@ -255,11 +256,24 @@
             this.btnGetInfo.UseVisualStyleBackColor = true;
             this.btnGetInfo.Click += new System.EventHandler(this.btnGetInfo_Click);
             // 
+            // btnUpdateTofrm1
+            // 
+            this.btnUpdateTofrm1.AutoSize = true;
+            this.btnUpdateTofrm1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnUpdateTofrm1.Location = new System.Drawing.Point(189, 326);
+            this.btnUpdateTofrm1.Name = "btnUpdateTofrm1";
+            this.btnUpdateTofrm1.Size = new System.Drawing.Size(138, 27);
+            this.btnUpdateTofrm1.TabIndex = 20;
+            this.btnUpdateTofrm1.Text = "更新节点信息到主窗体";
+            this.btnUpdateTofrm1.UseVisualStyleBackColor = true;
+            this.btnUpdateTofrm1.Click += new System.EventHandler(this.btnUpdateTofrm1_Click);
+            // 
             // frmSingleAdd
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(421, 378);
+            this.Controls.Add(this.btnUpdateTofrm1);
             this.Controls.Add(this.btnGetInfo);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.tbParentTitleCNFolder);
@@ -314,5 +328,6 @@
         private System.Windows.Forms.TextBox tbTag;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button btnGetInfo;
+        private System.Windows.Forms.Button btnUpdateTofrm1;
     }
 }

@@ -100,6 +100,12 @@ namespace WordRead
             }
         }
 
-
+        private void btnUpdateTofrm1_Click(object sender, EventArgs e)
+        {
+            this.frm_WordRead.tbParentGuid.Text = this.tbParentGuid.Text;
+            this.frm_WordRead.tbParentIDfolder.Text = this.tbParentIDfloder.Text;
+            this.frm_WordRead.tbParentTitleCnFolder.Text = this.tbParentTitleCNFolder.Text;
+            this.frm_WordRead.tbParentDepth.Text = this.tbParentDepth.Text;
+        }
     }
 }
