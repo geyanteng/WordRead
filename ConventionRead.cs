@@ -151,6 +151,7 @@ namespace WordRead
             //}
             #endregion
 
+            #region 选项1：pdf转为图片的word文件后，通过p节点class属性提取标题
             if (method == ReadMethod.TITLE_CLASS)
             {
                 //HtmlNodeCollection title1Nodes_tmp = new HtmlNodeCollection(htmlRootNode.Clone());
@@ -172,7 +173,8 @@ namespace WordRead
                         title2Nodes.Add(title2Nodes_init[i]);
                     }
                 }
-            }
+            } 
+            #endregion
 
             #region 选项2：标题中Span 标签 Style属性识别
             else if (method == ReadMethod.TITLE_SPANSTYLE)
@@ -704,5 +706,4 @@ namespace WordRead
         TITLE_TAG = 1,
         TITLE_SPANSTYLE = 2,
     }
-
 }

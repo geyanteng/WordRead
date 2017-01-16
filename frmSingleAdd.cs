@@ -77,7 +77,7 @@ namespace WordRead
                     DataRow infoRow=sqlUtils.getInfo(new Guid(this.tbParentGuid.Text));
                     this.tbParentTitleCNFolder.Text = infoRow["TitleCnFolder"].ToString();
                     this.tbParentIDfloder.Text = infoRow["IDFolder"].ToString();
-                    this.tbParentDepth.Text = (int.Parse(infoRow["Depth"].ToString())+1).ToString();
+                    this.tbParentDepth.Text = infoRow["Depth"].ToString();
                     this.toolStripStatusLabel1.Text = "获取信息成功";                 
                 }
                 catch(Exception err)
