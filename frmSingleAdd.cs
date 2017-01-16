@@ -106,6 +106,7 @@ namespace WordRead
             this.frm_WordRead.tbParentIDfolder.Text = this.tbParentIDfloder.Text;
             this.frm_WordRead.tbParentTitleCnFolder.Text = this.tbParentTitleCNFolder.Text;
             this.frm_WordRead.tbParentDepth.Text = this.tbParentDepth.Text;
+            this.Close();
         }
     }
 }

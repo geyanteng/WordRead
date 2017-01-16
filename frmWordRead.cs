@@ -23,18 +23,19 @@ namespace WordRead
         {
             InitializeComponent();
         }
+        // /Uploads/imagesrc/neihechuanbo/num5/2006
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.tbParentGuid.Text = "67ed1f76-0916-4b26-a81c-409cc74cc19a";
-            this.tbParentDepth.Text = "6";
+            this.tbParentGuid.Text = "60637b19-5572-46dc-adf4-e3b855095644";
+            this.tbParentDepth.Text = "3";
             this.tbParentIDfolder.Text =
-            "#f088ad64-8a9e-4ef6-a3e3-ac872a380283#ea00e0c5-53ca-4ce3-80b6-ff727c27f0b0#ce49ecc9-10cb-4760-8e9c-9446ad3f0eec#983e34e1-7d54-4f46-b980-ee53b21f22f9#4ea6e595-c23d-4b0f-ab6a-37f19d0827b7#0d161a54-756f-46ab-a4c0-ff862609c297#67ed1f76-0916-4b26-a81c-409cc74cc19a";
+            "#f088ad64-8a9e-4ef6-a3e3-ac872a380283#ea00e0c5-53ca-4ce3-80b6-ff727c27f0b0#090ee5f5-1d77-4561-a17b-8b464aaad7aa#60637b19-5572-46dc-adf4-e3b855095644";
             this.tbParentTitleCnFolder.Text =
-            "0#@`船舶检验技术规则#@`国际海船#@`国际航行海船法定检验技术规则2014#@`附 则#@`2014规则#@`附则2  2000年国际高速船安全规则";
-            this.tbHtmlPath.Text = @"../../../htmlRcgTest/1-gjhc/fuze/fuze2/di19zhang/19.htm";
-            this.tbFilesPath.Text = @"/Uploads/imagesrc/guojihaichuan/num1/fuze/fuze2/di19zhang";
-            this.tbTitle1SpanStyle.Text = @"font-size:18.0pt;font-family:黑体";
-            this.tbTitle2SpanStyle.Text = @"font-size:15.0pt;font-family:黑体";
+            "0#@`船舶检验技术规则#@`内河船舶#@`天生桥库区小型客货渡船检验规定（试行）2006";
+            this.tbHtmlPath.Text = @"../../../htmlRcgTest/3-nhcb/num5/2006.htm";
+            this.tbFilesPath.Text = @"/Uploads/imagesrc/neihechuanbo/num5/2006";
+            this.tbTitle1SpanStyle.Text = @"font-size:15.0pt;font-family:宋体";
+            this.tbTitle2SpanStyle.Text = @"font-size:14.0pt;font-family:楷体_GB2312";
             /*****************************************/
             this.tbTitle1Xpath.Text = @"/html[1]/body[1]//span[@style]";
             this.tbTitle1TagName.Text = "h1";
@@ -85,12 +86,13 @@ namespace WordRead
                         }
                     }
                     info = conventionRead.ReadHtml(rootNode);
-                    this.toolStripStatusLabel1.Text = "Html识别成功：一级目录有" + info.title1s.Count + "个,二级目录共有" + info.title2s.Count+"个"+" 图片识别结果 "+info.picResult;
+                    this.toolStripStatusLabel1.Text = "Html识别成功：一级目录有" + info.title1s.Count + 
+                        "个,二级目录共有" + info.title2s.Count+"个"+"一级标题直接内容有"+info.title1ContentsNum+"个,图片识别结果 "+info.picResult;
                     for (int i = 0; i < info.title1Guids.Count; i++)
-                        this.tbTitle1Guids.Text += info.title1s[i]+" : "+info.title1Guids[i]+"\r\n";
+                        this.tbTitle1Guids.Text += info.title1s[i] + "\r\n";// " : "+info.title1Guids[i]+"\r\n";
                     this.tbTitle1Guids.Text += "\r\n\r\n";
-                    for (int i = 0; i < info.title2s.Count; i++)
-                        this.tbTitle1Guids.Text += info.title2s[i] + "\r\n";
+                    for (int i = 0; i < info.titles.Count; i++)
+                        this.tbTitle1Guids.Text += info.titles[i] + "\r\n";
                 }
                 catch (Exception err) 
                 {
@@ -100,12 +102,9 @@ namespace WordRead
             }
             else
                 MessageBox.Show("请输入信息!");
-
             #region 废弃代码
             // ConventionRow rootNode=new ConventionRow(new Guid("1b506d0f-8956-46d3-a023-78d24e300ed0"),2,ConventionOptions.CATEGORY.IS_CATEGORY);
             // conventionRead.ReadCatalogue(rootNode);
-
-
             //    Word.Application app = new Word.Application();
             //    Word.Document doc = null;
             //    object unknow = Type.Missing;
@@ -156,7 +155,6 @@ namespace WordRead
             //    Console.WriteLine(mymatches.Count);
             //    Console.WriteLine("\nFinished");
             //    doc.Close();
-
             #endregion
         }
         private void btnUpdate_Click(object sender, EventArgs e)
@@ -177,13 +175,11 @@ namespace WordRead
         }
         private void btnHtmlPath_Click(object sender, EventArgs e)
         {
-
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 tbHtmlPath.Text = openFileDialog1.FileName;
             }
         }
-
         #region 识别模式选项
         private void rdbtTitleTag_CheckedChanged(object sender, EventArgs e)
         {
@@ -225,7 +221,6 @@ namespace WordRead
             }
         }
         #endregion
-
         #region 菜单按钮
         private void menuSingle_Click(object sender, EventArgs e)
         {
@@ -239,7 +234,6 @@ namespace WordRead
                 singleAdd.Activate();
             }
         }
-
         private void menuSQLTest_Click(object sender, EventArgs e)
         {
             SQLUtils sqlUtils = SQLUtils.getInstance();
@@ -260,7 +254,6 @@ namespace WordRead
             }
         } 
         #endregion
-
         #region 数据库选择
         private void rdbtConStrServer_CheckedChanged(object sender, EventArgs e)
         {
@@ -270,7 +263,6 @@ namespace WordRead
                 sqlUtils.ConStr = @"server=60.30.247.219;database=MRCS_0515;uid=pscadmin1;pwd=http://psc20131105";
             }
         }
-
         private void rdbtConStrLocal_CheckedChanged(object sender, EventArgs e)
         {
             SQLUtils sqlUtils = SQLUtils.getInstance();
@@ -279,7 +271,6 @@ namespace WordRead
                 sqlUtils.ConStr = @"Server=(local);Database=mrcs_0515;Integrated Security=true;";
             }
         }
-
         private void rdbtConStrLocal_work_CheckedChanged(object sender, EventArgs e)
         {
             SQLUtils sqlUtils = SQLUtils.getInstance();
@@ -289,7 +280,6 @@ namespace WordRead
             }
         }
         #endregion
-
         private void btnReDo_Click(object sender, EventArgs e)
         {
             SQLUtils sqlUtils = SQLUtils.getInstance();
@@ -304,13 +294,11 @@ namespace WordRead
                     this.toolStripStatusLabel1.Text = "撤销失败";
             }
         }
-
         private void menuUpdateData_Click(object sender, EventArgs e)
         {
             SQLUtils sqlUtils = SQLUtils.getInstance();
             sqlUtils.updateData();
         }
-
         private void menuCount_Click(object sender, EventArgs e)
         {
             SQLUtils sqlUtils = SQLUtils.getInstance();

@@ -22,8 +22,7 @@ namespace WordRead
         public string title1_select;
         public string title2_select;
         public ReturnInfo retInfo = new ReturnInfo();
-        public ReadMethod method;
-        public const int title2RecogMethod = 0;//0->style;1->正则表达式识别
+        public ReadMethod method;        
         public ConventionRead()
         {
         }
@@ -161,7 +160,15 @@ namespace WordRead
                 {
                     for (int i = 0; i < title1Nodes_init.Count; i++)
                     {
-                        if (title1Nodes_init[i].InnerHtml.Replace("\r\n", "").Contains(title1_select))
+                        string str_style = title1Nodes_init[i].InnerHtml.Replace("\r\n", "");
+                        bool condition = str_style.Contains(title1_select);
+                        if (RecogOptions.title1_has_zitizihao)
+                        {
+                            string str_style_zihao = title1_select.Substring(0, title1_select.IndexOf(';'));
+                            string str_style_ziti = title1_select.Substring(title1_select.IndexOf(';') + 1);
+                            condition = str_style.Contains(str_style_zihao) && str_style.Contains(str_style_ziti);
+                        }
+                        if (condition)
                         //(title1Nodes_init[i].Attributes["style"].Value.Replace("\r\n", "").Contains(title1_select))
                         {
                             foreach (var match in title1Nodes_init[i].AncestorsAndSelf())
@@ -190,7 +197,7 @@ namespace WordRead
                 #region 提取二级标题节点，生成二级目录的节点集合title2Nodes，和字符串集合str_title2List
 
                 HtmlNodeCollection tempNodes = new HtmlNodeCollection(htmlRootNode.Clone());
-                if (title2RecogMethod == 1)
+                if (RecogOptions.title2RecogMethod == 1)
                 {
                     title2Nodes_init = htmlRootNode.SelectNodes(@"//p");
                     if (title2Nodes_init != null)
@@ -198,49 +205,74 @@ namespace WordRead
                         for (int i = 0; i < title2Nodes_init.Count; i++)
                         {
                             string str_tmp = title2Nodes_init[i].InnerText.Replace("&nbsp;", " ");
-                            string regExp = @"(?<=^\s+)\d+.\d+(?![.])\s+[\s\S]+?$";
-                            Regex reg = new Regex(regExp,RegexOptions.Multiline);
+                            string regExp = Patterns.title2_x_dot_x_XXX;
+                            Regex reg = new Regex(regExp, RegexOptions.Multiline);
                             MatchCollection matches = reg.Matches(str_tmp);
                             if (matches.Count > 0)
                             {
-                                tempNodes.Add(title2Nodes_init[i]);
+                                string tmp = matches[0].Value;
+                                //有些文档中形如“1 XXX”的不是二级标题，需要手动在程序中修改
+                                //if(tmp.Substring(0, 1) == "第" || tmp.Substring(0, 1) == "附" || tmp.Substring(0, 1) == "修")
+                                if (!tmp.Contains("。") //&& tmp.Substring(tmp.Length - 1, 1) != "：" && !tmp.Contains("；")
+                                    //&&!tmp.Contains("p"))
+                                    )
+                                    //tmp.Length>0&&(tmp.Substring(0,1)=="第"|| tmp.Substring(0, 1) == "附"|| tmp.Substring(0, 1) == "修"))
+                                    if (RecogOptions.title2_bold)
+                                    {
+                                        foreach (var child in title2Nodes_init[i].Descendants())
+                                            if (child.Name == "b")
+                                            {
+                                                tempNodes.Add(title2Nodes_init[i]);
+                                                break;
+                                            }
+                                    }
+                                    else
+                                        tempNodes.Add(title2Nodes_init[i]);
                             }
                         }
                     }
                 }
-                if (title2RecogMethod == 0)
+                if (RecogOptions.title2RecogMethod==0)
                 {
                     title2Nodes_init = htmlRootNode.SelectNodes(@"//span[@style]");
                     if (title2Nodes_init != null)
                     {
                         for (int i = 0; i < title2Nodes_init.Count; i++)
                         {
-                            if (title2Nodes_init[i].Attributes["style"].Value.Replace("\r\n", "").Contains(title2_select)
-                                )//&& title2Nodes_init[i].ParentNode.Name=="b")
+                            string str_style = title2Nodes_init[i].Attributes["style"].Value.Replace("\r\n", "");
+                            bool condition = str_style.Contains(title2_select);
+                            if (RecogOptions.title2_has_zitizihao)
                             {
-                                foreach (var match in title2Nodes_init[i].AncestorsAndSelf())
+                                string str_style_zihao = title2_select.Substring(0, title2_select.IndexOf(';'));
+                                string str_style_ziti = title2_select.Substring(title2_select.IndexOf(';') + 1);
+                                condition = str_style.Contains(str_style_zihao) && str_style.Contains(str_style_ziti);
+                            }
+                            if (condition)
+                                if ((!RecogOptions.title1_bold) || (RecogOptions.title1_bold && title2Nodes_init[i].ParentNode.Name == "b"))
                                 {
-                                    if (match.Name == "p")
+                                    foreach (var match in title2Nodes_init[i].AncestorsAndSelf())
                                     {
-                                        //foreach(var match1 in match.Descendants())
-                                        //{
-                                        //    if (match1.Name == "a")
-                                        //    {
-                                        //        tempNodes.Add(match);
-                                        //        break;
-                                        //   }                                           
-                                        //}
-                                        string tmp = match.InnerText.Trim().Replace("&nbsp;", "").Replace("\r\n", "");
-                                        if (tmp.Length > 1)
-                                            //有些文档中形如“1 XXX”的不是二级标题，需要手动在程序中修改
-                                            //if(tmp.Substring(0, 1) == "第" || tmp.Substring(0, 1) == "附" || tmp.Substring(0, 1) == "修")
-                                            if (!tmp.Contains("。") && tmp.Substring(tmp.Length - 1, 1) != "：" && !tmp.Contains("；"))
-                                                //tmp.Length>0&&(tmp.Substring(0,1)=="第"|| tmp.Substring(0, 1) == "附"|| tmp.Substring(0, 1) == "修"))
-                                                tempNodes.Add(match);
-                                        break;
+                                        if (match.Name == "p")
+                                        {
+                                            //foreach(var match1 in match.Descendants())
+                                            //{
+                                            //    if (match1.Name == "a")
+                                            //    {
+                                            //        tempNodes.Add(match);
+                                            //        break;
+                                            //   }                                           
+                                            //}
+                                            string tmp = match.InnerText.Trim().Replace("&nbsp;", "").Replace("\r\n", "");
+                                            if (tmp.Length > 1)
+                                                //有些文档中形如“1 XXX”的不是二级标题，需要手动在程序中修改
+                                                //if(tmp.Substring(0, 1) == "第" || tmp.Substring(0, 1) == "附" || tmp.Substring(0, 1) == "修")
+                                                if (!tmp.Contains("。") )//&& tmp.Substring(tmp.Length - 1, 1) != "：" && !tmp.Contains("；"))
+                                                    //tmp.Length>0&&(tmp.Substring(0,1)=="第"|| tmp.Substring(0, 1) == "附"|| tmp.Substring(0, 1) == "修"))
+                                                    tempNodes.Add(match);
+                                            break;
+                                        }
                                     }
                                 }
-                            }
                         }
                     }
                 }
@@ -272,6 +304,7 @@ namespace WordRead
                         }
                     }
                 }
+                
                 for (int i = 0; i < titleNodes.Count; i++)
                 {
                     str_titleList.Add(titleNodes[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
@@ -523,6 +556,8 @@ namespace WordRead
                 retInfo.title1s = str_title1List;
                 retInfo.title2s = str_title2List;
                 retInfo.title2Contents = str_contentList;
+                retInfo.titles = str_titleList;
+                retInfo.title1ContentsNum = dic_title1Content.Count;
             }
             catch (Exception err)
             {
@@ -603,7 +638,7 @@ namespace WordRead
         public List<string> titles = new List<string>();
         public List<string> title1s = new List<string>();
         public List<string> title2s = new List<string>();
-        public List<string> dic_title1Contents = new List<string>();
+        public int title1ContentsNum;
         public List<string> title2Contents = new List<string>();
         public List<Guid> title1Guids = new List<Guid>();
         public string errorInfo;
@@ -613,6 +648,7 @@ namespace WordRead
     public static class Patterns
     {
         public static string imageSrc = @"(src=" + "\"" + @")[\s\S]+?(/image[\s\S]+?['" + "\"" + @"]>)";
+        public static string title2_x_dot_x_XXX = @"((?<=[(\s+)])|^)\d+.\d+(?![.])\s+?\S+(?=\s*$)";
         //@"(<img\s+width=" + "\"" + @"?\d+" + "\"" + @"?\s+height=" + "\"" + @"?\d+" + "\"" + @"?\s+src=['" + "\"" + @"])[\s\S]+?(/image[\s\S]+?['" + "\"" + @"]>)";
         //public static string Title1 = @"第\d{1,}章[\s\S]+?(?=\s\d{1,3}\r)";//查找一级标题
         //public static string subTitle = @"第\d{1,}章[\s\S]+?(?=\r)";//查找一级标题
@@ -623,5 +659,13 @@ namespace WordRead
         TITLE1_BOLD = 0,
         TITLE_TAG = 1,
         TITLE_SPANSTYLE = 2,
+    }
+    public static class RecogOptions
+    {
+        public const int title2RecogMethod = 1;//0->style;1->正则表达式识别
+        public const bool title1_has_zitizihao = true;
+        public const bool title2_has_zitizihao = true;
+        public const bool title1_bold = false;
+        public const bool title2_bold = true;
     }
 }
