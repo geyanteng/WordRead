@@ -43,7 +43,7 @@ namespace WordRead
             try
             {
                 ConventionRow tempRow = new ConventionRow(guid, new Guid(this.tbParentGuid.Text),
-                    int.Parse(this.tbParentDepth.Text), this.tbTitle.Text, int.Parse(this.tbSNum.Text),
+                    int.Parse(this.tbParentDepth.Text)+1, this.tbTitle.Text, int.Parse(this.tbSNum.Text),
                     isCategory, this.tbParentIDfloder.Text + "#"+guid, this.tbParentTitleCNFolder.Text + "#@`"+this.tbTitle.Text,this.tbTag.Text);
                 SQLUtils sqlUtils = SQLUtils.getInstance();
                 sqlUtils.writeRow_local(tempRow);

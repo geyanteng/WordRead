@@ -68,6 +68,7 @@ namespace WordRead
                     info = conventionRead.ReadHtml(rootNode);
                     this.toolStripStatusLabel1.Text = "Html识别成功：一级目录有" + info.title1s.Count + 
                         "个,二级目录共有" + info.title2s.Count+"个"+"一级标题直接内容有"+info.title1ContentsNum+"个,图片识别结果 "+info.picResult;
+                    this.tbTitle1Guids.Text = "";
                     for (int i = 0; i < info.title1Guids.Count; i++)
                         this.tbTitle1Guids.Text += info.title1s[i] + "\r\n";// " : "+info.title1Guids[i]+"\r\n";
                     this.tbTitle1Guids.Text += "\r\n\r\n";
