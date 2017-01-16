@@ -330,9 +330,9 @@
             this.rdbtTitle1Bold.AutoSize = true;
             this.rdbtTitle1Bold.Location = new System.Drawing.Point(6, 16);
             this.rdbtTitle1Bold.Name = "rdbtTitle1Bold";
-            this.rdbtTitle1Bold.Size = new System.Drawing.Size(134, 21);
+            this.rdbtTitle1Bold.Size = new System.Drawing.Size(114, 21);
             this.rdbtTitle1Bold.TabIndex = 15;
-            this.rdbtTitle1Bold.Text = "从一级标题加粗识别";
+            this.rdbtTitle1Bold.Text = "从标题class属性";
             this.rdbtTitle1Bold.UseVisualStyleBackColor = true;
             this.rdbtTitle1Bold.CheckedChanged += new System.EventHandler(this.rdbtTitle1Bold_CheckedChanged);
             // 
@@ -570,12 +570,10 @@
             // rdbtConStrLocal
             // 
             this.rdbtConStrLocal.AutoSize = true;
-            this.rdbtConStrLocal.Checked = true;
             this.rdbtConStrLocal.Location = new System.Drawing.Point(166, 16);
             this.rdbtConStrLocal.Name = "rdbtConStrLocal";
             this.rdbtConStrLocal.Size = new System.Drawing.Size(134, 21);
             this.rdbtConStrLocal.TabIndex = 27;
-            this.rdbtConStrLocal.TabStop = true;
             this.rdbtConStrLocal.Text = "我的电脑本地数据库";
             this.rdbtConStrLocal.UseVisualStyleBackColor = true;
             this.rdbtConStrLocal.CheckedChanged += new System.EventHandler(this.rdbtConStrLocal_CheckedChanged);
@@ -583,10 +581,12 @@
             // rdbtConStrServer
             // 
             this.rdbtConStrServer.AutoSize = true;
+            this.rdbtConStrServer.Checked = true;
             this.rdbtConStrServer.Location = new System.Drawing.Point(7, 16);
             this.rdbtConStrServer.Name = "rdbtConStrServer";
             this.rdbtConStrServer.Size = new System.Drawing.Size(122, 21);
             this.rdbtConStrServer.TabIndex = 26;
+            this.rdbtConStrServer.TabStop = true;
             this.rdbtConStrServer.Text = "正式服务器数据库";
             this.rdbtConStrServer.UseVisualStyleBackColor = true;
             this.rdbtConStrServer.CheckedChanged += new System.EventHandler(this.rdbtConStrServer_CheckedChanged);

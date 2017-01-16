@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigOpts.cs" />
     <Compile Include="LoadXML.cs" />
     <Compile Include="ConventionRead.cs" />
     <Compile Include="ConventionRow.cs" />

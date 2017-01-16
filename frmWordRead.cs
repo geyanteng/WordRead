@@ -24,27 +24,7 @@ namespace WordRead
             InitializeComponent();
         }
         // /Uploads/imagesrc/neihechuanbo/num5/2006
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            this.tbParentGuid.Text = "60637b19-5572-46dc-adf4-e3b855095644";
-            this.tbParentDepth.Text = "3";
-            this.tbParentIDfolder.Text =
-            "#f088ad64-8a9e-4ef6-a3e3-ac872a380283#ea00e0c5-53ca-4ce3-80b6-ff727c27f0b0#090ee5f5-1d77-4561-a17b-8b464aaad7aa#60637b19-5572-46dc-adf4-e3b855095644";
-            this.tbParentTitleCnFolder.Text =
-            "0#@`船舶检验技术规则#@`内河船舶#@`天生桥库区小型客货渡船检验规定（试行）2006";
-            this.tbHtmlPath.Text = @"../../../htmlRcgTest/3-nhcb/num5/2006.htm";
-            this.tbFilesPath.Text = @"/Uploads/imagesrc/neihechuanbo/num5/2006";
-            this.tbTitle1SpanStyle.Text = @"font-size:15.0pt;font-family:宋体";
-            this.tbTitle2SpanStyle.Text = @"font-size:14.0pt;font-family:楷体_GB2312";
-            /*****************************************/
-            this.tbTitle1Xpath.Text = @"/html[1]/body[1]//span[@style]";
-            this.tbTitle1TagName.Text = "h1";
-            this.tbTitle2TagName.Text = "b";
-            this.tbTitle2Xpath.Text = "";
-            this.toolStripStatusLabel1.Text = "";
-            //this.tbTitle2Xpath1.Text = @"//span[position()<3 and @style='";
-            //this.tbTitle1Xpath.Text = @"/html[1]/body[1]//b[1] |/html[1]/body[1]//h1[1]|/html[1]/body[1]//a[1]";
-        }
+        
         private void btnWordRead_Click(object sender, EventArgs e)
         {
             if (this.tbHtmlPath.Text != string.Empty && this.tbParentGuid.Text != string.Empty && 
@@ -64,7 +44,7 @@ namespace WordRead
                         {
                             conventionRead.title1_select = tbTitle1Xpath.Text;
                             conventionRead.title2_select = tbTitle2Xpath.Text;
-                            conventionRead.method = ReadMethod.TITLE1_BOLD;
+                            conventionRead.method = ReadMethod.TITLE_CLASS;
                         }
                     }
                     else if (rdbtTitleHTag.Checked)

@@ -22,7 +22,7 @@ namespace WordRead
         public string title1_select;
         public string title2_select;
         public ReturnInfo retInfo = new ReturnInfo();
-        public ReadMethod method;        
+        public ReadMethod method;//= ReadMethod.TITLE_CLASS;
         public ConventionRead()
         {
         }
@@ -51,104 +51,128 @@ namespace WordRead
             string htmlTxt = htmlRootNode.InnerHtml;
             //正文识别标题 
 
-            #region 选项1：一级标题粗体识别
-            if (method == ReadMethod.TITLE1_BOLD)
-            {
-                //一级标题
-                title1Nodes_init = htmlRootNode.SelectNodes(title1_select);
-                //二级标题可能所在span
-                title2Nodes_init = htmlRootNode.SelectNodes(title2_select);
-                #region 找出一级标题，HtmlNode保存在title1Nodes,文本存储在 str_title1List
+            #region （废弃选项：一级标题粗体识别）
+            //if (method == ReadMethod.TITLE1_BOLD)
+            //{
+            //    //一级标题
+            //    title1Nodes_init = htmlRootNode.SelectNodes(title1_select);
+            //    //二级标题可能所在span
+            //    title2Nodes_init = htmlRootNode.SelectNodes(title2_select);
+            //    #region 找出一级标题，HtmlNode保存在title1Nodes,文本存储在 str_title1List
 
-                if (title1Nodes_init != null)
-                {
-                    for (int i = 0; i < title1Nodes_init.Count; i++)
-                    {
-                        if ((title1Nodes_init[i].ParentNode.Name == "p" && title1Nodes_init[i].ParentNode.ParentNode.Name == "div" && title1Nodes_init[i].HasChildNodes)
-                            || (title1Nodes_init[i].Name == "h1" && title1Nodes_init[i].ParentNode.Name == "div")
-                            || (title1Nodes_init[i].Name == "h2" && title1Nodes_init[i].ParentNode.Name == "div")
-                            || (title1Nodes_init[i].ParentNode.Name == "a" && title1Nodes_init[i].ParentNode.ParentNode.Name == "p")
-                            )
-                        {
-                            foreach (var child in title1Nodes_init[i].DescendantsAndSelf())
-                            {
-                                if (child.Name == "span" && child.HasAttributes)
-                                {
-                                    foreach (var atbt in child.Attributes)
-                                    {
-                                        if (atbt.Name == "style")//&& atbt.Value== "font-size:15.0pt;font-family:黑体")
-                                        {
-                                            if ((title1Nodes_init[i].ParentNode.InnerText.Contains("第") && title1Nodes_init[i].ParentNode.InnerText.Contains("章"))
-                                                )
-                                            {
-                                                if (title1Nodes_init[i].ParentNode.ParentNode.Name == "p")
-                                                {
-                                                    title1Nodes.Add(title1Nodes_init[i].ParentNode.ParentNode);
-                                                    str_title1List.Add(title1Nodes_init[i].ParentNode.ParentNode.InnerText.Replace("&nbsp;", " ").Replace("\r\n", ""));
-                                                }
-                                                else if (title1Nodes_init[i].ParentNode.Name == "p")
-                                                {
-                                                    title1Nodes.Add(title1Nodes_init[i].ParentNode);
-                                                    str_title1List.Add(title1Nodes_init[i].ParentNode.InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
-                                                }
-                                                else if (title1Nodes_init[i].Name == "h" || title1Nodes_init[i].Name == "h1" || title1Nodes_init[i].Name == "h2")
-                                                {
-                                                    title1Nodes.Add(title1Nodes_init[i]);
-                                                    str_title1List.Add(title1Nodes_init[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
-                                                }
-                                            }
-                                            break;
-                                        }
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-                #endregion
+            //    if (title1Nodes_init != null)
+            //    {
+            //        for (int i = 0; i < title1Nodes_init.Count; i++)
+            //        {
+            //            if ((title1Nodes_init[i].ParentNode.Name == "p" && title1Nodes_init[i].ParentNode.ParentNode.Name == "div" && title1Nodes_init[i].HasChildNodes)
+            //                || (title1Nodes_init[i].Name == "h1" && title1Nodes_init[i].ParentNode.Name == "div")
+            //                || (title1Nodes_init[i].Name == "h2" && title1Nodes_init[i].ParentNode.Name == "div")
+            //                || (title1Nodes_init[i].ParentNode.Name == "a" && title1Nodes_init[i].ParentNode.ParentNode.Name == "p")
+            //                )
+            //            {
+            //                foreach (var child in title1Nodes_init[i].DescendantsAndSelf())
+            //                {
+            //                    if (child.Name == "span" && child.HasAttributes)
+            //                    {
+            //                        foreach (var atbt in child.Attributes)
+            //                        {
+            //                            if (atbt.Name == "style")//&& atbt.Value== "font-size:15.0pt;font-family:黑体")
+            //                            {
+            //                                if ((title1Nodes_init[i].ParentNode.InnerText.Contains("第") && title1Nodes_init[i].ParentNode.InnerText.Contains("章"))
+            //                                    )
+            //                                {
+            //                                    if (title1Nodes_init[i].ParentNode.ParentNode.Name == "p")
+            //                                    {
+            //                                        title1Nodes.Add(title1Nodes_init[i].ParentNode.ParentNode);
+            //                                        str_title1List.Add(title1Nodes_init[i].ParentNode.ParentNode.InnerText.Replace("&nbsp;", " ").Replace("\r\n", ""));
+            //                                    }
+            //                                    else if (title1Nodes_init[i].ParentNode.Name == "p")
+            //                                    {
+            //                                        title1Nodes.Add(title1Nodes_init[i].ParentNode);
+            //                                        str_title1List.Add(title1Nodes_init[i].ParentNode.InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
+            //                                    }
+            //                                    else if (title1Nodes_init[i].Name == "h" || title1Nodes_init[i].Name == "h1" || title1Nodes_init[i].Name == "h2")
+            //                                    {
+            //                                        title1Nodes.Add(title1Nodes_init[i]);
+            //                                        str_title1List.Add(title1Nodes_init[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
+            //                                    }
+            //                                }
+            //                                break;
+            //                            }
+            //                        }
+            //                        break;
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
 
-                #region 找出二级小节标题，HtmlNode保存在title2Nodes ，文本存储在str_title2List
-                //span所在的几种情形：div->p->a->span   div->p->span  div->h1->span
 
-                if (title2Nodes_init != null)
-                {
-                    for (int i = 0; i < title2Nodes_init.Count; i++)
-                    {
-                        //标题span存在的情形1
-                        if (title2Nodes_init[i].ParentNode.Name == "a" && title2Nodes_init[i].ParentNode.ParentNode.Name == "p")
-                        {
-                            //避免添加重复的部分
-                            if ((i == 0) || (i > 0 && title2Nodes_init[i].ParentNode.ParentNode.Line != title2Nodes_init[i - 1].ParentNode.ParentNode.Line))
-                            {
-                                title2Nodes.Add(title2Nodes_init[i].ParentNode.ParentNode);
-                                str_title2List.Add(title2Nodes_init[i].ParentNode.ParentNode.InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
-                            }
-                        }
-                        //标题span存在的情形2、3
-                        else if ((title2Nodes_init[i].ParentNode.Name == "p" && title2Nodes_init[i].ParentNode.ParentNode.Name == "div")
-                            || (title2Nodes_init[i].ParentNode.Name == "h1" && title2Nodes_init[i].ParentNode.ParentNode.Name == "div"))
-                        {
-                            //避免添加重复的部分
-                            if ((i == 0) || (i > 0 && title2Nodes_init[i].ParentNode.Line != title2Nodes_init[i - 1].ParentNode.Line))
-                            {
-                                title2Nodes.Add(title2Nodes_init[i].ParentNode);
-                                str_title2List.Add(title2Nodes_init[i].ParentNode.InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
-                            }
-                        }
-                    }
-                    for (int i = 0; i < title2Nodes.Count; i++)
-                    {
-                        if ((i > 0 && title2Nodes[i].Line == title2Nodes[i - 1].Line))
-                        {
-                            str_title2List.RemoveAt(i);
-                            title2Nodes.RemoveAt(i);
-                        }
-                    }
-                }
-                #endregion
-            }
+            //#region 找出二级小节标题，HtmlNode保存在title2Nodes ，文本存储在str_title2List
+            ////span所在的几种情形：div->p->a->span   div->p->span  div->h1->span
+
+            //if (title2Nodes_init != null)
+            //{
+            //    for (int i = 0; i < title2Nodes_init.Count; i++)
+            //    {
+            //        //标题span存在的情形1
+            //        if (title2Nodes_init[i].ParentNode.Name == "a" && title2Nodes_init[i].ParentNode.ParentNode.Name == "p")
+            //        {
+            //            //避免添加重复的部分
+            //            if ((i == 0) || (i > 0 && title2Nodes_init[i].ParentNode.ParentNode.Line != title2Nodes_init[i - 1].ParentNode.ParentNode.Line))
+            //            {
+            //                title2Nodes.Add(title2Nodes_init[i].ParentNode.ParentNode);
+            //                str_title2List.Add(title2Nodes_init[i].ParentNode.ParentNode.InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
+            //            }
+            //        }
+            //        //标题span存在的情形2、3
+            //        else if ((title2Nodes_init[i].ParentNode.Name == "p" && title2Nodes_init[i].ParentNode.ParentNode.Name == "div")
+            //            || (title2Nodes_init[i].ParentNode.Name == "h1" && title2Nodes_init[i].ParentNode.ParentNode.Name == "div"))
+            //        {
+            //            //避免添加重复的部分
+            //            if ((i == 0) || (i > 0 && title2Nodes_init[i].ParentNode.Line != title2Nodes_init[i - 1].ParentNode.Line))
+            //            {
+            //                title2Nodes.Add(title2Nodes_init[i].ParentNode);
+            //                str_title2List.Add(title2Nodes_init[i].ParentNode.InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
+            //            }
+            //        }
+            //    }
+            //    for (int i = 0; i < title2Nodes.Count; i++)
+            //    {
+            //        if ((i > 0 && title2Nodes[i].Line == title2Nodes[i - 1].Line))
+            //        {
+            //            str_title2List.RemoveAt(i);
+            //            title2Nodes.RemoveAt(i);
+            //        }
+            //    }
+            //}
+            //#endregion
+            //
+            //}
             #endregion
+
+            if (method == ReadMethod.TITLE_CLASS)
+            {
+                //HtmlNodeCollection title1Nodes_tmp = new HtmlNodeCollection(htmlRootNode.Clone());
+                title1Nodes_init = htmlRootNode.SelectNodes(@"//p[@class=1]");
+                title2Nodes_init = htmlRootNode.SelectNodes(@"//p[@class=2]");
+                for (int i = 0; i < title1Nodes_init.Count; i++)
+                {
+                    if (title1Nodes_init[i].InnerText.Replace("&nbsp;", "").Trim() != string.Empty)
+                    {
+                        str_title1List.Add(title1Nodes_init[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
+                        title1Nodes.Add(title1Nodes_init[i]);
+                    }
+                }
+                for (int i = 0; i < title2Nodes_init.Count; i++)
+                {
+                    if (title2Nodes_init[i].InnerText.Replace("&nbsp;", "").Trim() != string.Empty)
+                    {
+                        str_title2List.Add(title2Nodes_init[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
+                        title2Nodes.Add(title2Nodes_init[i]);
+                    }
+                }
+            }
 
             #region 选项2：标题中Span 标签 Style属性识别
             else if (method == ReadMethod.TITLE_SPANSTYLE)
@@ -171,11 +195,21 @@ namespace WordRead
                         if (condition)
                         //(title1Nodes_init[i].Attributes["style"].Value.Replace("\r\n", "").Contains(title1_select))
                         {
-                            foreach (var match in title1Nodes_init[i].AncestorsAndSelf())
+                            foreach (var match in title1Nodes_init[i].DescendantsAndSelf())
                             {
-                                if (match.Name == "p")
+                                if (RecogOptions.title1_child == 0 && match.Name == "p")
                                 {
-                                    title1Nodes_tmp.Add(match);
+                                    title1Nodes_tmp.Add(title1Nodes_init[i]);
+                                    break;
+                                }
+                                if (RecogOptions.title1_child == 1 && match.Name == "b")
+                                {
+                                    title1Nodes_tmp.Add(title1Nodes_init[i]);
+                                    break;
+                                }
+                                if (RecogOptions.title1_child == 2 && match.Name == "a")
+                                {
+                                    title1Nodes_tmp.Add(title1Nodes_init[i]);
                                     break;
                                 }
                             }
@@ -214,25 +248,34 @@ namespace WordRead
                                 //有些文档中形如“1 XXX”的不是二级标题，需要手动在程序中修改
                                 //if(tmp.Substring(0, 1) == "第" || tmp.Substring(0, 1) == "附" || tmp.Substring(0, 1) == "修")
                                 if (!tmp.Contains("。") //&& tmp.Substring(tmp.Length - 1, 1) != "：" && !tmp.Contains("；")
-                                    //&&!tmp.Contains("p"))
+                                                       //&&!tmp.Contains("p"))
                                     )
-                                    //tmp.Length>0&&(tmp.Substring(0,1)=="第"|| tmp.Substring(0, 1) == "附"|| tmp.Substring(0, 1) == "修"))
-                                    if (RecogOptions.title2_bold)
+                                //tmp.Length>0&&(tmp.Substring(0,1)=="第"|| tmp.Substring(0, 1) == "附"|| tmp.Substring(0, 1) == "修"))
+                                {
+                                    foreach (var match in title2Nodes_init[i].DescendantsAndSelf())
                                     {
-                                        foreach (var child in title2Nodes_init[i].Descendants())
-                                            if (child.Name == "b")
-                                            {
-                                                tempNodes.Add(title2Nodes_init[i]);
-                                                break;
-                                            }
+                                        if (RecogOptions.title2_child == 0 && match.Name == "p")
+                                        {
+                                            tempNodes.Add(title2Nodes_init[i]);
+                                            break;
+                                        }
+                                        if (RecogOptions.title2_child == 1 && match.Name == "b")
+                                        {
+                                            tempNodes.Add(title2Nodes_init[i]);
+                                            break;
+                                        }
+                                        if (RecogOptions.title2_child == 2 && match.Name == "a")
+                                        {
+                                            tempNodes.Add(title2Nodes_init[i]);
+                                            break;
+                                        }
                                     }
-                                    else
-                                        tempNodes.Add(title2Nodes_init[i]);
+                                }
                             }
                         }
                     }
                 }
-                if (RecogOptions.title2RecogMethod==0)
+                if (RecogOptions.title2RecogMethod == 0)
                 {
                     title2Nodes_init = htmlRootNode.SelectNodes(@"//span[@style]");
                     if (title2Nodes_init != null)
@@ -248,7 +291,9 @@ namespace WordRead
                                 condition = str_style.Contains(str_style_zihao) && str_style.Contains(str_style_ziti);
                             }
                             if (condition)
-                                if ((!RecogOptions.title1_bold) || (RecogOptions.title1_bold && title2Nodes_init[i].ParentNode.Name == "b"))
+                                if ((RecogOptions.title2_child == 0)
+                                    || (RecogOptions.title2_child == 1 && title2Nodes_init[i].ParentNode.Name == "b")
+                                    || (RecogOptions.title2_child == 2 && title2Nodes_init[i].ParentNode.Name == "a"))
                                 {
                                     foreach (var match in title2Nodes_init[i].AncestorsAndSelf())
                                     {
@@ -266,7 +311,7 @@ namespace WordRead
                                             if (tmp.Length > 1)
                                                 //有些文档中形如“1 XXX”的不是二级标题，需要手动在程序中修改
                                                 //if(tmp.Substring(0, 1) == "第" || tmp.Substring(0, 1) == "附" || tmp.Substring(0, 1) == "修")
-                                                if (!tmp.Contains("。") )//&& tmp.Substring(tmp.Length - 1, 1) != "：" && !tmp.Contains("；"))
+                                                if (!tmp.Contains("。"))//&& tmp.Substring(tmp.Length - 1, 1) != "：" && !tmp.Contains("；"))
                                                     //tmp.Length>0&&(tmp.Substring(0,1)=="第"|| tmp.Substring(0, 1) == "附"|| tmp.Substring(0, 1) == "修"))
                                                     tempNodes.Add(match);
                                             break;
@@ -285,61 +330,60 @@ namespace WordRead
                         str_title2List.Add(tempNodes[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
                     }
                 }
-                #endregion
-
-                #region 生成包含按序排列的一二级目录的节点集合titleNodes，和字符串集合str_titleList
-                foreach (var match in title1Nodes)
-                    titleNodes.Add(match);
-                foreach (var match in title2Nodes)
-                    titleNodes.Add(match);
-                for (int i = 0; i < titleNodes.Count; i++)
-                {
-                    for (int j = i; j < titleNodes.Count; j++)
-                    {
-                        if (titleNodes[i].Line > titleNodes[j].Line)
-                        {
-                            var temp = titleNodes[i];
-                            titleNodes[i] = titleNodes[j];
-                            titleNodes[j] = temp;
-                        }
-                    }
-                }
-                
-                for (int i = 0; i < titleNodes.Count; i++)
-                {
-                    str_titleList.Add(titleNodes[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
-                }
-                #endregion
+                #endregion               
             }
             #endregion
 
             #region 选项3：h1/h2/h3标签识别标题
-            else if (method == ReadMethod.TITLE_TAG)
+            //else if (method == ReadMethod.TITLE_TAG)
+            //{
+            //    titleNodes_init = htmlRootNode.SelectNodes(@"//" + title1_select + @"|" + @"//" + title2_select);
+            //    title1Nodes_init = htmlRootNode.SelectNodes(@"//" + title1_select);
+            //    title2Nodes_init = htmlRootNode.SelectNodes(@"//" + title2_select);
+            //    for (int i = 0; i < titleNodes_init.Count; i++)
+            //    {
+            //        string tmpstr = titleNodes_init[i].InnerText;
+            //        if (titleNodes_init[i].Name == title1_select && tmpstr.Contains("第") && tmpstr.Contains("章"))
+            //        {
+            //            titleNodes.Add(titleNodes_init[i]);
+            //            title1Nodes.Add(titleNodes_init[i]);
+            //            str_titleList.Add(titleNodes_init[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
+            //            str_title1List.Add(titleNodes_init[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
+            //        }
+            //        else if (titleNodes_init[i].Name == title2_select)
+            //        {
+            //            titleNodes.Add(titleNodes_init[i]);
+            //            title2Nodes.Add(titleNodes_init[i]);
+            //            str_titleList.Add(titleNodes_init[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
+            //            str_title2List.Add(titleNodes_init[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
+            //        }
+            //    }
+            //}
+            #endregion
+
+            #region 生成包含按序排列的一二级目录的节点集合titleNodes，和字符串集合str_titleList
+            foreach (var match in title1Nodes)
+                titleNodes.Add(match);
+            foreach (var match in title2Nodes)
+                titleNodes.Add(match);
+            for (int i = 0; i < titleNodes.Count; i++)
             {
-                titleNodes_init = htmlRootNode.SelectNodes(@"//" + title1_select + @"|" + @"//" + title2_select);
-                title1Nodes_init = htmlRootNode.SelectNodes(@"//" + title1_select);
-                title2Nodes_init = htmlRootNode.SelectNodes(@"//" + title2_select);
-                for (int i = 0; i < titleNodes_init.Count; i++)
+                for (int j = i; j < titleNodes.Count; j++)
                 {
-                    string tmpstr = titleNodes_init[i].InnerText;
-                    if (titleNodes_init[i].Name == title1_select && tmpstr.Contains("第") && tmpstr.Contains("章"))
+                    if (titleNodes[i].Line > titleNodes[j].Line)
                     {
-                        titleNodes.Add(titleNodes_init[i]);
-                        title1Nodes.Add(titleNodes_init[i]);
-                        str_titleList.Add(titleNodes_init[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
-                        str_title1List.Add(titleNodes_init[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
-                    }
-                    else if (titleNodes_init[i].Name == title2_select)
-                    {
-                        titleNodes.Add(titleNodes_init[i]);
-                        title2Nodes.Add(titleNodes_init[i]);
-                        str_titleList.Add(titleNodes_init[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
-                        str_title2List.Add(titleNodes_init[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
+                        var temp = titleNodes[i];
+                        titleNodes[i] = titleNodes[j];
+                        titleNodes[j] = temp;
                     }
                 }
             }
-            #endregion
 
+            for (int i = 0; i < titleNodes.Count; i++)
+            {
+                str_titleList.Add(titleNodes[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
+            }
+            #endregion
             try
             {
                 #region 找出html文本末尾可能存在的各脚注div，HtmlNode存储在ftNoteRefnodes
@@ -488,7 +532,7 @@ namespace WordRead
                     contentNodeDoc.LoadHtml(str_content);
                     contentNodes.Add(contentNodeDoc.DocumentNode);
                     str_contentList.Add(contentNodes[i].OuterHtml);
-                    //System.IO.File.WriteAllText(@"../../../htmlRcgTest/" + i + @".html", str_contentList[i]);
+                    System.IO.File.WriteAllText(@"../../../htmlRcgTest/" + i + @".html", str_contentList[i]);
                 }
                 #endregion
                 //  断点位置：在局部变量窗口中检查str_contentList/str_titleList/
@@ -656,16 +700,9 @@ namespace WordRead
     }
     public enum ReadMethod
     {
-        TITLE1_BOLD = 0,
+        TITLE_CLASS = 0,
         TITLE_TAG = 1,
         TITLE_SPANSTYLE = 2,
     }
-    public static class RecogOptions
-    {
-        public const int title2RecogMethod = 1;//0->style;1->正则表达式识别
-        public const bool title1_has_zitizihao = true;
-        public const bool title2_has_zitizihao = true;
-        public const bool title1_bold = false;
-        public const bool title2_bold = true;
-    }
+
 }
