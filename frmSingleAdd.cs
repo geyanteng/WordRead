@@ -39,7 +39,7 @@ namespace WordRead
             if (cbkIsCategory.Checked)
                 isCategory = ConventionOptions.CATEGORY.IS_CATEGORY;
             else
-                isCategory = ConventionOptions.CATEGORY.IS_TITLE1_BOLD;
+                isCategory = ConventionOptions.CATEGORY.IS_CONTENT;
             try
             {
                 ConventionRow tempRow = new ConventionRow(guid, new Guid(this.tbParentGuid.Text),

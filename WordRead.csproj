@@ -67,6 +67,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigOpts.cs" />
+    <Compile Include="frmCount.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCount.Designer.cs">
+      <DependentUpon>frmCount.cs</DependentUpon>
+    </Compile>
     <Compile Include="LoadXML.cs" />
     <Compile Include="ConventionRead.cs" />
     <Compile Include="ConventionRow.cs" />
@@ -86,6 +92,9 @@
     </Compile>
     <Compile Include="SQLUtils.cs" />
     <Compile Include="Tree.cs" />
+    <EmbeddedResource Include="frmCount.resx">
+      <DependentUpon>frmCount.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmWordRead.resx">
       <DependentUpon>frmWordRead.cs</DependentUpon>
     </EmbeddedResource>

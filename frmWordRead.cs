@@ -18,6 +18,7 @@ namespace WordRead
         internal ConventionRead conventionRead;
         internal frmSingleAdd singleAdd;
         internal ReturnInfo info;
+        internal frmCount frmcount;
         //SQLUtils sqlUtils;
         public frmWordRead()
         {
@@ -282,9 +283,18 @@ namespace WordRead
         }
         private void menuCount_Click(object sender, EventArgs e)
         {
+            if (frmcount == null)
+            {
+                frmcount = new frmCount();
+                frmcount.Show();
+            }
+            else
+            {
+                frmcount.Activate();
+            }
             SQLUtils sqlUtils = SQLUtils.getInstance();
-            sqlUtils.conventionCount(this.treeConventionCount);
-            ToXML.SaveToXml(this.treeConventionCount, "../../TreeXml.xml");
+            sqlUtils.conventionCount(frmcount.treeView1);
+            ToXML.SaveToXml(frmcount.treeView1, "../../TreeXml.xml");
         }
     }
 }

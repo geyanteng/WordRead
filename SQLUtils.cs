@@ -236,10 +236,12 @@ namespace WordRead
                 sqlcmd.Connection = sqlconnect;
                 sqlcmd.CommandType = CommandType.Text;
                 DataSet sqlDataSet = new DataSet();
-                sqlcmd.CommandText = "select Guid,ParentNodeGuid,TitleEn,ShortTitleEn from " + tableName;
+                sqlcmd.CommandText = "select Guid,ParentNodeGuid,TitleEn,ShortTitleEn,IDFolder,Category from " + tableName;
                 SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlcmd);
                 sqlDataAdapter.Fill(sqlDataSet, tableName);
                 DataTable tblAllData = sqlDataSet.Tables[tableName];
+                //
+                
                 //add root node of the convention tree
                 string rootGuid = "fa6fe77d-7a97-4735-9da2-cd54c1c5fdcd";
                 sqlcmd.CommandText = "select * from " + tableName + " where Guid='"+rootGuid+"'";
@@ -247,23 +249,49 @@ namespace WordRead
                 DataTable tblResult = sqlDataSet.Tables["tblResult"];
                 Tree<DataRow> treeConventionRow = new Tree<DataRow>(tblResult.Rows[0]);
                 tblResult.Reset();
-
-                sqlcmd.CommandText = "select * from " + tableName + " where ParentNodeGuid='" + rootGuid + "'";
+                sqlcmd.CommandText = "select * from " + tableName + " where ParentNodeGuid='" + rootGuid + "' order by SequenceNumber";
                 sqlDataAdapter.Fill(sqlDataSet, "tblResult");
-                for(int i=0;i< tblResult.Rows.Count; i++)
+                //sqlDataAdapter.Fill(sqlDataSet, "tblResult_0");
+                //DataTable tmp_tblResult = sqlDataSet.Tables["tblResult_0"];
+                //tblResult = tmp_tblResult.Clone();
+                //for (int a = 0; a < tmp_tblResult.Rows.Count; a++)
+                //{
+                //    for (int b = 0; b < tmp_tblResult.Rows.Count; b++)
+                //    {
+                //        if (int.Parse(tmp_tblResult.Rows[b]["SequenceNumber"].ToString()) == a + 1)
+                //        {
+                //            tblResult.Rows.Add(tmp_tblResult.Rows[b].ItemArray);
+                //        }
+                //    }
+                //}
+                for (int i=0;i< tblResult.Rows.Count; i++)
                 {             
                     Tree<DataRow> node = new Tree<DataRow>(tblResult.Rows[i]);
                     treeConventionRow.AddNode(node);
-                    string Guid = node.Data["Guid"].ToString();
-                    sqlcmd.CommandText = "select * from " + tableName + " where ParentNodeGuid='" + Guid + "'";
+                    string Guid = node.Data["Guid"].ToString();                    
+                    sqlcmd.CommandText = "select * from " + tableName + " where ParentNodeGuid='" + Guid + "' order by SequenceNumber";
                     sqlDataAdapter.Fill(sqlDataSet, "tblResult_" + i);
-                    DataTable tblResult_i = sqlDataSet.Tables["tblResult_" + i];
+                    DataTable tblResult_i= sqlDataSet.Tables["tblResult_"+i];
+                    //按SequenceNumber排序
+                    //DataTable tmp_tblResult_i = sqlDataSet.Tables["tblResult_" + i];
+                    //DataTable tblResult_i=new DataTable();
+                    //tblResult_i = tmp_tblResult_i.Clone();
+                    //for (int a = 0; a < tmp_tblResult_i.Rows.Count; a++)
+                    //{
+                    //    for(int b=0;b< tmp_tblResult_i.Rows.Count;b++)
+                    //    {
+                    //        if (int.Parse(tmp_tblResult_i.Rows[b]["SequenceNumber"].ToString()) == a+1)
+                    //        {
+                    //            tblResult_i.Rows.Add(tmp_tblResult_i.Rows[b].ItemArray);
+                    //        }
+                    //    }                        
+                    //}
                     for (int j=0;j< tblResult_i.Rows.Count; j++)
                     {
                         Tree<DataRow> node1 = new Tree<DataRow>(tblResult_i.Rows[j]);
                         node.AddNode(node1);
                         string Guid1 = node1.Data["Guid"].ToString();
-                        sqlcmd.CommandText = "select * from " + tableName + " where ParentNodeGuid='" + Guid1 + "'";
+                        sqlcmd.CommandText = "select * from " + tableName + " where ParentNodeGuid='" + Guid1 + "' order by SequenceNumber";
                         sqlDataAdapter.Fill(sqlDataSet, "tblResult_" + i+"_"+j);
                         DataTable tblResult_i_j = sqlDataSet.Tables["tblResult_" + i + "_" + j];
                         for(int k=0;k< tblResult_i_j.Rows.Count; k++)
@@ -271,7 +299,7 @@ namespace WordRead
                             Tree<DataRow> node2 = new Tree<DataRow>(tblResult_i_j.Rows[k]);
                             node1.AddNode(node2);
                             string Guid2 = node2.Data["Guid"].ToString();
-                            sqlcmd.CommandText = "select * from " + tableName + " where ParentNodeGuid='" + Guid2 + "'";
+                            sqlcmd.CommandText = "select * from " + tableName + " where ParentNodeGuid='" + Guid2 + "' order by SequenceNumber";
                             sqlDataAdapter.Fill(sqlDataSet, "tblResult_" + i + "_" + j+"_"+k);
                             DataTable tblResult_i_j_k = sqlDataSet.Tables["tblResult_" + i + "_" + j + "_" + k];
                             for (int l = 0; l < tblResult_i_j_k.Rows.Count; l++)
@@ -279,7 +307,7 @@ namespace WordRead
                                 Tree<DataRow> node3 = new Tree<DataRow>(tblResult_i_j_k.Rows[l]);
                                 node2.AddNode(node3);
                                 string Guid3 = node3.Data["Guid"].ToString();
-                                sqlcmd.CommandText = "select * from " + tableName + " where ParentNodeGuid='" + Guid3 + "'";
+                                sqlcmd.CommandText = "select * from " + tableName + " where ParentNodeGuid='" + Guid3 + "' order by SequenceNumber";
                                 sqlDataAdapter.Fill(sqlDataSet, "tblResult_" + i + "_" + j + "_" + k+"_"+l);
                                 DataTable tblResult_i_j_k_l = sqlDataSet.Tables["tblResult_" + i + "_" + j + "_" + k+"_"+l];
                                 for (int m = 0; m < tblResult_i_j_k_l.Rows.Count; m++)
@@ -299,19 +327,50 @@ namespace WordRead
                     string title1 = node1.Data["ShortTitleEn"].ToString();
                     if (title1 == string.Empty)
                         title1 = node1.Data["TitleEn"].ToString();
-                    TreeNode viewNode1 = new TreeNode(node1.NodeNumber + " : " + title1);
+                    int count1 = 0, count1_1=0;
+                    foreach (DataRow row in tblAllData.Rows)
+                    {
+                        if (row["IDFolder"].ToString().Contains(node1.Data["IDFolder"].ToString()))
+                            {
+                            	count1++;
+                            if (row["Category"].ToString() == "2")
+                                count1_1++;
+                            }
+
+                    }
+                    TreeNode viewNode1 = new TreeNode("Descendants=" + (count1-1)+";Contents="+count1_1+";Catalogues="+(count1-1-count1_1)+";Children="+node1.NodeNumber + " : " + title1);
                     viewNode0.Nodes.Add(viewNode1);
                     for (int j = 0; j < node1.NodeNumber; j++)
                     {
                         Tree<DataRow> node2 = node1.Nodes[j];
                         string title2 = node2.Data["TitleEn"].ToString();
-                        TreeNode viewNode2 = new TreeNode(node2.NodeNumber + " : " + title2);
+                        int count2 = 0, count2_1 = 0;
+                        foreach (DataRow row in tblAllData.Rows)
+                        {
+                            if (row["IDFolder"].ToString().Contains(node2.Data["IDFolder"].ToString()))
+                            {
+                                count2++;
+                                if (row["Category"].ToString() == "2")
+                                    count2_1++;
+                            }
+                        }
+                        TreeNode viewNode2 = new TreeNode("Descendants=" + (count2-1) + ";contents=" + count2_1 + ";Catalogues=" + (count2 - 1 - count2_1) + ";children=" + node2.NodeNumber + " : " + title2);
                         viewNode1.Nodes.Add(viewNode2);
                         for (int k = 0; k < node2.NodeNumber; k++)
                         {
                             Tree<DataRow> node3 = node2.Nodes[k];
                             string title3 = node3.Data["TitleEn"].ToString();
-                            TreeNode viewNode3 = new TreeNode(node3.NodeNumber + " : " + title3);
+                            int count3 = 0, count3_1 = 0;
+                            foreach (DataRow row in tblAllData.Rows)
+                            {
+                                if (row["IDFolder"].ToString().Contains(node3.Data["IDFolder"].ToString()))
+                                {
+                                    count3++;
+                                    if (row["Category"].ToString() == "2")
+                                        count3_1++;
+                                }
+                            }
+                            TreeNode viewNode3 = new TreeNode("Descendants=" + (count3 - 1) + ";contents=" + count3_1 + ";Catalogues=" + (count3 - 1 - count3_1) + ";children=" + node3.NodeNumber + " : " + title3);
                             viewNode2.Nodes.Add(viewNode3);
                             for (int l = 0; l < node3.NodeNumber; l++)
                             {

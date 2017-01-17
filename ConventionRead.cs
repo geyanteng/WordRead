@@ -187,7 +187,7 @@ namespace WordRead
                     for (int i = 0; i < title1Nodes_init.Count; i++)
                     {
                         string str_style = title1Nodes_init[i].InnerHtml.Replace("\r\n", "");
-                        bool condition = str_style.Contains(title1_select);
+                        bool condition = str_style.Contains(title1_select);//&& title1Nodes_init[i].InnerText.Substring(0, 1) == "第";
                         if (RecogOptions.title1_has_zitizihao)
                         {
                             string str_style_zihao = title1_select.Substring(0, title1_select.IndexOf(';'));
@@ -250,7 +250,7 @@ namespace WordRead
                                 //有些文档中形如“1 XXX”的不是二级标题，需要手动在程序中修改
                                 //if(tmp.Substring(0, 1) == "第" || tmp.Substring(0, 1) == "附" || tmp.Substring(0, 1) == "修")
                                 if (!tmp.Contains("。") //&& tmp.Substring(tmp.Length - 1, 1) != "：" && !tmp.Contains("；")
-                                                       //&&!tmp.Contains("p"))
+                                                                          //&&!tmp.Contains("p"))
                                     )
                                 //tmp.Length>0&&(tmp.Substring(0,1)=="第"|| tmp.Substring(0, 1) == "附"|| tmp.Substring(0, 1) == "修"))
                                 {
@@ -313,6 +313,8 @@ namespace WordRead
                                             if (tmp.Length > 1)
                                                 //有些文档中形如“1 XXX”的不是二级标题，需要手动在程序中修改
                                                 //if(tmp.Substring(0, 1) == "第" || tmp.Substring(0, 1) == "附" || tmp.Substring(0, 1) == "修")
+                                                //if(tmp.Contains("节")&&tmp.Substring(0,1)=="第")
+                                                //if(!(tmp.Substring(0,1)=="第"))
                                                 if (!tmp.Contains("。"))//&& tmp.Substring(tmp.Length - 1, 1) != "：" && !tmp.Contains("；"))
                                                     //tmp.Length>0&&(tmp.Substring(0,1)=="第"|| tmp.Substring(0, 1) == "附"|| tmp.Substring(0, 1) == "修"))
                                                     tempNodes.Add(match);
@@ -562,7 +564,7 @@ namespace WordRead
                         if (pair.Key == i)//若一级标题下有内容，而无二级目录
                         {
                             tempRow1 = new ConventionRow(rootConvention, str_title1List[i],
-                                i + 1, ConventionOptions.CATEGORY.IS_TITLE1_BOLD, pair.Value);
+                                i + 1, ConventionOptions.CATEGORY.IS_CONTENT, pair.Value);
                             sqlUtils.writeRow_local(tempRow1);
                             retInfo.title1Guids.Add(tempRow1.Guid);
                             //retInfo.retTable.Rows.Add(tempRow1);
@@ -585,7 +587,7 @@ namespace WordRead
                             if (title2Nodes[j].Line < title1Nodes[i + 1].Line && title2Nodes[j].Line > title1Nodes[i].Line)
                             {
                                 ConventionRow tempRow2 = new ConventionRow(tmp_rootConvention, str_title2List[j],
-                                    ++k, ConventionOptions.CATEGORY.IS_TITLE1_BOLD, str_contentList[j]);
+                                    ++k, ConventionOptions.CATEGORY.IS_CONTENT, str_contentList[j]);
                                 sqlUtils.writeRow_local(tempRow2);
                                 //retInfo.retTable.Rows.Add(tempRow2);                         
                             }
@@ -593,7 +595,7 @@ namespace WordRead
                         else if (title2Nodes[j].Line > title1Nodes[i].Line)
                         {
                             ConventionRow tempRow2 = new ConventionRow(tmp_rootConvention, str_title2List[j],
-                                ++k, ConventionOptions.CATEGORY.IS_TITLE1_BOLD, str_contentList[j]);
+                                ++k, ConventionOptions.CATEGORY.IS_CONTENT, str_contentList[j]);
                             sqlUtils.writeRow_local(tempRow2);
                             //retInfo.retTable.Rows.Add(tempRow2);
                         }
@@ -669,7 +671,7 @@ namespace WordRead
         //        }
         //        ConventionRow tempRow2 = new ConventionRow(ConventionRowTree.Nodes[i].Data.Guid,
         //            ConventionRowTree.Nodes[i].Data.Depth + 1, allTitle_matches[j].Value,
-        //            ConventionRowTree.Nodes[i].NodeNumber + 1, ConventionOptions.CATEGORY.IS_TITLE1_BOLD);
+        //            ConventionRowTree.Nodes[i].NodeNumber + 1, ConventionOptions.CATEGORY.IS_CONTENT);
         //        Tree<ConventionRow> ConventionNode2 = new Tree<ConventionRow>(tempRow2);
         //        ConventionRowTree.Nodes[i].AddNode(ConventionNode2);
         //        Console.WriteLine(ConventionNode2.Data.TitleCn);

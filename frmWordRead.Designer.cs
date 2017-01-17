@@ -79,7 +79,6 @@
             this.rdbtConStrServer = new System.Windows.Forms.RadioButton();
             this.btnUpdate = new System.Windows.Forms.Button();
             this.btnReDo = new System.Windows.Forms.Button();
-            this.treeConventionCount = new System.Windows.Forms.TreeView();
             this.tbcMode.SuspendLayout();
             this.tabRecognize.SuspendLayout();
             this.grpRecognize.SuspendLayout();
@@ -476,7 +475,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(722, 25);
+            this.menuStrip1.Size = new System.Drawing.Size(710, 25);
             this.menuStrip1.TabIndex = 19;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -513,10 +512,10 @@
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(18, 18);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 441);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 437);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 12, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(722, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(710, 22);
             this.statusStrip1.TabIndex = 20;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -613,19 +612,11 @@
             this.btnReDo.UseVisualStyleBackColor = true;
             this.btnReDo.Click += new System.EventHandler(this.btnReDo_Click);
             // 
-            // treeConventionCount
-            // 
-            this.treeConventionCount.Location = new System.Drawing.Point(715, 36);
-            this.treeConventionCount.Name = "treeConventionCount";
-            this.treeConventionCount.Size = new System.Drawing.Size(259, 398);
-            this.treeConventionCount.TabIndex = 28;
-            // 
             // frmWordRead
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(722, 463);
-            this.Controls.Add(this.treeConventionCount);
+            this.ClientSize = new System.Drawing.Size(710, 459);
             this.Controls.Add(this.btnReDo);
             this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.grpConnectStr);
@@ -719,7 +710,6 @@
         internal System.Windows.Forms.TextBox tbFilesPath;
         private System.Windows.Forms.ToolStripMenuItem menuUpdateData;
         private System.Windows.Forms.ToolStripMenuItem menuCount;
-        private System.Windows.Forms.TreeView treeConventionCount;
     }
 }
 
