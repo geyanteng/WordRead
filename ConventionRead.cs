@@ -35,7 +35,6 @@ namespace WordRead
             HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
             doc.Load(htmlPath);
             HtmlNode htmlRootNode = doc.DocumentNode;
-            HtmlNodeCollection titleNodes_init;
             HtmlNodeCollection title1Nodes_init;
             HtmlNodeCollection title2Nodes_init;
             List<string> str_contentList = new List<string>();
@@ -187,7 +186,10 @@ namespace WordRead
                     for (int i = 0; i < title1Nodes_init.Count; i++)
                     {
                         string str_style = title1Nodes_init[i].InnerHtml.Replace("\r\n", "");
-                        bool condition = str_style.Contains(title1_select);//&& title1Nodes_init[i].InnerText.Substring(0, 1) == "第";
+                        bool condition = str_style.Contains(title1_select);
+                        //bool condition = str_style.Contains(title1_select) 
+                        //    && (title1Nodes_init[i].InnerText.Substring(0, 1) == "第")
+                        //|| title1Nodes_init[i].InnerText.Substring(0, 1) == "附";
                         if (RecogOptions.title1_has_zitizihao)
                         {
                             string str_style_zihao = title1_select.Substring(0, title1_select.IndexOf(';'));
@@ -195,7 +197,6 @@ namespace WordRead
                             condition = str_style.Contains(str_style_zihao) && str_style.Contains(str_style_ziti);
                         }
                         if (condition)
-                        //(title1Nodes_init[i].Attributes["style"].Value.Replace("\r\n", "").Contains(title1_select))
                         {
                             foreach (var match in title1Nodes_init[i].DescendantsAndSelf())
                             {
@@ -215,7 +216,6 @@ namespace WordRead
                                     break;
                                 }
                             }
-                            //title1Nodes_tmp.Add(title1Nodes_init[i]);
                         }
                     }
                     for (int i = 0; i < title1Nodes_tmp.Count; i++)
@@ -309,12 +309,15 @@ namespace WordRead
                                             //        break;
                                             //   }                                           
                                             //}
-                                            string tmp = match.InnerText.Trim().Replace("&nbsp;", "").Replace("\r\n", "");
+                                            string tmp = match.InnerText.Replace("&nbsp;", "").Replace("\r\n", "").Trim();
+                                            int a = 0;
                                             if (tmp.Length > 1)
                                                 //有些文档中形如“1 XXX”的不是二级标题，需要手动在程序中修改
-                                                //if(tmp.Substring(0, 1) == "第" || tmp.Substring(0, 1) == "附" || tmp.Substring(0, 1) == "修")
-                                                //if(tmp.Contains("节")&&tmp.Substring(0,1)=="第")
-                                                //if(!(tmp.Substring(0,1)=="第"))
+                                                if(tmp.Substring(0, 1) == "第" || tmp.Substring(0, 1) == "附" || tmp.Substring(0, 1) == "修")
+                                                //if(tmp.Contains("条")&&tmp.Substring(0,1)=="第")
+                                                //if(!(tmp.Substring(0,1)=="第")&& !(tmp.Substring(0, 1) == "附"))
+                                                
+                                                //if(int.TryParse(tmp.Substring(0, 1),out a)==true)
                                                 if (!tmp.Contains("。"))//&& tmp.Substring(tmp.Length - 1, 1) != "：" && !tmp.Contains("；"))
                                                     //tmp.Length>0&&(tmp.Substring(0,1)=="第"|| tmp.Substring(0, 1) == "附"|| tmp.Substring(0, 1) == "修"))
                                                     tempNodes.Add(match);
@@ -331,7 +334,8 @@ namespace WordRead
                     (i == 0 || (i > 0 && tempNodes[i].Line != tempNodes[i - 1].Line)))
                     {
                         title2Nodes.Add(tempNodes[i]);
-                        str_title2List.Add(tempNodes[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
+                        string tmp = tempNodes[i].InnerText.Replace("\r\n", "").Replace("&nbsp;", " ");
+                        str_title2List.Add(tmp.Trim());
                     }
                 }
                 #endregion               
@@ -385,7 +389,8 @@ namespace WordRead
 
             for (int i = 0; i < titleNodes.Count; i++)
             {
-                str_titleList.Add(titleNodes[i].InnerText.Trim().Replace("&nbsp;", " ").Replace("\r\n", ""));
+                string tmp = titleNodes[i].InnerText.Replace("&nbsp;", " ").Replace("\r\n", "");
+                str_titleList.Add(tmp.Trim());
             }
             #endregion
             try
@@ -413,6 +418,7 @@ namespace WordRead
                         htmlTxt = htmlTxt.Replace(ftNoteRefnodes[i].OuterHtml, "");
                     }
                 }
+                htmlTxt = htmlTxt.Replace("</body>", "").Replace("</html>", "").Replace("<body>", "").Replace("<html>", "");
                 #endregion
 
                 #region 替换图片路径
@@ -472,6 +478,7 @@ namespace WordRead
                     {
                         if (pair.Value.Contains("href=\"#_" + ftnref.Attributes["id"].Value + "\""))
                         {
+                            
                             v = v + ftnref.OuterHtml;
                         }
                     }
