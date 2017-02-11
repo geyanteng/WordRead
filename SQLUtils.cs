@@ -314,6 +314,24 @@ namespace WordRead
                                 {
                                     Tree<DataRow> node4 = new Tree<DataRow>(tblResult_i_j_k_l.Rows[m]);
                                     node3.AddNode(node4);
+                                    string Guid4 = node4.Data["Guid"].ToString();
+                                    sqlcmd.CommandText = "select * from " + tableName + " where ParentNodeGuid='" + Guid4 + "' order by SequenceNumber";
+                                    sqlDataAdapter.Fill(sqlDataSet, "tblResult_" + i + "_" + j + "_" + k + "_" + l + "_" + m);
+                                    DataTable tblResult_i_j_k_l_m = sqlDataSet.Tables["tblResult_" + i + "_" + j + "_" + k + "_" + l + "_" + m];
+                                    for (int n = 0; n < tblResult_i_j_k_l_m.Rows.Count; n++)
+                                    {
+                                        Tree<DataRow> node5 = new Tree<DataRow>(tblResult_i_j_k_l_m.Rows[n]);
+                                        node4.AddNode(node5);
+                                        //    string Guid5 = node5.Data["Guid"].ToString();
+                                        //    sqlcmd.CommandText = "select * from " + tableName + " where ParentNodeGuid='" + Guid5 + "' order by SequenceNumber";
+                                        //    sqlDataAdapter.Fill(sqlDataSet, "tblResult_" + i + "_" + j + "_" + k + "_" + l + "_" + m + "_" + n);
+                                        //    DataTable tblResult_i_j_k_l_m_n = sqlDataSet.Tables["tblResult_" + i + "_" + j + "_" + k + "_" + l + "_" + m + "_" + n];
+                                        //    for (int o = 0; o < tblResult_i_j_k_l_m_n.Rows.Count; o++)
+                                        //    {
+                                        //        Tree<DataRow> node6 = new Tree<DataRow>(tblResult_i_j_k_l_m_n.Rows[o]);
+                                        //        node5.AddNode(node6);
+                                        //    }
+                                    }
                                 }
                             }
                         }
@@ -327,7 +345,7 @@ namespace WordRead
                     string title1 = node1.Data["ShortTitleEn"].ToString();
                     if (title1 == string.Empty)
                         title1 = node1.Data["TitleEn"].ToString();
-                    int count1 = 0, count1_1=0;
+                    int count1 = 0, count1_1=0,countCata1=0;
                     foreach (DataRow row in tblAllData.Rows)
                     {
                         if (row["IDFolder"].ToString().Contains(node1.Data["IDFolder"].ToString()))
@@ -338,13 +356,20 @@ namespace WordRead
                             }
 
                     }
-                    TreeNode viewNode1 = new TreeNode("Descendants=" + (count1-1)+";Contents="+count1_1+";Catalogues="+(count1-1-count1_1)+";Children="+node1.NodeNumber + " : " + title1);
+                    if (count1 == 1)
+                    {
+                        countCata1 = 0;
+                        count1_1 = 0;
+                    }
+                    else
+                        countCata1 = count1 - 1 - count1_1;
+                    TreeNode viewNode1 = new TreeNode("Descendants=" + (count1-1)+";Contents="+count1_1+";Catalogues="+ countCata1 + ";Children="+node1.NodeNumber + " : " + title1);
                     viewNode0.Nodes.Add(viewNode1);
                     for (int j = 0; j < node1.NodeNumber; j++)
                     {
                         Tree<DataRow> node2 = node1.Nodes[j];
                         string title2 = node2.Data["TitleEn"].ToString();
-                        int count2 = 0, count2_1 = 0;
+                        int count2 = 0, count2_1 = 0, countCata2 = 0;
                         foreach (DataRow row in tblAllData.Rows)
                         {
                             if (row["IDFolder"].ToString().Contains(node2.Data["IDFolder"].ToString()))
@@ -354,13 +379,20 @@ namespace WordRead
                                     count2_1++;
                             }
                         }
-                        TreeNode viewNode2 = new TreeNode("Descendants=" + (count2-1) + ";contents=" + count2_1 + ";Catalogues=" + (count2 - 1 - count2_1) + ";children=" + node2.NodeNumber + " : " + title2);
+                        if (count2 == 1)
+                        {
+                            countCata2 = 0;
+                            count2_1 = 0;
+                        }
+                        else
+                            countCata2 = count2 - 1 - count2_1;
+                        TreeNode viewNode2 = new TreeNode("Descendants=" + (count2-1) + ";contents=" + count2_1 + ";Catalogues=" + countCata2 + ";children=" + node2.NodeNumber + " : " + title2);
                         viewNode1.Nodes.Add(viewNode2);
                         for (int k = 0; k < node2.NodeNumber; k++)
                         {
                             Tree<DataRow> node3 = node2.Nodes[k];
                             string title3 = node3.Data["TitleEn"].ToString();
-                            int count3 = 0, count3_1 = 0;
+                            int count3 = 0, count3_1 = 0, countCata3=0;
                             foreach (DataRow row in tblAllData.Rows)
                             {
                                 if (row["IDFolder"].ToString().Contains(node3.Data["IDFolder"].ToString()))
@@ -370,14 +402,86 @@ namespace WordRead
                                         count3_1++;
                                 }
                             }
-                            TreeNode viewNode3 = new TreeNode("Descendants=" + (count3 - 1) + ";contents=" + count3_1 + ";Catalogues=" + (count3 - 1 - count3_1) + ";children=" + node3.NodeNumber + " : " + title3);
+                            if (count3 == 1)
+                            {
+                                countCata3 = 0;
+                                count3_1 = 0;
+                            }
+                            else
+                                countCata3 = count3 - 1 - count3_1;
+                            TreeNode viewNode3 = new TreeNode("Descendants=" + (count3 - 1) + ";contents=" + count3_1 + ";Catalogues=" + countCata3 + ";children=" + node3.NodeNumber + " : " + title3);
                             viewNode2.Nodes.Add(viewNode3);
                             for (int l = 0; l < node3.NodeNumber; l++)
                             {
                                 Tree<DataRow> node4 = node3.Nodes[l];
                                 string title4 = node4.Data["TitleEn"].ToString();
-                                TreeNode viewNode4 = new TreeNode(node4.NodeNumber + " : " + title4);
+                                int count4 = 0, count4_1 = 0, countCata4=0;
+                                foreach (DataRow row in tblAllData.Rows)
+                                {
+                                    if (row["IDFolder"].ToString().Contains(node4.Data["IDFolder"].ToString()))
+                                    {
+                                        count4++;
+                                        if (row["Category"].ToString() == "2")
+                                            count4_1++;
+                                    }
+                                }
+                                if (count4 == 1)
+                                {
+                                    countCata4 = 0;
+                                    count4_1 = 0;
+                                }
+                                else
+                                    countCata4 = count4 - 1 - count4_1;
+                                TreeNode viewNode4 = new TreeNode("Descendants=" + (count4 - 1) + ";contents=" + count4_1 + ";Catalogues=" + countCata4 + ";children=" + node4.NodeNumber + " : " + title4);
                                 viewNode3.Nodes.Add(viewNode4);
+                                for (int m = 0; m < node4.NodeNumber; m++)
+                                {
+                                    Tree<DataRow> node5 = node4.Nodes[m];
+                                    string title5 = node5.Data["TitleEn"].ToString();
+                                    int count5 = 0, count5_1 = 0, countCata5=0;
+                                    foreach (DataRow row in tblAllData.Rows)
+                                    {
+                                        if (row["IDFolder"].ToString().Contains(node5.Data["IDFolder"].ToString()))
+                                        {
+                                            count5++;
+                                            if (row["Category"].ToString() == "2")
+                                                count5_1++;
+                                        }
+                                    }
+                                    if (count5 == 1)
+                                    {
+                                        countCata5 = 0;
+                                        count5_1 = 0;
+                                    }
+                                    else
+                                        countCata5 = count5 - 1 - count5_1;
+                                    TreeNode viewNode5 = new TreeNode("Descendants=" + (count5 - 1) + ";contents=" + count5_1 + ";Catalogues=" + countCata5 + ";children=" + node5.NodeNumber + " : " + title5);
+                                    viewNode4.Nodes.Add(viewNode5);
+                                    //for (int n = 0; n < node5.NodeNumber; n++)
+                                    //{
+                                    //    Tree<DataRow> node6 = node4.Nodes[n];
+                                    //    string title6 = node6.Data["TitleEn"].ToString();
+                                    //    int count6 = 0, count6_1 = 0,countCata6=0;
+                                    //    foreach (DataRow row in tblAllData.Rows)
+                                    //    {
+                                    //        if (row["IDFolder"].ToString().Contains(node6.Data["IDFolder"].ToString()))
+                                    //        {
+                                    //            count6++;
+                                    //            if (row["Category"].ToString() == "2")
+                                    //                count6_1++;
+                                    //        }
+                                    //    }
+                                    //    if (count6 == 1)
+                                    //    {
+                                    //        countCata6 = 0;
+                                    //        count6_1 = 0;
+                                    //    }
+                                    //    else
+                                    //        countCata6 = count6 - 1 - count6_1;
+                                    //    TreeNode viewNode6 = new TreeNode("Descendants=" + (count6 - 1) + ";contents=" + count6_1 + ";Catalogues=" + countCata6 + ";children=" + node6.NodeNumber + " : " + title6);
+                                    //    viewNode5.Nodes.Add(viewNode6);
+                                    //}
+                                }
                             }
                         }
                     }

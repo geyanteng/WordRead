@@ -313,7 +313,7 @@ namespace WordRead
                                             int a = 0;
                                             if (tmp.Length > 1)
                                                 //有些文档中形如“1 XXX”的不是二级标题，需要手动在程序中修改
-                                                if(tmp.Substring(0, 1) == "第" || tmp.Substring(0, 1) == "附" || tmp.Substring(0, 1) == "修")
+                                                //if((tmp.Contains("条") && tmp.Substring(0, 1) == "第") || tmp.Substring(0, 1) == "附" || tmp.Substring(0, 1) == "标")
                                                 //if(tmp.Contains("条")&&tmp.Substring(0,1)=="第")
                                                 //if(!(tmp.Substring(0,1)=="第")&& !(tmp.Substring(0, 1) == "附"))
                                                 

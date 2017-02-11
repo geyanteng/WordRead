@@ -296,5 +296,27 @@ namespace WordRead
             sqlUtils.conventionCount(frmcount.treeView1);
             ToXML.SaveToXml(frmcount.treeView1, "../../TreeXml.xml");
         }
+
+        private void btnInfo_Click(object sender, EventArgs e)
+        {
+            if (this.tbParentGuid.Text != string.Empty)
+            {
+                try
+                {
+                    Guid guid = new Guid(this.tbParentGuid.Text);
+                    SQLUtils sqlUtils = SQLUtils.getInstance();
+                    DataRow infoRow = sqlUtils.getInfo(new Guid(this.tbParentGuid.Text));
+                    this.tbParentTitleCnFolder.Text = infoRow["TitleCnFolder"].ToString();
+                    this.tbParentIDfolder.Text = infoRow["IDFolder"].ToString();
+                    this.tbParentDepth.Text = infoRow["Depth"].ToString();
+                    this.toolStripStatusLabel1.Text = "获取信息成功";
+                }
+                catch (Exception err)
+                {
+                    Console.WriteLine(err.Message);
+                    this.toolStripStatusLabel1.Text = "获取信息失败";
+                }
+            }
+        }
     }
 }

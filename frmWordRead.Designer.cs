@@ -79,6 +79,7 @@
             this.rdbtConStrServer = new System.Windows.Forms.RadioButton();
             this.btnUpdate = new System.Windows.Forms.Button();
             this.btnReDo = new System.Windows.Forms.Button();
+            this.btnInfo = new System.Windows.Forms.Button();
             this.tbcMode.SuspendLayout();
             this.tabRecognize.SuspendLayout();
             this.grpRecognize.SuspendLayout();
@@ -374,6 +375,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnInfo);
             this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.tbParentTitleCnFolder);
             this.groupBox1.Controls.Add(this.label7);
@@ -612,6 +614,16 @@
             this.btnReDo.UseVisualStyleBackColor = true;
             this.btnReDo.Click += new System.EventHandler(this.btnReDo_Click);
             // 
+            // btnInfo
+            // 
+            this.btnInfo.Location = new System.Drawing.Point(204, 78);
+            this.btnInfo.Name = "btnInfo";
+            this.btnInfo.Size = new System.Drawing.Size(69, 23);
+            this.btnInfo.TabIndex = 28;
+            this.btnInfo.Text = "获取信息";
+            this.btnInfo.UseVisualStyleBackColor = true;
+            this.btnInfo.Click += new System.EventHandler(this.btnInfo_Click);
+            // 
             // frmWordRead
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -710,6 +722,7 @@
         internal System.Windows.Forms.TextBox tbFilesPath;
         private System.Windows.Forms.ToolStripMenuItem menuUpdateData;
         private System.Windows.Forms.ToolStripMenuItem menuCount;
+        private System.Windows.Forms.Button btnInfo;
     }
 }
 
